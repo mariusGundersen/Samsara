@@ -16,7 +16,8 @@
     "consolidate": "^0.10.0",
     "dustjs-linkedin": "^2.5.1",
     "dockerode": "^2.0.6",
-    "promise": "^6.1.0"
+    "promise": "^6.1.0",
+    "request": "^2.51.0"
   },
   "devDependencies": {
     "gulp": "^3.8.10"
