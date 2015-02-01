@@ -17,18 +17,12 @@
 
     <div id="menu">
       <div class="pure-menu pure-menu-open">
-        <a class="pure-menu-heading" href="#">Company</a>
-
+        <a class="pure-menu-heading" href="#">Containers</a>
+        {#containers}
         <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-
-          <li class="menu-item-divided">
-              <a href="#">Services</a>
-          </li>
-
-          <li><a href="#">Contact</a></li>
+          <li><a href="/container/{Id}">{Names[0]}</a></li>
         </ul>
+        {/containers}
       </div>
     </div>
 

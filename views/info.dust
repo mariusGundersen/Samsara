@@ -1,0 +1,4 @@
+{>layout/}
+{<content}
+<pre>{info}</pre>
+{/content}
