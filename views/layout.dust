@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
-  <link rel='stylesheet' href='/bower/pure/pure-min.css' />
+  <link rel='stylesheet' href='/bower_components/pure/pure-min.css' />
   <link rel='stylesheet' href='/stylesheets/pure-sidemenu.css' />
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
@@ -42,5 +42,7 @@
       </div>
     </div>
   </div>
+  <script src="/bower_components/es6-promise/promise.js"></script>
+  <script src="/bower_components/requirejs/require.js" data-main="/javascripts/main.js"></script>
 </body>
 </html>
