@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var docker = require('../private/docker');
+var orchestra = require('../private/orchestra');
 
 router.get('/', function(req, res, next) {
-  docker.listContainers()
+  orchestra.containers()
   .then(function (containers) {
     res.render('index', { title: 'Containers', containers: containers });
   }).catch(function(err){

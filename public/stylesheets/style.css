@@ -1,8 +1,8 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.container-state-running a:before{
+  color: #060;
+  content: '\25B6'
 }
-
-a {
-  color: #00B7FF;
+.container-state-stopped a:before{
+  color: #900;
+  content: '\25FC'
 }

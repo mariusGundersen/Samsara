@@ -2,7 +2,7 @@
 {<content}
 <ul>
  {#containers}
-  <li><a href="/container/{Id}">{Names[0]}</a></li>{~n}
+  <li><a href="/container/{id}">{name}</a></li>{~n}
  {/containers}
 </ul>
 {/content}
