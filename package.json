@@ -12,6 +12,8 @@
     "express": "~4.11.1",
     "jade": "~1.9.1",
     "morgan": "~1.5.1",
-    "serve-favicon": "~2.2.0"
+    "serve-favicon": "~2.2.0",
+    "consolidate": "^0.10.0",
+    "dustjs-linkedin": "^2.5.1"
   }
 }

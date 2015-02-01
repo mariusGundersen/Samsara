@@ -8,12 +8,17 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var dust = require('dustjs-linkedin');
+var cons = require('consolidate');
+
 var app = express();
 app.enable('trust proxy');
 
 // view engine setup
+app.engine('dust', cons.dust);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'dust');
+app.set('template_engine', 'dust');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
