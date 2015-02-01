@@ -1,4 +1,8 @@
 {>layout/}
 {<content}
-This is loaded from a partial. It is dust.js
+<ul>
+ {#containers}
+  <li><a href="/container/{Id}">{Names[0]}</a></li>{~n}
+ {/containers}
+</ul>
 {/content}

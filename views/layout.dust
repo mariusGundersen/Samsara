@@ -23,7 +23,7 @@
           <li><a href="#">Home</a></li>
           <li><a href="#">About</a></li>
 
-          <li class="menu-item-divided pure-menu-selected">
+          <li class="menu-item-divided">
               <a href="#">Services</a>
           </li>
 

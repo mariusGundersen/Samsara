@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node server.js"
   },
   "dependencies": {
     "body-parser": "~1.10.2",
@@ -14,7 +14,9 @@
     "morgan": "~1.5.1",
     "serve-favicon": "~2.2.0",
     "consolidate": "^0.10.0",
-    "dustjs-linkedin": "^2.5.1"
+    "dustjs-linkedin": "^2.5.1",
+    "dockerode": "^2.0.6",
+    "promise": "^6.1.0"
   },
   "devDependencies": {
     "gulp": "^3.8.10"
