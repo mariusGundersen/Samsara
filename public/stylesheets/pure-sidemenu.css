@@ -94,6 +94,9 @@ appears on the left side of the page.
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
+    #menu .pure-menu-heading {
+        background: #1f8dd6;
+    }
     /*
     All anchors inside the menu should be styled like this.
     */
@@ -127,19 +130,21 @@ appears on the left side of the page.
             background: #333;
         }
 
-    /*
-    This styles the selected menu item `<li>`.
-    */
-    #menu .pure-menu-selected,
-    #menu .pure-menu-heading {
-        background: #1f8dd6;
-    }
         /*
-        This styles a link within a selected menu item `<li>`.
+        This styles the selected menu item `<li>`.
         */
-        #menu .pure-menu-selected a {
-            color: #fff;
+        #menu .pure-menu li.pure-menu-selected{
+            background: #fff;
         }
+            /*
+            This styles a link within a selected menu item `<li>`.
+            */
+            #menu .pure-menu li.pure-menu-selected a {
+                color: #000;
+            }
+            #menu .pure-menu li.pure-menu-selected a:hover {
+                background: #fff;
+            }
 
     /*
     This styles the menu heading.

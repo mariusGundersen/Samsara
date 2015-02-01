@@ -14,7 +14,16 @@ module.exports = {
             state: info.State.Running ? 'running' : 'stopped'
           };
         });
-      }));
+      }))
+      .then(function(list){
+        return list.sort(function(a, b){
+          return a.state == 'running' && b.state != 'running' ? -1 : 
+          a.state != 'running' && b.state == 'running' ? 1 :
+          a.name < b.name ? -1 : 
+          a.name > b.name ? 1 : 
+          0
+        });
+      });
     });
   }
 }

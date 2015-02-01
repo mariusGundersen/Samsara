@@ -1,4 +1,4 @@
 {>layout/}
 {<content}
-<pre>{info}</pre>
+<pre>{info|js}</pre>
 {/content}

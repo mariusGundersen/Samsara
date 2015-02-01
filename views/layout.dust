@@ -18,10 +18,10 @@
 
     <div id="menu">
       <div class="pure-menu pure-menu-open">
-        <a class="pure-menu-heading" href="#">Containers</a>
+        <a class="pure-menu-heading" href="/">Containers</a>
         {#containers}
         <ul>
-          <li class="container-state-{state}"><a href="/container/{id}">{name}</a></li>
+          <li class="container-state-{state} {?selected}pure-menu-selected{/selected}"><a href="/container/{id}">{name}</a></li>
         </ul>
         {/containers}
       </div>
