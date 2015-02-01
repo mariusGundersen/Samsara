@@ -1,16 +1,48 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>{title}</title>
-<link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <link rel='stylesheet' href='/bower/pure/pure-min.css' />
+  <link rel='stylesheet' href='/stylesheets/pure-sidemenu.css' />
 </head>
 <body>
-<h1>{title}</h1>
-{+content}
-This is the base content.
-{/content}
+  <div id="layout">
+    <!-- Menu toggle -->
+    <a href="#menu" id="menuLink" class="menu-link">
+      <!-- Hamburger icon -->
+      <span></span>
+    </a>
+
+    <div id="menu">
+      <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading" href="#">Company</a>
+
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+
+          <li class="menu-item-divided pure-menu-selected">
+              <a href="#">Services</a>
+          </li>
+
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="main">
+      <div class="header">
+        <h1>{title}</h1>
+      </div>
+      
+      <div class="content">
+        {+content}
+        This is the base content.
+        {/content}
+      </div>
+    </div>
+  </div>
 </body>
-<!--
-{session}
--->
 </html>
