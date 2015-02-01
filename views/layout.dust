@@ -19,11 +19,14 @@
     <div id="menu">
       <div class="pure-menu pure-menu-open">
         <a class="pure-menu-heading" href="/">Containers</a>
-        {#containers}
         <ul>
-          <li class="container-state-{state} {?selected}pure-menu-selected{/selected}"><a href="/container/{id}">{name}</a></li>
+          <li>
+            <a class="" href="/app/new">new</a>
+          </li>
+          {#containers}
+            <li class="container-state-{state} {?selected}pure-menu-selected{/selected}" data-id="{$idx}"><a href="/container/{id}">{name}</a></li>
+          {/containers}
         </ul>
-        {/containers}
       </div>
     </div>
 
