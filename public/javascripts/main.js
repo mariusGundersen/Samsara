@@ -1,5 +1,5 @@
 require.config({
-  baseUrl: '/javascript',
+  baseUrl: '/javascripts',
   
   paths: {
     'knockout': '/bower_components/knockout/dist/knockout'

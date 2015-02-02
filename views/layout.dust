@@ -9,9 +9,9 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
-  <div id="layout">
+  <div id="layout" data-viewmodel="MenuViewModel" data-bind="css:{active: menuVisible}">
     <!-- Menu toggle -->
-    <a href="#menu" id="menuLink" class="menu-link">
+    <a href="#menu" id="menuLink" class="menu-link" data-bind="click: toggleMenuVisible">
       <!-- Hamburger icon -->
       <span></span>
     </a>
@@ -43,6 +43,6 @@
     </div>
   </div>
   <script src="/bower_components/es6-promise/promise.js"></script>
-  <script src="/bower_components/requirejs/require.js" data-main="/javascripts/main.js"></script>
+  <script src="/bower_components/requirejs/require.js" data-main="/javascripts/main"></script>
 </body>
 </html>
