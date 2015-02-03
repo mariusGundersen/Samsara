@@ -12,5 +12,9 @@ require.config({
 });
 
 require(['deco'], function(deco){
-  deco.config().start();
+  deco.config({
+    qvc:{
+      baseUrl: '/qvc'
+    }
+  }).start();
 });

@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var qvc = require('qvc');
 
 var dust = require('dustjs-linkedin');
 var cons = require('consolidate');
@@ -24,6 +25,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/qvc', qvc(
+  require('./handlers/container')
+));
 
 app.use('/', require('./routes/index'));
 app.use('/container', require('./routes/container'));

@@ -1,4 +1,8 @@
 {>layout/}
 {<content}
+<div data-viewmodel="ContainerViewModel" data-model="{info|js}">
+  <button class="pure-button" data-bind="click: start, visible:!running(), disabled: start.isBusy">Start</button>
+  <button class="pure-button" data-bind="click: stop, visible: running(), disabled: stop.isBusy">Stop</button>
+</div>
 <pre>{info|js}</pre>
 {/content}

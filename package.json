@@ -17,7 +17,8 @@
     "dustjs-linkedin": "^2.5.1",
     "dockerode": "^2.0.6",
     "promise": "^6.1.0",
-    "request": "^2.51.0"
+    "request": "^2.51.0",
+    "qvc": "^0.1.2"
   },
   "devDependencies": {
     "gulp": "^3.8.10"
