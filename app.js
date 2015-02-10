@@ -9,6 +9,13 @@ var qvc = require('qvc');
 var dust = require('dustjs-linkedin');
 var cons = require('consolidate');
 
+var auth = require('http-auth');
+
+var basic = auth.basic({
+    realm: "Docker SpacePort",
+    file: __dirname+"/passwd" // gevorg:gpass, Sarah:testpass ...
+});
+
 var app = express();
 app.enable('trust proxy');
 
@@ -20,6 +27,7 @@ app.set('template_engine', 'dust');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(auth.connect(basic));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

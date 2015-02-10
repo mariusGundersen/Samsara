@@ -18,7 +18,8 @@
     "dockerode": "^2.0.6",
     "promise": "^6.1.0",
     "request": "^2.51.0",
-    "qvc": "^0.1.2"
+    "qvc": "^0.1.2",
+    "http-auth": "~2.2.5"
   },
   "devDependencies": {
     "gulp": "^3.8.10"
