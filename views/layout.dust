@@ -26,9 +26,11 @@
           </li>
           {#containers}
             <li class="container-state-{state} {?selected}pure-menu-selected{/selected}" data-id="{$idx}">
-              <i class="fa fa-play"></i>
-              <i class="fa fa-stop"></i>
-              <a href="/container/{id}">{name}</a>
+              <a href="/container/{id}">
+                <i class="fa fa-play fa-fw"></i>
+                <i class="fa fa-stop fa-fw"></i>
+                {name}
+              </a>
             </li>
           {/containers}
         </ul>

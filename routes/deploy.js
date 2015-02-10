@@ -10,8 +10,8 @@ router.post('/:name/:secret', function(req, res, next){
   if(!(ip[0] == 162
     && ip[1] == 242
     && ip[2] == 195
-    && ip[3] >= 64
-    && ip[3] <= 127)){
+    && ip[3] >=  64
+    && ip[3] <  128)){
     console.log("not a trusted IP!");
     res.status('403');
     res.write("wrong ip");

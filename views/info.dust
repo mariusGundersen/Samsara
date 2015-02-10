@@ -1,8 +1,18 @@
 {>layout/}
 {<content}
 <div data-viewmodel="ContainerViewModel" data-model="{info|js}">
-  <button class="pure-button" data-bind="click: start, visible:!running(), disabled: start.isBusy"><i class="fa fa-play"></i>Start</button>
-  <button class="pure-button" data-bind="click: stop, visible: running(), disabled: stop.isBusy"><i class="fa fa-stop"></i>Stop</button>
+  <button class="pure-button button-success" 
+          data-bind="click: start, visible:!running(), disabled: start.isBusy" 
+          style="{?info.State.Running}display: none{/info.State.Running}">
+    <i class="fa fa-play"></i> 
+    Start
+  </button>
+  <button class="pure-button button-error" 
+          data-bind="click: stop, visible: running(), disabled: stop.isBusy" 
+          style="{^info.State.Running}display: none{/info.State.Running}">
+    <i class="fa fa-stop"></i> 
+    Stop
+  </button>
 </div>
 <pre>{info|js}</pre>
 {/content}
