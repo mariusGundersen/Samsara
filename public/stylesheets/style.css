@@ -1,8 +1,12 @@
-.container-state-running a:before{
+.container-state-running i.fa-play{
   color: #060;
-  content: '\25B6'
 }
-.container-state-stopped a:before{
+.container-state-stopped i.fa-stop{
   color: #900;
-  content: '\25FC'
-} 
+}
+.container-state-stopped i.fa-play{
+  display: none;
+}
+.container-state-running i.fa-stop{
+  display: none;
+}

@@ -7,6 +7,7 @@
   <link rel='stylesheet' href='/bower_components/pure/pure-min.css' />
   <link rel='stylesheet' href='/stylesheets/pure-sidemenu.css' />
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body>
   <div id="layout" data-viewmodel="MenuViewModel" data-bind="css:{active: menuVisible}">
@@ -24,7 +25,11 @@
             <a class="" href="/app/new">new</a>
           </li>
           {#containers}
-            <li class="container-state-{state} {?selected}pure-menu-selected{/selected}" data-id="{$idx}"><a href="/container/{id}">{name}</a></li>
+            <li class="container-state-{state} {?selected}pure-menu-selected{/selected}" data-id="{$idx}">
+              <i class="fa fa-play"></i>
+              <i class="fa fa-stop"></i>
+              <a href="/container/{id}">{name}</a>
+            </li>
           {/containers}
         </ul>
       </div>
