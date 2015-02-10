@@ -21,5 +21,15 @@ module.exports = [
       console.log("started failed", err);
       done(err);
     });
+  }),
+  qvc.command('restartContainer', function(command, done){
+    console.log("restartContainer", command.id);
+    docker.getContainer(command.id).restart().then(function(){
+      console.log("restarted");
+      done(null, true);
+    }, function(err){
+      console.log("restarted failed", err);
+      done(err);
+    });
   })
 ];

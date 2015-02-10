@@ -17,6 +17,12 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
       self.running(true);
     });
     
+    this.restart = qvc.createCommand('restartContainer', {
+      id: model.Id
+    }).success(function(){
+      self.running(true);
+    });
+    
   };
   
 });

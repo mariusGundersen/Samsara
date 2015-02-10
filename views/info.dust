@@ -13,6 +13,12 @@
     <i class="fa fa-stop"></i> 
     Stop
   </button>
+  <button class="pure-button button-secondary" 
+          data-bind="click: restart, visible: running(), disabled: restart.isBusy" 
+          style="{^info.State.Running}display: none{/info.State.Running}">
+    <i class="fa fa-refresh" data-bind="css: {'fa-spin': restart.isBusy}"></i> 
+    Restart
+  </button>
 </div>
 <pre>{info|js}</pre>
 {/content}

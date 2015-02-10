@@ -17,6 +17,7 @@ module.exports = {
 function promiseifyContainer(container){
   return {
     inspect: Promise.denodeify(container.inspect.bind(container)),
+    restart: Promise.denodeify(container.restart.bind(container)),
     start: Promise.denodeify(container.start.bind(container)),
     stop: Promise.denodeify(container.stop.bind(container)),
     remove: Promise.denodeify(container.remove.bind(container)),
