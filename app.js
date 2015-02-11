@@ -27,11 +27,14 @@ app.set('template_engine', 'dust');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(auth.connect(basic));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use('/deploy', require('./routes/deploy'));
+
+app.use(auth.connect(basic));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/qvc', qvc(
@@ -40,7 +43,6 @@ app.use('/qvc', qvc(
 
 app.use('/', require('./routes/index'));
 app.use('/container', require('./routes/container'));
-app.use('/deploy', require('./routes/deploy'));
 app.use('/app', require('./routes/app'));
 
 // catch 404 and forward to error handler
