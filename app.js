@@ -13,7 +13,7 @@ var auth = require('http-auth');
 
 var basic = auth.basic({
     realm: "Docker SpacePort",
-    file: __dirname+"/passwd" // gevorg:gpass, Sarah:testpass ...
+    file: __dirname+"/config/authentication"
 });
 
 var app = express();
