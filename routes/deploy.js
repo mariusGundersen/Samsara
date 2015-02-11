@@ -49,8 +49,8 @@ function validateDeploy(name, secret, image, ip, callback_url){
         return reject('wrong image');
       }
       
-      console.log('ip', config['from-ip'], ip);
-      if(new Netmask(config['from-ip']).contains(ip) == false){
+      console.log('ip', config.deploy['from-ip'], ip);
+      if(new Netmask(config.deploy['from-ip']).contains(ip) == false){
         return reject('wrong ip');
       }
       
