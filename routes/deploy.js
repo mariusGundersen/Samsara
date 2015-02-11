@@ -2,47 +2,62 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('promise');
 var deploy = require('../private/deploy');
+var fs = require('fs');
+var Netmask = require('netmask').Netmask;
 
 router.post('/:name/:secret', function(req, res, next){
   
-  console.log(req.headers['x-real-ip']);
-  var ip = req.headers['x-real-ip'].split('.');
-  if(!(ip[0] == 162
-    && ip[1] == 242
-    && ip[2] == 195
-    && ip[3] >=  64
-    && ip[3] <  128)){
-    console.log("not a trusted IP!");
-    res.status('403');
-    res.write("wrong ip");
-    res.end();
-    return;
-  }
-  
-  if(req.body.callback_url == null){
-    console.log("missing callback_url");
-    res.status('403');
-    res.write("missing callback_url");
-    res.end();
-    return;
-  }
-  
-  if(req.params.secret != '61f558d1f29de2debf35ddaef81f9486274a76b42a2ef7cbe9ce4c0111871fa0'){
-    console.log("wrong secret");
-    res.status('403');
-    res.write("wrong secret");
-    res.end();
-    return;
-  }
-  
-  var imageName = req.body.repository.repo_name;
-  var containerName = req.body.repository.name;
-  var callbackUrl = req.body.callback_url;
-  
-  deploy(imageName, containerName, callbackUrl);
+  validateDeploy(
+    req.params.name, 
+    req.params.secret, 
+    req.body.repository.repo_name, 
+    req.headers['x-real-ip'], 
+    req.body.callback_url
+  ).then(function(params){
 
-  res.write('success');
-  res.end();
+    deploy(params.image, params.name, params.callbackUrl);
+
+    res.write('success');
+    res.end();
+  }).catch(function(error){
+    res.status('403');
+    res.write(error);
+    res.end();
+  });
 });
+
+function validateDeploy(name, secret, image, ip, callback_url){
+  return new Promise(function(resolve, reject){
+    fs.readFile(__dirname+'../config/apps/'+name, 'utf8', function(err, content){
+      if(err){
+        return reject(err);
+      }
+      
+      var config = JSON.parse(content);
+      
+      if(config.deploy.secret !== secret){
+        return reject('wrong secret');
+      }
+      
+      if(config.image !== image){
+        return reject('wrong image');
+      }
+      
+      if(new Netmask(config['from-ip']).contains(ip) == false){
+        return reject('wrong ip');
+      }
+      
+      if(callback_url == null){
+        return reject('missing callback_url');
+      }
+      
+      resolve({
+        image: config.image,
+        name: name,
+        callbackUrl: callback_url
+      });
+    });
+  });
+}
 
 module.exports = router;
