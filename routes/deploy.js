@@ -22,7 +22,7 @@ router.post('/:name/:secret', function(req, res, next){
   }).catch(function(error){
     console.log('validation failed for', req.params.name, error);
     res.status('403');
-    res.write(error);
+    res.write(JSON.stringify(error, null, ' '));
     res.end();
   });
 });
@@ -30,7 +30,7 @@ router.post('/:name/:secret', function(req, res, next){
 function validateDeploy(name, secret, image, ip, callback_url){
   return new Promise(function(resolve, reject){
     console.log('reading file', name);
-    fs.readFile(__dirname+'../config/apps/'+name, 'utf8', function(err, content){
+    fs.readFile(__dirname+'/../config/apps/'+name, 'utf8', function(err, content){
       if(err){
         console.log('could not read file', err);
         return reject(err);
