@@ -1,5 +1,6 @@
 var docker = require('./docker');
 var Promise = require('promise');
+var extend = require('extend');
 
 module.exports = function deploy(config){
   console.log(config.image);
@@ -19,10 +20,10 @@ module.exports = function deploy(config){
   .then(function(oldContainer){
     var newName = oldContainer.name+'_v'+(oldContainer.version+1);
     console.log("creating container", newName);
-    return docker.createContainer({
+    return docker.createContainer(extend({
       Image: config.image, 
       name: newName
-    })
+    }, config.raw))
     .then(function(container){
       console.log("starting container");
       return container.start();
