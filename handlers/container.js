@@ -22,6 +22,16 @@ module.exports = [
       done(err);
     });
   }),
+  qvc.command('removeContainer', function(command, done){
+    console.log("removeContainer", command.id);
+    docker.getContainer(command.id).remove().then(function(){
+      console.log("removed");
+      done(null, true);
+    }, function(err){
+      console.log("remove failed", err);
+      done(err);
+    });
+  }),
   qvc.command('restartContainer', function(command, done){
     console.log("restartContainer", command.id);
     docker.getContainer(command.id).restart().then(function(){

@@ -20,6 +20,12 @@
     <i class="fa fa-refresh" data-bind="css: {'fa-spin': restart.isBusy}"></i> 
     Restart
   </button>
+  <button class="pure-button button-error" 
+          data-bind="click: remove, visible: !running(), disabled: start.isBusy" 
+          style="{?info.State.Running}display: none{/info.State.Running}; float:right">
+    <i class="fa fa-trash-o"></i> 
+    Remove
+  </button>
 </div>
 <pre>{info|js}</pre>
 {/content}

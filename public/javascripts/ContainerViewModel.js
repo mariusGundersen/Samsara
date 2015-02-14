@@ -25,5 +25,11 @@ define(['knockout', 'deco/qvc', 'containerEvents'], function(ko, qvc, container)
       self.running(true);
       container.hasStarted(model.Id);
     });
+    
+    this.remove = qvc.createCommand('removeContainer', {
+      id: model.Id
+    }).success(function(){
+      document.location = '/';
+    });
   };
 });
