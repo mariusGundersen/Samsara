@@ -1,0 +1,10 @@
+{>layout/}
+{<content}
+  <ul>
+    {#apps}
+      <li>
+        <a href="{.}">{.}</a>
+      </li>
+    {/apps}
+  </ul>
+{/content}

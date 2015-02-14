@@ -1,5 +1,11 @@
 {>layout/}
 {<content}
-info
-{config}
+  {#config}
+    <dl>
+      <dt>Image</dt>
+      <dd>{image}</dd>
+      <dt>Description</dt>
+      <dd>{description}</dd>
+    </dl>
+  {/config}
 {/content}
