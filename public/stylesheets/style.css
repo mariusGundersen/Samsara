@@ -16,21 +16,20 @@
 .button-error,
 .button-warning,
 .button-secondary {
-    color: white;
+  color: white;
 }
-
 .button-success {
-    background: rgb(28, 184, 65); /* this is a green */
+  background: rgb(28, 184, 65);
 }
 
 .button-error {
-    background: rgb(202, 60, 60); /* this is a maroon */
+  background: rgb(202, 60, 60); /* this is a maroon */
 }
 
 .button-warning {
-    background: rgb(223, 117, 20); /* this is an orange */
+  background: rgb(223, 117, 20); /* this is an orange */
 }
 
 .button-secondary {
-    background: rgb(66, 184, 221); /* this is a light blue */
+  background: rgb(66, 184, 221); /* this is a light blue */
 }

@@ -2,27 +2,27 @@
 {<content}
 <div data-viewmodel="ContainerViewModel" data-model="{info|js}">
   <button class="pure-button button-success" 
-          data-bind="click: start, visible:!running(), disabled: start.isBusy" 
+          data-bind="click: start, visible:!running(), disable: isBusy" 
           style="{?info.State.Running}display: none{/info.State.Running}">
-    <i class="fa fa-play"></i> 
+    <i class="fa fa-fw fa-play" data-bind="css: {'fa-spin': start.isBusy, 'fa-refresh': start.isBusy, 'fa-play': !start.isBusy()}"></i>&nbsp;
     Start
   </button>
   <button class="pure-button button-error" 
-          data-bind="click: stop, visible: running(), disabled: stop.isBusy" 
+          data-bind="click: stop, visible: running(), disable: isBusy" 
           style="{^info.State.Running}display: none{/info.State.Running}">
-    <i class="fa fa-stop"></i> 
+    <i class="fa fa-fw fa-stop" data-bind="css: {'fa-spin': stop.isBusy, 'fa-refresh': stop.isBusy, 'fa-stop': !stop.isBusy()}"></i>&nbsp;
     Stop
   </button>
   <button class="pure-button button-secondary" 
-          data-bind="click: restart, visible: running(), disabled: restart.isBusy" 
+          data-bind="click: restart, visible: running(), disable: isBusy" 
           style="{^info.State.Running}display: none{/info.State.Running}">
-    <i class="fa fa-refresh" data-bind="css: {'fa-spin': restart.isBusy}"></i> 
+    <i class="fa fa-fw fa-refresh" data-bind="css: {'fa-spin': restart.isBusy}"></i>&nbsp;
     Restart
   </button>
   <button class="pure-button button-error" 
-          data-bind="click: remove, visible: !running(), disabled: start.isBusy" 
+          data-bind="click: remove, visible: !running(), disable: isBusy" 
           style="{?info.State.Running}display: none{/info.State.Running}; float:right">
-    <i class="fa fa-trash-o"></i> 
+    <i class="fa fa-fw fa-trash-o" data-bind="css: {'fa-spin': remove.isBusy, 'fa-refresh': remove.isBusy, 'fa-trash-o': !remove.isBusy()}"></i>&nbsp;
     Remove
   </button>
 </div>

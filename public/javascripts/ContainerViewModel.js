@@ -31,5 +31,12 @@ define(['knockout', 'deco/qvc', 'containerEvents'], function(ko, qvc, container)
     }).success(function(){
       document.location = '/';
     });
+    
+    this.isBusy = ko.computed(function(){
+      return self.stop.isBusy()
+        || self.start.isBusy()
+        || self.restart.isBusy()
+        || self.remove.isBusy();
+    });
   };
 });
