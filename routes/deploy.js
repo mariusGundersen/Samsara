@@ -2,20 +2,50 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('promise');
 var deploy = require('../private/deploy');
-var fs = require('fs');
-var Netmask = require('netmask').Netmask;
+var validateDeploy = require('../private/validateDeploy');
+var request = require('request');
 
 router.post('/:name/:secret', function(req, res, next){
-  console.log('deploying', req.params.name);
+  
+  console.log('deploying', req.params.name, req.body);
+  
   validateDeploy(
     req.params.name, 
     req.params.secret, 
-    req.body.repository.repo_name, 
-    req.headers['x-real-ip'], 
+    req.body.repository && req.body.repository.repo_name, 
+    req.headers['x-real-ip'] || req.connection.remoteAddress, 
     req.body.callback_url
-  ).then(function(params){
-    console.log('validated', params);
-    deploy(params.image, params.name, params.callbackUrl);
+  ).then(function(config){
+    
+    console.log('validated', config);
+    
+    deploy(config)
+    .then(function(state){
+      request.post({
+        url: req.body.callback_url,
+        body: JSON.stringify({
+          state: 'success',
+          context: config.description,
+          descrption: 'deployed',
+          target_url: config.url
+        })
+      }, function(err, resp, body){
+        console.log('response', body);
+      });
+    }).catch(function(error){
+      console.error(error);
+      request.post({
+        url: req.body.callback_url,
+        body: JSON.stringify({
+          state: 'error',
+          context: config.description,
+          descrption: error,
+          target_url: config.url
+        })
+      }, function(err, resp, body){
+        console.log('response', body);
+      });
+    });
 
     res.write('success');
     res.end();
@@ -26,46 +56,5 @@ router.post('/:name/:secret', function(req, res, next){
     res.end();
   });
 });
-
-function validateDeploy(name, secret, image, ip, callback_url){
-  return new Promise(function(resolve, reject){
-    console.log('reading file', name);
-    fs.readFile(__dirname+'/../config/apps/'+name, 'utf8', function(err, content){
-      if(err){
-        console.log('could not read file', err);
-        return reject(err);
-      }
-      
-      var config = JSON.parse(content);
-      console.log('config', config);
-      
-      console.log('secret', config.deploy.secret, secret);
-      if(config.deploy.secret !== secret){
-        return reject('wrong secret');
-      }
-      
-      console.log('image', config.image, image);
-      if(config.image !== image){
-        return reject('wrong image');
-      }
-      
-      console.log('ip', config.deploy['from-ip'], ip);
-      if(new Netmask(config.deploy['from-ip']).contains(ip) == false){
-        return reject('wrong ip');
-      }
-      
-      console.log('callback_url', callback_url);
-      if(callback_url == null){
-        return reject('missing callback_url');
-      }
-      
-      resolve({
-        image: config.image,
-        name: name,
-        callbackUrl: callback_url
-      });
-    });
-  });
-}
 
 module.exports = router;

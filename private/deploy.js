@@ -1,18 +1,17 @@
 var docker = require('./docker');
-var request = require('request');
 var Promise = require('promise');
 
-module.exports = function(imageName, containerName, callbackUrl){
-  console.log(imageName);
+module.exports = function deploy(config){
+  console.log(config.image);
   
-  docker.pull(imageName)
+  return docker.pull(config.image)
   .then(function (stream) {
     return new Promise(function(resolve, reject){
       console.log("pulling")
       stream.pipe(process.stdout);
       stream.on('end', function(){
         console.log('done pulling');
-        resolve(containerName);
+        resolve(config.name);
       });
     });
   })
@@ -21,7 +20,7 @@ module.exports = function(imageName, containerName, callbackUrl){
     var newName = oldContainer.name+'_v'+(oldContainer.version+1);
     console.log("creating container", newName);
     return docker.createContainer({
-      Image: imageName, 
+      Image: config.image, 
       name: newName
     })
     .then(function(container){
@@ -44,21 +43,6 @@ module.exports = function(imageName, containerName, callbackUrl){
       console.log("removing old container");
       return container.remove();
     });
-  })
-  .then(function(){
-    request.post({
-      url: callbackUrl,
-      body: JSON.stringify({
-        state: 'success',
-        context: 'decojs.com website',
-        descrption: 'deployed',
-        target_url: 'http://decojs.com'
-      })
-    }, function(err, resp, body){
-      console.log('response', body);
-    });
-  }).catch(function(error){
-    console.error(error);
   });
 };
 
