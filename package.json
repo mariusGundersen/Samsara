@@ -21,7 +21,8 @@
     "qvc": "^0.1.2",
     "http-auth": "~2.2.5",
     "netmask": "~1.0.5",
-    "fs-promise": "~0.3.1"
+    "fs-promise": "~0.3.1",
+    "deep-freeze": "0.0.1"
   },
   "devDependencies": {
     "gulp": "^3.8.10"
