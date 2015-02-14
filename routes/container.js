@@ -20,7 +20,7 @@ router.get('/:id', function(req, res, next) {
     res.render('info', {
       info: result[0], 
       title: result[0].Name.substr(1) + ' - Container',
-      containers: result[1]
+      menu: result[1]
     });
   }).catch(function(err){
     console.log(err);
