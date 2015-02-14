@@ -1,6 +1,5 @@
 {>layout/}
 {<content}
-{#content}
   <ul>
     {#apps}
       <li>
@@ -8,5 +7,4 @@
       </li>
     {/apps}
   </ul>
-{/content}
 {/content}

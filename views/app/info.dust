@@ -1,6 +1,5 @@
 {>layout/}
 {<content}
-{#content}
   {#config}
     <a href="/app/{name}/edit">Edit</a>
     <dl>
@@ -10,5 +9,4 @@
       <dd>{description}</dd>
     </dl>
   {/config}
-{/content}
 {/content}

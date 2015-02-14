@@ -46,8 +46,11 @@
       </div>
       
       <div class="content">
+        
+        {#content}
         {+content}
         This is the base content.
+        {/content}
         {/content}
       </div>
     </div>

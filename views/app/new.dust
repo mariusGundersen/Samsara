@@ -1,6 +1,5 @@
 {>layout/}
 {<content}
-{#content}
 <form class="pure-form pure-form-aligned">
   <label>
     Name
@@ -11,5 +10,4 @@
     <input>
   </label>
 </form>
-{/content}
 {/content}
