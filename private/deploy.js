@@ -28,43 +28,52 @@ module.exports = function deploy(config){
       console.log("starting container");
       return container.start();
     }).then(function(){
-      console.log("stopping old container", oldContainer.id);
-      return oldContainer.id;
+      console.log("container started");
+      return oldContainer.ids;
     });
   })
-  .then(function stopOldContainer(id){
-    if(!id){
+  .then(function stopOldContainers(ids){
+    if(!ids){
       return Promise.resolve();
     }
-    console.log("finding old container", id);
-    var container = docker.getContainer(id);
-    console.log("old container found", container);
-    return container.stop()
-    .then(function(){
-      console.log("removing old container");
-      return container.remove();
-    });
+    
+    console.log("stopping old containers", ids);
+    return Promise.all(ids.map(function(id){
+      var container = docker.getContainer(id);
+      console.log("old container found, will be stopped and removed", id);
+      return container.stop()
+      .then(function(){
+        console.log("removing old container", id);
+        return container.remove();
+      }, function(){
+        console.log("container already stopped, removing it", id);
+        return container.remove();
+      });
+    }));
   });
 };
 
 function getPreviousContainer(name){
-  return docker.listContainers()
+  return docker.listContainers({all: true})
   .then(function (containers) {
 
-    var oldContainer = containers.filter(function(container){
+    var oldContainers = containers.filter(function(container){
       return container.Names[0].indexOf('/'+name+'_v') == 0;
-    })[0];
+    }).map(function(container){
+      return {version: /_v(\d+)$/.exec(container.Names[0])[1]*1, id: container.Id};
+    }).sort(function(a, b){
+      return a.version<b.version ? 1 : a.version>b.version ? -1 : 0;
+    });
 
-    if(oldContainer){
-      var version = /_v(\d+)$/.exec(oldContainer.Names[0])[1];
+    if(oldContainers.length){
       return {
-        id: oldContainer.Id, 
-        version: version*1, 
+        ids: oldContainers.map(function(container){return container.id;}), 
+        version: oldContainers[0].version,
         name: name
       };
     }else{
       return {
-        id: null, 
+        ids: [], 
         version: 0, 
         name: name
       };
