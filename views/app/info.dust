@@ -1,7 +1,5 @@
 {>layout/}
 {<content}
-<form>
-<label>
-<input>
-</form>
+info
+{config}
 {/content}

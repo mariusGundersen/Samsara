@@ -1,0 +1,13 @@
+{>layout/}
+{<content}
+<form class="pure-form pure-form-aligned">
+  <label>
+    Name
+    <input>
+  </label>
+  <label>
+    Image
+    <input>
+  </label>
+</form>
+{/content}
