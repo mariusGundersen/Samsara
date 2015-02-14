@@ -24,7 +24,7 @@
           <li>
             <a class="" href="/app/new"><i class="fa fa-plus fa-fw"></i>Create new app</a>
           </li>
-          {#menu}
+          {#mainMenu.containers}
             <li data-viewmodel="MenuListContainerVM" 
                 data-model="{.|js}" 
                 class="container-state-{state} {?selected}pure-menu-selected{/selected}" 
@@ -35,7 +35,7 @@
                 {name}
               </a>
             </li>
-          {/menu}
+          {/mainMenu.containers}
         </ul>
       </div>
     </div>

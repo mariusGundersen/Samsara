@@ -1,5 +1,6 @@
 {>layout/}
 {<content}
+{#content}
 <table class="pure-table pure-table-striped">
   <thead>
     <tr>
@@ -18,4 +19,5 @@
     {/containers}
   </tbody>
  </table>
+{/content}
 {/content}

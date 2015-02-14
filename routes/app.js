@@ -2,25 +2,27 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('promise');
 var app = require('../providers/app');
+var makePageModel = require('../private/makePageModel');
 
 
 router.get('/', function(req, res, next) {
   app
   .list()
   .then(function(list){
-    res.render('app/index', {
-      title: 'Apps',
-      apps: list
-    });
+    return makePageModel('Apps', {apps:list});
+  })
+  .then(function(pageModel){
+    res.render('app/index', pageModel);
   }).catch(function(error){
     res.render('error', {message: error.message, error: error});
   });
 });
 
 
-router.get('/new', function(req, res, next) {    
-  res.render('app/new', {
-    title: 'New app'
+router.get('/new', function(req, res, next) {
+  makePageModel('New app')
+  .then(function(pageModel){
+    res.render('app/new', pageModel);
   });
 });
 
@@ -28,18 +30,19 @@ router.get('/:name', function(req, res, next) {
   app(req.params.name)
   .config()
   .then(function(config){
-    res.render('app/info', {
-      title: req.params.name,
-      config: config
-    });
+    return makePageModel( req.params.name, {config: config});
+  })
+  .then(function(pageModel){
+    res.render('app/info', pageModel);
   }).catch(function(error){
     res.render('error', {message: error.message, error: error});
   });
 });
 
-router.get('/:name/edit', function(req, res, next) {    
-  res.render('app/edit', {
-    title: req.params.name
+router.get('/:name/edit', function(req, res, next) {
+  makePageModel('Edit '+req.params.name)
+  .then(function(pageModel){
+    res.render('app/edit', pageModel);
   });
 });
 
