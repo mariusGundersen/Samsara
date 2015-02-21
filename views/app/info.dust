@@ -1,7 +1,7 @@
 {>"app/layout"/}
 {<content}
   {#config}
-    <a href="/app/{name}/edit">Edit</a>
+    <a class="pure-button" href="/app/{name}/edit"><i class="fa fa-fw fa-edit"></i>&nbsp;Edit</a>
     <dl>
       <dt>Image</dt>
       <dd>{image}</dd>
