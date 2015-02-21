@@ -9,4 +9,23 @@
       <dd>{description}</dd>
     </dl>
   {/config}
+
+  <table class="pure-table pure-table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#containers}
+        <tr>
+          <td><a href="/container/{Id}" title="{Id}">{Name}</a></td>
+          <td>{Image}</td>
+          <td>{Status}</td>
+        </tr>
+      {/containers}
+    </tbody>
+   </table>
 {/content}
