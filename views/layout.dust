@@ -18,13 +18,15 @@
     </a>
 
     <div id="menu">
+      {#mainMenu}
+      {+mainMenu}
       <div class="pure-menu pure-menu-open">
         <a class="pure-menu-heading" href="/">Containers</a>
         <ul>
           <li>
             <a class="" href="/app/new"><i class="fa fa-plus fa-fw"></i>Create new app</a>
           </li>
-          {#mainMenu.containers}
+          {#containers}
             <li data-viewmodel="MenuListContainerVM" 
                 data-model="{.|js}" 
                 class="container-state-{state} {?selected}pure-menu-selected{/selected}" 
@@ -35,9 +37,11 @@
                 {name}
               </a>
             </li>
-          {/mainMenu.containers}
+          {/containers}
         </ul>
       </div>
+      {/mainMenu}
+      {/mainMenu}
     </div>
 
     <div id="main">

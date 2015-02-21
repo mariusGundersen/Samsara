@@ -1,4 +1,4 @@
-{>layout/}
+{>"app/layout"/}
 {<content}
   {#config}
     <a href="/app/{name}/edit">Edit</a>

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('promise');
 var app = require('../providers/app');
-var makePageModel = require('../private/makePageModel');
+var makePageModel = require('../private/makeAppsPageModel');
 
 
 router.get('/', function(req, res, next) {

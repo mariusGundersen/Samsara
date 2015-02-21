@@ -1,4 +1,4 @@
-{>layout/}
+{>"app/layout"/}
 {<content}
 <form class="pure-form pure-form-aligned">
   <label>

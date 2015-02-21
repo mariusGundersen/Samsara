@@ -1,9 +1,9 @@
-{>layout/}
+{>"app/layout"/}
 {<content}
   <ul>
     {#apps}
       <li>
-        <a href="{.}">{.}</a>
+        <a href="app/{.}">{.}</a>
       </li>
     {/apps}
   </ul>
