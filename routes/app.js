@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/new', function(req, res, next) {
-  makePageModel('New app')
+  makePageModel('New app', {})
   .then(function(pageModel){
     res.render('app/new', pageModel);
   });

@@ -37,3 +37,7 @@
 dt{
   font-weight: bold;
 }
+
+.validation-error-message{
+  color: #d00; 
+}

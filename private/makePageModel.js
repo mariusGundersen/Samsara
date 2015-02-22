@@ -37,7 +37,7 @@ module.exports = function(title, content, currentContainerId){
         containers: containers
       },
       title: title,
-      content: content
+      content: content || {}
     }
   });
 }

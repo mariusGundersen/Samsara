@@ -38,7 +38,8 @@ app.use(auth.connect(basic));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/qvc', qvc(
-  require('./handlers/container')
+  require('./handlers/container'),
+  require('./handlers/app')
 ));
 
 app.use('/', require('./routes/index'));

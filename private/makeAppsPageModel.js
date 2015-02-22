@@ -18,7 +18,7 @@ module.exports = function(title, content, currentAppName){
         apps: apps
       },
       title: title,
-      content: content
+      content: content || {}
     }
   });
 }
