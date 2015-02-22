@@ -1,5 +1,6 @@
 var qvc = require('qvc');
-var apps = require('../providers/app');
+var app = require('../providers/app');
+var deploy = require('../private/deploy');
 var fs = require('fs-promise');
 
 module.exports = [
@@ -44,5 +45,12 @@ module.exports = [
         ]
       }
     ]
+  }),
+  qvc.command('deployApp', function(command, done){
+    app(command.name).config()
+    .then(deploy)
+    .then(function(){
+      done(null, true);
+    }, done);
   })
 ];

@@ -10,7 +10,7 @@
     <input data-bind="value: image" placeholder="ex: nginx">
   </label>
   <button type="submit" class="pure-button button-secondary" data-bind="disable: create.isBusy">
-    <i class="fa fa-fw fa-check"data-bind="css: {'fa-spin': create.isBusy, 'fa-refresh': create.isBusy, 'fa-check': !create.isBusy()}"></i>&nbsp;
+    <i class="fa fa-fw fa-check" data-bind="css: {'fa-spin': create.isBusy, 'fa-refresh': create.isBusy, 'fa-check': !create.isBusy()}"></i>&nbsp;
     Create
   </button>
 </form>

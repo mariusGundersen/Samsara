@@ -10,6 +10,13 @@
     </dl>
   {/config}
 
+  <div data-viewmodel="AppInfoVM" data-model="{config|js}">
+    <button class="pure-button button-secondary" data-bind="click: deploy, disable: deploy.isBusy">
+    <i class="fa fa-fw fa-cloud-upload" data-bind="css: {'fa-spin': deploy.isBusy, 'fa-refresh': deploy.isBusy, 'fa-cloud-upload': !deploy.isBusy()}"></i>&nbsp;
+      Deploy a new version
+    </button>
+  </div>
+
   <table class="pure-table pure-table-striped">
     <thead>
       <tr>

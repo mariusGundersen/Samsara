@@ -33,7 +33,7 @@ module.exports = function deploy(config){
     });
   })
   .then(function stopOldContainers(ids){
-    if(!ids){
+    if(!ids || !ids.length){
       return Promise.resolve();
     }
     
