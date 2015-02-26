@@ -52,5 +52,45 @@ module.exports = [
     .then(function(){
       done(null, true);
     }, done);
+  }),
+  qvc.command('enableWebhook', function(command, done){
+    app(command.name).config()
+    .then(function(config){
+      config.webhook.enable = true;
+      return config;
+    })
+    .then(function(config){
+      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('disableWebhook', function(command, done){
+    app(command.name).config()
+    .then(function(config){
+      config.webhook.enable = false;
+      return config;
+    })
+    .then(function(config){
+      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('saveWebhook', function(command, done){
+    app(command.name).config()
+    .then(function(config){
+      config.webhook['secret'] = command.secret;
+      config.webhook['from-ip'] = command.fromIp;
+      return config;
+    })
+    .then(function(config){
+      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
   })
 ];

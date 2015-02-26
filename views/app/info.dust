@@ -17,6 +17,39 @@
     </button>
   </div>
 
+  <hr />
+
+  {#config.webhook}
+    <div data-viewmodel="AppInfoWebhookVM" data-model="{config|js}">
+      <div data-bind="visible: enabled" style="{^enable}display:none{/enable}">
+        <button class="pure-button" data-bind="click:disable" style="float:right"><i class="fa fa-fw fa-close"></i>&nbsp;Disable</button>
+        <button class="pure-button" data-bind="click:edit" style="float:right"><i class="fa fa-fw fa-edit"></i>&nbsp;Edit</button>
+        <dl>
+          <dt>Secret</dt>
+          <dd data-bind="text: secret">{secret}</dd>
+          <dt>Endpoint IP</dt>
+          <dd data-bind="text: fromIp">{from-ip}</dd>
+        </dl>
+      </div>
+      <form class="pure-form pure-form-stacked" data-bind="visible: editing" style="display:none">
+        
+        <label for="secret">Secret</label>
+        <input id="secret" data-bind="value: secret">
+        
+        <label for="from-ip">From ip</label>
+        <input id="from-ip" data-bind="value: fromIp" placeholder="aa.b.cc.dd/24">
+      
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
+        <button class="pure-button" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i>&nbsp;Cancel</button>
+      </form>
+      <div data-bind="visible: disabled" style="text-align: center; {?enable}display:none{/enable}">
+        <button class="pure-button pure-button-large" data-bind="click:enable"><i class="fa fa-fw fa-check"></i>&nbsp;Enable</button>
+      </div>
+    </div>
+  {/config.webhook}
+
+  <hr />
+
   <table class="pure-table pure-table-striped">
     <thead>
       <tr>

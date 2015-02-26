@@ -6,8 +6,8 @@ function app(name){
   return {
     config: function(){
       return fs.readFile('config/apps/'+name+'/config.json')
-      .then(JSON.parse)
-      .then(freeze);
+      .then(JSON.parse);
+      //.then(freeze);
     }
   };
 };

@@ -11,6 +11,11 @@ function validateDeploy(name, secret, image, ip, callback_url){
       throw 'config folder name does not match config.json name';
     }
 
+    console.log('enabled', config.webhook.enable);
+    if(!config.webhook.enable){
+      throw 'webhook disabled';
+    }
+
     console.log('secret', config.webhook.secret, secret);
     if(config.webhook.secret !== secret){
       throw 'wrong secret';
