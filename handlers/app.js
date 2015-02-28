@@ -51,7 +51,10 @@ module.exports = [
     .then(deploy)
     .then(function(){
       done(null, true);
-    }, done);
+    }, function(error){
+      console.error(error);
+      done(error);
+    });
   }),
   qvc.command('enableWebhook', function(command, done){
     app(command.name).config()

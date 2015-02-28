@@ -1,21 +1,26 @@
 {>"app/layout"/}
 {<content}
   {#config}
-    <a class="pure-button" href="/app/{name}/edit"><i class="fa fa-fw fa-edit"></i>&nbsp;Edit</a>
+    <p>{description}</p>
     <dl>
       <dt>Image</dt>
       <dd>{image}</dd>
-      <dt>Description</dt>
-      <dd>{description}</dd>
     </dl>
   {/config}
 
-  <div data-viewmodel="AppInfoVM" data-model="{config|js}">
-    <button class="pure-button button-secondary" data-bind="click: deploy, disable: deploy.isBusy">
+  <form class="pure-form" data-viewmodel="AppInfoVM" data-model="{config|js}">
+    <h2>
+      Deploy
+    </h2>
+    <p style="text-align: center">Pull the latest version of <code>{config.image}</code> from the Docker Hub and start it, then stop and remove the previous version</p>
+    <span class="pure-u-1-4"></span>
+    <button class="pure-button pure-button-primary button-xlarge pure-input-1-2" data-bind="click: deploy, disable: deploy.isBusy">
     <i class="fa fa-fw fa-cloud-upload" data-bind="css: {'fa-spin': deploy.isBusy, 'fa-refresh': deploy.isBusy, 'fa-cloud-upload': !deploy.isBusy()}"></i>&nbsp;
-      Deploy a new version
+      Deploy
     </button>
-  </div>
+    <div style="text-align: center" data-bind="text: result" class="validation-error-message"></div>
+  </form>
+
 
   {#config}
     <div data-viewmodel="AppInfoWebhookVM" data-model="{.|js}">
@@ -58,9 +63,9 @@
     </div>
   {/config}
 
-  <hr />
+  <h2>Versions</h2>
 
-  <table class="pure-table pure-table-striped">
+  <table class="pure-table pure-table-striped table-fixed">
     <thead>
       <tr>
         <th>Name</th>

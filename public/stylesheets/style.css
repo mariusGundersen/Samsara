@@ -40,6 +40,8 @@
 .button-minimal:active{
   background: transparent;
   border: none;
+  padding: 0;
+  box-shadow: none;
 }
 
 .button-xsmall {
@@ -68,4 +70,14 @@ dt{
 
 .pull-right{
   float: right; 
+}
+
+h2{
+  margin-top: 3em;
+  border-bottom: 1px solid #ccc; 
+}
+
+.table-fixed{
+  table-layout: fixed;
+  width: 100%;
 }
