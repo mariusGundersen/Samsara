@@ -2,6 +2,7 @@ var qvc = require('qvc');
 var app = require('../providers/app');
 var deploy = require('../private/deploy');
 var fs = require('fs-promise');
+var mutateAppConfig = require('../mutators/appConfig');
 
 module.exports = [
   qvc.command('newApp', function(command, done){
@@ -47,39 +48,24 @@ module.exports = [
     ]
   }),
   qvc.command('setAppImage', function(command, done){
-    app(command.name).config()
-    .then(function(config){
+    mutateAppConfig(command.name, function(config){
       config.image = command.value;
-      return config;
-    })
-    .then(function(config){
-      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
     })
     .then(function(){
       done(null, true);
     }, done);
   }),
   qvc.command('setAppDescription', function(command, done){
-    app(command.name).config()
-    .then(function(config){
+    mutateAppConfig(command.name, function(config){
       config.description = command.value;
-      return config;
-    })
-    .then(function(config){
-      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
     })
     .then(function(){
       done(null, true);
     }, done);
   }),
   qvc.command('setAppUrl', function(command, done){
-    app(command.name).config()
-    .then(function(config){
+    mutateAppConfig(command.name, function(config){
       config.url = command.value;
-      return config;
-    })
-    .then(function(config){
-      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
     })
     .then(function(){
       done(null, true);
@@ -96,40 +82,25 @@ module.exports = [
     });
   }),
   qvc.command('enableWebhook', function(command, done){
-    app(command.name).config()
-    .then(function(config){
+    mutateAppConfig(command.name, function(config){
       config.webhook.enable = true;
-      return config;
-    })
-    .then(function(config){
-      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
     })
     .then(function(){
       done(null, true);
     }, done);
   }),
   qvc.command('disableWebhook', function(command, done){
-    app(command.name).config()
-    .then(function(config){
+    mutateAppConfig(command.name, function(config){
       config.webhook.enable = false;
-      return config;
-    })
-    .then(function(config){
-      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
     })
     .then(function(){
       done(null, true);
     }, done);
   }),
   qvc.command('saveWebhook', function(command, done){
-    app(command.name).config()
-    .then(function(config){
+    mutateAppConfig(command.name, function(config){
       config.webhook['secret'] = command.secret;
       config.webhook['from-ip'] = command.fromIp;
-      return config;
-    })
-    .then(function(config){
-      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
     })
     .then(function(){
       done(null, true);
