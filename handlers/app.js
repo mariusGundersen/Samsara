@@ -46,6 +46,45 @@ module.exports = [
       }
     ]
   }),
+  qvc.command('setAppImage', function(command, done){
+    app(command.name).config()
+    .then(function(config){
+      config.image = command.value;
+      return config;
+    })
+    .then(function(config){
+      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('setAppDescription', function(command, done){
+    app(command.name).config()
+    .then(function(config){
+      config.description = command.value;
+      return config;
+    })
+    .then(function(config){
+      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('setAppUrl', function(command, done){
+    app(command.name).config()
+    .then(function(config){
+      config.url = command.value;
+      return config;
+    })
+    .then(function(config){
+      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify(config, null, '  '));
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
   qvc.command('deployApp', function(command, done){
     app(command.name).config()
     .then(deploy)

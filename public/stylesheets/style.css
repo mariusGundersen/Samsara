@@ -47,8 +47,11 @@
 .button-minimal:active{
   background: transparent;
   border: none;
-  padding: 0;
   box-shadow: none;
+}
+
+.button-no-padding{
+  padding: 0;
 }
 
 .button-xsmall {
@@ -87,4 +90,11 @@ h2{
 .table-fixed{
   table-layout: fixed;
   width: 100%;
+}
+
+.control-like{
+  padding: 0.5em 0 0.6em;
+  display: inline-block;
+  box-sizing: border-box;
+  line-height: normal;
 }
