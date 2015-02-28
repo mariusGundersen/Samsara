@@ -23,8 +23,7 @@ router.get('/', function(req, res, next) {
   .then(function (pageModel) {
     res.render('index', pageModel);
   }).catch(function(err){
-    console.log(err);
-    res.render('error', {message: err.message, error: err});
+    res.render('error', {content:{message: error.message, error: error}});
   });
 });
 

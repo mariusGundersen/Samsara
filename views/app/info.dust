@@ -68,17 +68,15 @@
   <table class="pure-table pure-table-striped table-fixed">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Image</th>
+        <th>Version</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
       {#containers}
         <tr>
-          <td><a href="/container/{Id}" title="{Id}">{Name}</a></td>
-          <td>{Image}</td>
-          <td>{Status}</td>
+          <td><a href="/container/{id}" title="{id}">v{version}</a></td>
+          <td>{state}</td>
         </tr>
       {/containers}
     </tbody>

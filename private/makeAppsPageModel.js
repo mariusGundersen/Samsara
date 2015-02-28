@@ -1,41 +1,12 @@
 var apps = require('../providers/app');
-var docker = require('./docker');
+var appContainers = require('../providers/appContainers');
 var Promise = require('promise');
 
 module.exports = function(title, content, currentAppName){
   return apps.list()
   .then(function(apps){
     return Promise.all(apps.map(function(name){
-      return docker.listContainers({all:true})
-      .then(function(containers){
-        return Promise.all(containers.map(function(container){
-          return docker.getContainer(container.Id).inspect().then(function(info){
-            return {
-              name: info.Name.substr(1),
-              id: info.Id,
-              image: info.Image,
-              state: info.State.Running ? 'running' : 'stopped'
-            };
-          });
-        }))
-      })
-      .then(function(allContainers){
-        return allContainers.filter(function(container){
-          var match =  /^(.*)_v(\d+)$/.exec(container.name);
-          return match && match[1] == name;
-        }).map(function(container){
-          return {
-            name: container.name,
-            id: container.id,
-            image: container.image,
-            state: container.state,
-            version: /^(.*)_v(\d+)$/.exec(container.name)[2]
-          };
-        }).sort(function(a,b){
-          return a.version < b.version ? 1 : a.version > b.version ? -1 : 0;
-        });
-      }).then(function(versions){
-        
+      return appContainers(name).then(function(versions){        
         var runningContainer = versions.filter(function(c){ return c.state == 'running'})[0];
         
         return {
@@ -47,7 +18,6 @@ module.exports = function(title, content, currentAppName){
       });
     }))
     .then(function(list){
-      
       list.filter(function(app){
         return app.name == currentAppName;
       }).forEach(function(app){
@@ -70,6 +40,6 @@ module.exports = function(title, content, currentAppName){
       },
       title: title,
       content: content || {}
-    }
+    };
   });
 }
