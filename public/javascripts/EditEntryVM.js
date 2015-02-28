@@ -23,5 +23,11 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
       self.value(oldValue);
       self.editing(false);
     };
+    
+    this.editing.subscribe(function(value){
+      if(!value){
+        self.value(oldValue);
+      }
+    });
   };
 });
