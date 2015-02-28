@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
     return makePageModel('Containers', {containers: list}, null);
   })
   .then(function (pageModel) {
-    res.render('index', pageModel);
+    res.render('container/index', pageModel);
   }).catch(function(err){
     res.render('error', {content:{message: error.message, error: error}});
   });

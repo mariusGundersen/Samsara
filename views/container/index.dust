@@ -1,6 +1,7 @@
-{>layout/}
+{>"container/layout"/}
 {<content}
-<table class="pure-table pure-table-striped">
+<h2>Containers</h2>
+<table class="pure-table pure-table-striped table-fixed">
   <thead>
     <tr>
       <th>Name</th>

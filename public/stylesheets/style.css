@@ -98,3 +98,7 @@ h2{
   box-sizing: border-box;
   line-height: normal;
 }
+
+.text-faded{
+  color: #ccc;
+}

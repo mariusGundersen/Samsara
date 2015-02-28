@@ -1,5 +1,6 @@
-{>layout/}
+{>"container/layout"/}
 {<content}
+<h2>{name}</h2>
 <div data-viewmodel="ContainerViewModel" data-model="{info|js}">
   <button class="pure-button button-success" 
           data-bind="click: start, visible:!running(), disable: isBusy" 
@@ -26,5 +27,5 @@
     Remove
   </button>
 </div>
-<pre>{info|js}</pre>
+<pre>{json}</pre>
 {/content}

@@ -42,9 +42,9 @@ app.use('/qvc', qvc(
   require('./handlers/app')
 ));
 
-app.use('/', require('./routes/index'));
 app.use('/container', require('./routes/container'));
 app.use('/app', require('./routes/app'));
+app.use('/', require('./routes/app'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

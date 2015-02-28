@@ -20,26 +20,7 @@
     <div id="menu">
       {#mainMenu}
       {+mainMenu}
-      <div class="pure-menu pure-menu-open">
-        <a class="pure-menu-heading" href="/">Containers</a>
-        <ul class="pure-menu-list">
-          <li class="pure-menu-item">
-            <a class="pure-menu-link" href="/app/new"><i class="fa fa-plus fa-fw"></i>Create new app</a>
-          </li>
-          {#containers}
-            <li data-viewmodel="MenuListContainerVM" 
-                data-model="{.|js}" 
-                class="container-state-{state} {?selected}pure-menu-selected{/selected}" 
-                data-bind="css:{'container-state-running':running(), 'container-state-stopped':!running()}">
-              <a class="pure-menu-link" href="/container/{id}">
-                <i class="fa fa-play fa-fw"></i>
-                <i class="fa fa-stop fa-fw"></i>
-                {name}
-              </a>
-            </li>
-          {/containers}
-        </ul>
-      </div>
+      This is where the menu goes
       {/mainMenu}
       {/mainMenu}
     </div>

@@ -1,23 +1,23 @@
 {>layout/}
 {<mainMenu}
 <div class="pure-menu pure-menu-open">
-  <a class="pure-menu-heading" href="/">Apps</a>
+  <a class="pure-menu-heading" href="/container">Containers</a>
   <ul class="pure-menu-list">
     <li class="pure-menu-item">
-      <a href="/app/new" class="pure-menu-link"><i class="fa fa-plus fa-fw"></i>Create new app</a>
+      <a class="pure-menu-link" href="/app/new"><i class="fa fa-plus fa-fw"></i>Create new app</a>
     </li>
-    {#apps}
+    {#containers}
       <li data-viewmodel="MenuListContainerVM" 
           data-model="{.|js}" 
-          class="pure-menu-item container-state-{state} {?selected}pure-menu-selected{/selected}" 
+          class="container-state-{state} {?selected}pure-menu-selected{/selected}" 
           data-bind="css:{'container-state-running':running(), 'container-state-stopped':!running()}">
-        <a class="pure-menu-link" href="/app/{id}">
+        <a class="pure-menu-link" href="/container/{id}">
           <i class="fa fa-play fa-fw"></i>
           <i class="fa fa-stop fa-fw"></i>
-          {name} <span class="container-version">(v{version})</span>
+          {name}
         </a>
       </li>
-    {/apps}
+    {/containers}
   </ul>
 </div>
 {/mainMenu}
