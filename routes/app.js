@@ -50,7 +50,7 @@ router.get('/:name', function(req, res, next) {
       return makePageModel(req.params.name, {
         config: config,
         containers: containers
-      });
+      }, req.params.name);
     });
   })
   .then(function(pageModel){
