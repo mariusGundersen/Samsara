@@ -16,6 +16,10 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
       return self.state() == 'editing'; 
     });
     
+    this.url = ko.computed(function(){
+      return document.location.origin+'/deploy/'+model.name+'/'+self.secret();
+    });
+    
     this.edit = function(){
       self.state('editing');
     };
@@ -23,7 +27,7 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     this.enable = qvc.createCommand('enableWebhook', {
       name: model.name
     }).success(function(){
-      self.state('enabled');
+      self.state('editing');
     });
     
     this.disable = qvc.createCommand('disableWebhook', {

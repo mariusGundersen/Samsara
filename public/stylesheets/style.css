@@ -34,10 +34,38 @@
   background: rgb(66, 184, 221); /* this is a light blue */
 }
 
+.button-minimal,
+.button-minimal:hover,
+.button-minimal:focus,
+.button-minimal:active{
+  background: transparent;
+  border: none;
+}
+
+.button-xsmall {
+    font-size: 70%;
+}
+
+.button-small {
+    font-size: 85%;
+}
+
+.button-large {
+    font-size: 110%;
+}
+
+.button-xlarge {
+    font-size: 125%;
+}
+
 dt{
   font-weight: bold;
 }
 
 .validation-error-message{
   color: #d00; 
+}
+
+.pull-right{
+  float: right; 
 }
