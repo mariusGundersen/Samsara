@@ -14,7 +14,7 @@ window.onload = function(){
     return Array.prototype.indexOf.call(pane.element.classList, 'menu') != -1;
   }).forEach(function(dragger, index, draggers){
     dragger.element.querySelector('h2').addEventListener('click', function(){
-      handleMenuClicked(panes[panes.length -2- index]);
+      handleMenuClicked(panes[panes.length - (2 + index)]);
     }, false);
     dragger.element.addEventListener('pointerdown', handlePointerDown, false);
   });
@@ -85,7 +85,7 @@ window.onload = function(){
       if(dx < PANEL_WIDTH/2){
         dx = 0;
       }else if(dx < (PANEL_WIDTH+ICON_WIDTH)/2+(PANEL_WIDTH-ICON_WIDTH)){
-        dx = PANEL_WIDTH+ICON_WIDTH;
+        dx = PANEL_WIDTH+(panes.length == 3 ? 0 : ICON_WIDTH);
       }else{
         dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+ICON_WIDTH))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+ICON_WIDTH);
       }
@@ -133,8 +133,8 @@ window.onload = function(){
       };
     });
 
-    if(size == -1){
-      panes[2].widthIcon = -35;
+    if(size == -1 && panes.length > 2){
+      panes[panes.length-2].widthIcon = panes.length == 3 ? 0 : -ICON_WIDTH;
     }
 
     panes.reduce(function(v, pane, index, panes){

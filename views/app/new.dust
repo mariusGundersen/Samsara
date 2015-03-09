@@ -1,26 +1,28 @@
 {>"app/layout"/}
-{<content}
-<form class="pure-form pure-form-aligned" data-viewmodel="NewAppVM" data-bind="submit: create">
-  <h2>New app</h2>
-  <div class="pure-control-group">
-    <label>
-      Name
-    </label>
-    <input data-bind="value: name" placeholder="ex: website"> 
-    <span class="validation-error-message" data-bind="validationMessageFor:name"></span>
+{<appPage}
+<div class="pane content">
+  <form class="pure-form pure-form-aligned" data-viewmodel="NewAppVM" data-bind="submit: create">
+    <h2>New app</h2>
+    <div class="pure-control-group">
+      <label>
+        Name
+      </label>
+      <input data-bind="value: name" placeholder="ex: website"> 
+      <span class="validation-error-message" data-bind="validationMessageFor:name"></span>
+      </div>
+    <div class="pure-control-group">
+      <label>
+        Image
+      </label>
+      <input data-bind="value: image" placeholder="ex: nginx">
+      <span class="validation-error-message" data-bind="validationMessageFor:image"></span>
     </div>
-  <div class="pure-control-group">
-    <label>
-      Image
-    </label>
-    <input data-bind="value: image" placeholder="ex: nginx">
-    <span class="validation-error-message" data-bind="validationMessageFor:image"></span>
-  </div>
-  <div class="pure-controls">
-    <button type="submit" class="pure-button button-success" data-bind="disable: create.isBusy">
-      <i class="fa fa-fw fa-check" data-bind="css: {'fa-spin': create.isBusy, 'fa-refresh': create.isBusy, 'fa-check': !create.isBusy()}"></i>&nbsp;
-      Create
-    </button>
-  </div>
-</form>
-{/content}
+    <div class="pure-controls">
+      <button type="submit" class="pure-button button-success" data-bind="disable: create.isBusy">
+        <i class="fa fa-fw fa-check" data-bind="css: {'fa-spin': create.isBusy, 'fa-refresh': create.isBusy, 'fa-check': !create.isBusy()}"></i>&nbsp;
+        Create
+      </button>
+    </div>
+  </form>
+</div>
+{/appPage}

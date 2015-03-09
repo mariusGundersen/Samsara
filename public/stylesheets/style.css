@@ -12,10 +12,10 @@
 }
 
 .container-version{
-  color: #555;
+  color: #567;
 }
-.pure-menu-selected .container-version{
-  color: #aaa;
+.selected .container-version{
+  color: #789;
 }
 
 

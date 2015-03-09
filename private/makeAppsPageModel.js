@@ -35,7 +35,7 @@ module.exports = function(title, content, currentAppName){
   })
   .then(function(apps){
     return {
-      mainMenu: {
+      menu: {
         apps: apps
       },
       title: title,
