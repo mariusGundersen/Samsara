@@ -42,9 +42,9 @@ app.use('/qvc', qvc(
   require('./handlers/app')
 ));
 
-app.use('/container', require('./routes/container'));
-app.use('/app', require('./routes/app'));
-app.use('/', require('./routes/app'));
+app.use('/container/', require('./routes/container'));
+app.use('/app/', require('./routes/app'));
+app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -62,6 +62,7 @@ if (app.get('env') === 'development') {
         res.status(err.status || 500);
         res.render('error', {
           title: 'Error',
+          menu:{settings:false},
           content: {
             message: err.message,
             error: err
@@ -76,6 +77,7 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       title: 'Error',
+      mentu:{settings:false},
       content: {
         message: err.message,
         error: {}

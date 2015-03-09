@@ -1,6 +1,7 @@
 var apps = require('../providers/app');
 var appContainers = require('../providers/appContainers');
 var Promise = require('promise');
+var makePageModel = require('./makePageModel');
 
 module.exports = function(title, content, currentAppName){
   return apps.list()
@@ -34,12 +35,12 @@ module.exports = function(title, content, currentAppName){
     });
   })
   .then(function(apps){
-    return {
+    return makePageModel(title, {
       menu: {
+        newApp: currentAppName == 'new',
         apps: apps
       },
-      title: title,
       content: content || {}
-    };
+    }, 'app');
   });
 }

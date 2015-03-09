@@ -4,7 +4,7 @@ var Promise = require('promise');
 var app = require('../providers/app');
 var docker = require('../private/docker');
 var appContainers = require('../providers/appContainers');
-var makePageModel = require('../private/makeAppsPageModel');
+var makePageModel = require('../private/makeAppPageModel');
 
 router.get('/', function(req, res, next) {
   Promise.all([
