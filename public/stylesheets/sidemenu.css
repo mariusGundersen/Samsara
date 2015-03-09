@@ -56,23 +56,22 @@ li{
   padding: 0;
   list-style:none;
 }
+li sub{
+  position: relative;
+  left: -.5em;
+}
 li a{
   text-decoration: none;
   padding: 10px 7px;
   display: block;
   color: white;
+  white-space: nowrap;
 }
 li.selected a{
   background: #405060;
 }
 li a:active{
   background: #405060; 
-}
-.fa-play{
-  color: #080;
-}
-.fa-stop{
-  color: #a00;
 }
 .menu h2{
   padding-left:7px;

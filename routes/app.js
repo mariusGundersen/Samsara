@@ -4,6 +4,8 @@ var Promise = require('promise');
 var app = require('../providers/app');
 var appContainers = require('../providers/appContainers');
 var makePageModel = require('../private/makeAppPageModel');
+var docker = require('../private/docker');
+var moment = require('moment');
 
 router.get('/', function(req, res, next) {
   app
@@ -54,6 +56,43 @@ router.get('/:name/edit', function(req, res, next) {
   makePageModel('Edit '+req.params.name)
   .then(function(pageModel){
     res.render('app/edit', pageModel);
+  });
+});
+
+router.get('/:name/version/:version', function(req, res, next){
+  appContainers(req.params.name)
+  .then(function(containers){
+    
+    containers.forEach(function(c){
+      c.name = req.params.name;
+      c.description = moment(c.state == 'running' ? c.info.State.StartedAt : c.info.State.FinishedAt).fromNow(c.state == 'running');
+    });
+    
+    var found = containers.filter(function(c){
+      return c.version == req.params.version;
+    })[0];
+    
+    if(!found) throw new Error('404');
+    
+    found.selected = true;
+        
+    return docker.getContainer(found.id).inspect().then(function(result){
+    
+      return makePageModel(req.params.name + ' - ' + req.params.version, {
+        menu: containers,
+        name: req.params.name,
+        content:{
+          name: req.params.name,
+          version: req.params.version,
+          json: JSON.stringify(result, null, '  ')
+        }
+      }, req.params.name);
+    });
+  })
+  .then(function(pageModel){
+    res.render('app/version/index', pageModel);
+  }).catch(function(error){
+    res.render('error', {content:{message: error.message, error: error}});
   });
 });
 

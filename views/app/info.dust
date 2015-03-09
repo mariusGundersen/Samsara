@@ -102,7 +102,7 @@
       <tbody>
         {#containers}
           <tr>
-            <td><a href="/container/{id}" title="{id}">v{version}</a></td>
+            <td><a href="/app/{config.name}/version/{version}" title="{id}">v{version}</a></td>
             <td>{state}</td>
           </tr>
         {/containers}

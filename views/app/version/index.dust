@@ -1,0 +1,7 @@
+{>"app/version/layout"/}
+{<appVersionPage}
+<div class="pane content">
+  <h2>{name} v{version}</h2>
+  <pre>{json}</pre>
+</div>
+{/appVersionPage}

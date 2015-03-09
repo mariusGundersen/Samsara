@@ -1,0 +1,40 @@
+{>"app/layout"/}
+{<appPage}
+  <div class="menu pane">
+    <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/app/{name}">Versions</a></h2>
+    <ul>
+      {#menu}
+        <li class="container-state-{state} {?selected}selected{/selected}">
+          <a href="/app/{name}/version/{version}">
+            {version}
+            <sub>
+              <i class="fa fa-play"></i>
+              <i class="fa fa-stop"></i>
+            </sub> 
+            {description}
+          </a>
+        </li>
+      {/menu}
+    </ul>
+  </div>
+  
+  
+  {#content}
+  {+appVersionPage}
+  <div class="content pane">
+    <h2>Create a new page!</h2>
+    <pre>
+{`
+{&gt;"app/version/layout"/}
+{&lt;appVersionPage}
+  &lt;div class="pane content"&gt;
+    &lt;h2&gt;Put something here&lt;/h2&gt;
+    &lt;p&gt;And something more here...&lt;/p&gt;
+  &lt;/div&gt;
+{/appVersionPage}
+`}
+    </pre>
+  </div>
+  {/appVersionPage}
+  {/content}
+{/appPage}
