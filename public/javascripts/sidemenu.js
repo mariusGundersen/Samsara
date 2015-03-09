@@ -13,7 +13,7 @@ window.onload = function(){
   panes.filter(function(pane){
     return Array.prototype.indexOf.call(pane.element.classList, 'menu') != -1;
   }).forEach(function(dragger, index, draggers){
-    dragger.element.querySelector('h2').addEventListener('click', function(){
+    dragger.element.querySelector("h2 a[href='#']").addEventListener('click', function(){
       handleMenuClicked(panes[panes.length - (2 + index)]);
     }, false);
     dragger.element.addEventListener('pointerdown', handlePointerDown, false);

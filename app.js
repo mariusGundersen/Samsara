@@ -42,8 +42,8 @@ app.use('/qvc', qvc(
   require('./handlers/app')
 ));
 
-app.use('/container/', require('./routes/container'));
-app.use('/app/', require('./routes/app'));
+app.use('/container(s?)/', require('./routes/container'));
+app.use('/app(s?)/', require('./routes/app'));
 app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler

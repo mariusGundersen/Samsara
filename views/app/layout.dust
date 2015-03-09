@@ -1,7 +1,7 @@
 {>layout/}
 {<content}
   <div class="menu pane">
-    <h2><a href="#"><i class="fa fa-sun-o fa-fw"></i>Spirits</a></h2>
+    <h2><a href="#"><i class="fa fa-sun-o fa-fw"></i></a><a href="/apps">Spirits</a></h2>
     <ul>
       <li class="{?menu.newApp}selected{/menu.newApp}">
         <a href="/app/new"><i class="fa fa-plus fa-fw"></i>Create new app</a>
