@@ -33,7 +33,7 @@ module.exports = function(title, content, currentContainerId){
   })
   .then(function(containers){
     return {
-      mainMenu: {
+      menu: {
         containers: containers
       },
       title: title,

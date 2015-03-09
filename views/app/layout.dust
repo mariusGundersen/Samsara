@@ -1,7 +1,7 @@
 {>layout/}
 {<content}
   <div class="menu pane">
-    <h2><a href="#"><i class="fa fa-star fa-fw"></i>Spirits</a></h2>
+    <h2><a href="#"><i class="fa fa-sun-o fa-fw"></i>Spirits</a></h2>
     <ul>
       <li>
         <a href="/app/new"><i class="fa fa-plus fa-fw"></i>Create new app</a>
@@ -23,7 +23,7 @@
   {+appPage}
   <div class="content pane">
     <h2>Create a new page!</h2>
-    <pre  >
+    <pre>
 {`
 {&gt;"app/layout"/}
 {&lt;appPage}
