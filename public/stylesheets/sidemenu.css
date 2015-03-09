@@ -1,0 +1,93 @@
+*{
+  box-sizing: border-box;
+  
+}
+html{
+  height: 100%;
+  overflow: hidden;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  background: red;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+div.menu{
+  will-change: transform;
+  color: white;
+  padding: 0;
+  background: #303840;
+  flex: 0 1 200px;
+  width: 200px;
+  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+div.content{
+  will-change: transform;
+  padding: 0 1em;
+  flex: 1 0 85px;
+  background: white;
+  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
+  overflow-y: auto;
+  overflow-x: auto;
+  position: relative;
+}
+body[animate-menus=true] div.content,
+body[animate-menus=true] .menu{
+  transition: transform .5s ease-out;
+}
+body[animate-menus=false] *{
+  cursor: grabbing;
+}
+
+ul{
+  margin: 0;
+  padding: 0;
+}
+li{
+  margin: 0;
+  padding: 0;
+  list-style:none;
+}
+li sub{
+  position: relative;
+  left: -.5em;
+}
+li a{
+  text-decoration: none;
+  padding: 10px 7px;
+  display: block;
+  color: white;
+  white-space: nowrap;
+}
+li.selected a{
+  background: #405060;
+}
+li a:active{
+  background: #405060; 
+}
+.menu h2{
+  padding-left:7px;
+  margin:0;
+  white-space: nowrap;
+  cursor:pointer;
+}
+.menu h2 a{
+  text-decoration: none;
+  color: white;
+}
+.menu .fa-fw{
+  width: 20px;
+  display: inline-block;
+  margin-right: 8px
+}
+.content h2{
+  margin-top: 0;
+}

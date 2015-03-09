@@ -1,8 +1,8 @@
 .container-state-running i.fa-play{
-  color: #060;
+  color: #0a0;
 }
 .container-state-stopped i.fa-stop{
-  color: #900;
+  color: #c00;
 }
 .container-state-stopped i.fa-play{
   display: none;
@@ -11,11 +11,12 @@
   display: none;
 }
 
+
 .container-version{
-  color: #555;
+  color: #567;
 }
-.pure-menu-selected .container-version{
-  color: #aaa;
+.selected .container-version{
+  color: #789;
 }
 
 

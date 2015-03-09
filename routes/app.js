@@ -2,33 +2,21 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('promise');
 var app = require('../providers/app');
-var docker = require('../private/docker');
 var appContainers = require('../providers/appContainers');
-var makePageModel = require('../private/makeAppsPageModel');
+var makePageModel = require('../private/makeAppPageModel');
+var docker = require('../private/docker');
+var moment = require('moment');
 
 router.get('/', function(req, res, next) {
-  Promise.all([
-    app
-    .list()
-    .then(function(apps){
-      return Promise.all(apps.map(function(name){
-        return app(name).config();
-      }));
-    }),
-    docker.listContainers({all: true})
-    .then(function(containers){
-      return containers.map(function(container){
-        return {
-          Id: container.Id,
-          Name: container.Names[0].substr(1),
-          Status: container.Status,
-          Image: container.Image
-        }
-      });
-    })
-  ])
+  app
+  .list()
+  .then(function(apps){
+    return Promise.all(apps.map(function(name){
+      return app(name).config();
+    }));
+  })
   .then(function(result){
-    return makePageModel('Apps', {apps:result[0], containers:result[1]});
+    return makePageModel('Apps', {apps:result});
   })
   .then(function(pageModel){
     res.render('app/index', pageModel);
@@ -68,6 +56,43 @@ router.get('/:name/edit', function(req, res, next) {
   makePageModel('Edit '+req.params.name)
   .then(function(pageModel){
     res.render('app/edit', pageModel);
+  });
+});
+
+router.get('/:name/version/:version', function(req, res, next){
+  appContainers(req.params.name)
+  .then(function(containers){
+    
+    containers.forEach(function(c){
+      c.name = req.params.name;
+      c.description = moment(c.state == 'running' ? c.info.State.StartedAt : c.info.State.FinishedAt).fromNow(c.state == 'running');
+    });
+    
+    var found = containers.filter(function(c){
+      return c.version == req.params.version;
+    })[0];
+    
+    if(!found) throw new Error('404');
+    
+    found.selected = true;
+        
+    return docker.getContainer(found.id).inspect().then(function(result){
+    
+      return makePageModel(req.params.name + ' - ' + req.params.version, {
+        menu: containers,
+        name: req.params.name,
+        content:{
+          name: req.params.name,
+          version: req.params.version,
+          json: JSON.stringify(result, null, '  ')
+        }
+      }, req.params.name);
+    });
+  })
+  .then(function(pageModel){
+    res.render('app/version/index', pageModel);
+  }).catch(function(error){
+    res.render('error', {content:{message: error.message, error: error}});
   });
 });
 

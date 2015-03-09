@@ -43,11 +43,11 @@ module.exports = function deploy(config){
       console.log("old container found, will be stopped and removed", id);
       return container.stop()
       .then(function(){
-        console.log("removing old container", id);
-        return container.remove();
+        console.log("stopped old container", id);
+        //return container.remove();
       }, function(){
-        console.log("container already stopped, removing it", id);
-        return container.remove();
+        console.log("container already stopped", id);
+        //return container.remove();
       });
     }));
   });
