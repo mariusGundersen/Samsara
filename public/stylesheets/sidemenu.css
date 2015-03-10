@@ -61,10 +61,6 @@ li{
   padding: 0;
   list-style:none;
 }
-li sub{
-  position: relative;
-  left: -.5em;
-}
 li a{
   text-decoration: none;
   padding: 10px 7px;
@@ -78,6 +74,16 @@ li.selected a{
 li a:active{
   background: #405060; 
 }
+li a .version{
+  display: inline-block;
+  width: 20px;
+  margin-right: 8px;
+  text-align: right;
+}
+li.container-state-stopped a{
+  color: #707880;
+}
+
 .menu h2{
   padding-left:7px;
   margin:0;

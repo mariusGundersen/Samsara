@@ -6,11 +6,9 @@
       {#menu}
         <li class="container-state-{state} {?selected}selected{/selected}">
           <a href="/app/{name}/version/{version}">
-            {version}
-            <sub>
-              <i class="fa fa-play"></i>
-              <i class="fa fa-stop"></i>
-            </sub> 
+            <span class="version">
+              {version}
+            </span>- 
             {description}
           </a>
         </li>
