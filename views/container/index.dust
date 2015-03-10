@@ -1,7 +1,7 @@
 {>"container/layout"/}
 {<containerPage}
 <div class="pane content">
-  <h2>Containers</h2>
+  <h2 class="dragger">Containers</h2>
   <table class="pure-table pure-table-striped table-fixed">
     <thead>
       <tr>

@@ -23,6 +23,8 @@ window.onload = function(){
   document.body.addEventListener('pointerleave', handlePointerUp, false);
   document.body.addEventListener('pointercancel', handlePointerUp, false);
   
+  document.querySelector('.content h2.dragger').addEventListener('pointerdown', handlePointerDown, false);
+  
   function handleWindowResize(){
     document.body.setAttribute('animate-menus', 'false');
     panes = createPanes(paneElements, screenSize());
@@ -112,7 +114,8 @@ window.onload = function(){
   }
   
   function translateElement(element, value){
-    element.style.transform = "translate("+value+"px)";
+    element.style.transform = "translate3d("+value+"px, 0px, 0px)";
+    element.style.webkitTransform = "translate3d("+value+"px, 0px, 0px)";
   }
 
   function screenSize(){

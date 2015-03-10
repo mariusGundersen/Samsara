@@ -2,7 +2,7 @@
 {<appPage}
 <div class="pane content">
   <form class="pure-form pure-form-aligned" data-viewmodel="NewAppVM" data-bind="submit: create">
-    <h2>New app</h2>
+    <h2 class="dragger">New app</h2>
     <div class="pure-control-group">
       <label>
         Name

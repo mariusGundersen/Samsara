@@ -1,8 +1,8 @@
 {>layout/}
 {<content}
   <div class="pane content">
-    <h1>{message}</h1>
-    <h2>{error.status}</h2>
+    <h2 class="dragger">{message}</h2>
+    <h3>{error.status}</h3>
     <pre> {error.stack}</pre>
   </div>
 {/content}

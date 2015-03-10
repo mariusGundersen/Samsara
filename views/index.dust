@@ -1,5 +1,5 @@
 {>layout/}
 {<content}
   <div class="pane content">
-    <h2>Samsara</h2>
+    <h2 class="dragger">Samsara</h2>
 {/content}

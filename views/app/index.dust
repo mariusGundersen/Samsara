@@ -1,7 +1,7 @@
 {>"app/layout"/}
 {<appPage}
   <div class="pane content">
-    <h2>Apps</h2>
+    <h2 class="dragger">Apps</h2>
     <ul class="pure-menu-list">
       {#apps}
         <li class="pure-menu-item">
