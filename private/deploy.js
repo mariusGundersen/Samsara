@@ -1,6 +1,7 @@
 var docker = require('./docker');
 var Promise = require('promise');
 var extend = require('extend');
+var createContainerFromConfig = require('./createContainerFromConfig');
 
 module.exports = function deploy(config){
   console.log(config.image);
@@ -20,10 +21,7 @@ module.exports = function deploy(config){
   .then(function(oldContainer){
     var newName = oldContainer.name+'_v'+(oldContainer.version+1);
     console.log("creating container", newName);
-    return docker.createContainer(extend({
-      Image: config.image, 
-      name: newName
-    }, config.raw))
+    return docker.createContainer(createContainerFromConfig(newName, config))
     .then(function(container){
       console.log("starting container");
       return container.start();

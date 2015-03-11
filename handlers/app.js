@@ -105,5 +105,27 @@ module.exports = [
     .then(function(){
       done(null, true);
     }, done);
-  })
+  }),
+  qvc.command('setEnvVar', function(command, done){
+    mutateAppConfig(command.name, function(config){
+      if(!config.env){
+        config.env = {};
+      }
+      config.env[command.key] = command.value;
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('removeEnvVar', function(command, done){
+    mutateAppConfig(command.name, function(config){
+      if(!config.env){
+        config.env = {};
+      }
+      config.env[command.key] = undefined;
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
 ];
