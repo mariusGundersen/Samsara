@@ -28,12 +28,5 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
       self.key(oldKey);
       self.editing(false);
     };
-    
-    this.editing.subscribe(function(value){
-      if(!value){
-        self.value(oldValue);
-        self.key(oldKey);
-      }
-    });
   };
 });
