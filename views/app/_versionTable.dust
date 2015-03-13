@@ -1,0 +1,20 @@
+<div>
+  <h2>Versions</h2>
+
+  <table class="pure-table pure-table-striped table-fixed">
+    <thead>
+      <tr>
+        <th>Version</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#containers}
+        <tr>
+          <td><a href="/app/{config.name}/version/{version}" title="{id}">v{version}</a></td>
+          <td>{state}</td>
+        </tr>
+      {/containers}
+    </tbody>
+  </table>
+</div>

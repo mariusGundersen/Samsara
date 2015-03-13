@@ -1,0 +1,38 @@
+<div data-viewmodel="app/WebhookVM" data-model="{config|js}">
+  <form class="pure-form pure-form-aligned" data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
+    <h2>
+      Webhook
+      <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit webhook"><i class="fa fa-fw fa-pencil"></i></button>
+    </h2>
+    <div class="pure-control-group">
+      <label for="url">Webhook url</label>
+      <input id="url" readonly class="pure-input-1-2" data-bind="value: url" value="http://example.com/deploy/{config.name}/{config.webhook.secret}">
+    </div>
+  </form>
+  <form class="pure-form pure-form-aligned" data-bind="visible: editing" style="display:none">
+    <h2>
+      Webhook
+      <button class="pure-button button-xsmall pull-right button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
+    </h2>
+    <div class="pure-control-group">
+      <label for="secret">Secret</label>
+      <input id="secret" data-bind="value: secret" class="pure-input-1-2">
+    </div>
+    <div class="pure-control-group">
+      <label for="from-ip">From ip</label>
+      <input id="from-ip" data-bind="value: fromIp" placeholder="162.242.195.64/26" class="pure-input-1-2">
+    </div>
+    <div class="pure-controls">
+      <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button> 
+      <button class="pure-button button-error" data-bind="click:disable"><i class="fa fa-fw fa-close"></i>&nbsp;Disable</button>
+    </div>
+  </form>
+  <form class="pure-form" data-bind="visible: disabled" style="{?config.webhook.enable}display:none{/config.webhook.enable}">
+    <h2>
+      Webhook
+    </h2>
+    <p style="text-align: center">By enabling the webhook the Docker Hub can deploy a new version of this app</p>
+    <span class="pure-u-1-4"></span>
+    <button class="pure-button pure-button-primary button-xlarge pure-input-1-2" data-bind="click:enable"><i class="fa fa-fw fa-check"></i>&nbsp;Enable</button>
+  </form>
+</div>
