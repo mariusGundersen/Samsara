@@ -4,17 +4,30 @@
     <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add environment variable"><i class="fa fa-fw fa-plus"></i></button>
   </h2>
   <div data-bind="foreach: envVars">        
-    <form class="pure-form pure-form-aligned">
+    <form class="pure-form pure-form-aligned" data-bind="visible:state()=='show'" style="display:none">
       <div class="pure-control-group">
-        <label class="control-like" data-bind="visible:!editing(), text:key"></label>
-        <span class="control-like" data-bind="visible:!editing(), text:value"></span>
-        <input value="" data-bind="visible:editing, value:key" style="display:none">
-        <input value="" data-bind="visible:editing, value:value" style="display:none">
-        <button class="pure-button pull-right button-error" style="display:none" data-bind="visible:editing, click:$parent.remove"><i class="fa fa-fw fa-trash"></i>&nbsp;Remove</button>
-        <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
-        <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-        <button class="pure-button pull-right button-minimal" style="display:none" data-bind="visible:!editing(), click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
+        <label class="control-like" data-bind="text:key"></label>
+        <span class="control-like" data-bind="text:value"></span>
+        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+    </form>   
+    <form class="pure-form pure-form-aligned" data-bind="visible:state()=='editing', submit:save" style="display:none">
+      <div class="pure-control-group">
+        <label class="control-like" data-bind="text:key"></label>
+        <input value="" data-bind="value:value" placeholder="value">
+        <button class="pure-button pull-right button-error" data-bind="click:$parent.remove"><i class="fa fa-fw fa-trash"></i>&nbsp;Remove</button>
+        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
+        <button class="pure-button pull-right button-minimal" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-undo"></i></button>
       </div>
     </form>
-  </div>
+  </div> 
+  <form class="pure-form pure-form-aligned" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
+    <div class="pure-control-group">
+      <input value="" data-bind="value:fresh.key" placeholder="key">
+      <input value="" data-bind="value:fresh.value" placeholder="value">
+      <span class="validation-error-message" data-bind="validationMessageFor:fresh.key"></span>
+      <button class="pure-button pull-right button-success" type="submit" data-bind="click:create"><i class="fa fa-fw fa-check"></i>&nbsp;Create</button>
+      <button class="pure-button pull-right button-minimal" type="cancel" data-bind="click:cancelCreate"><i class="fa fa-fw fa-undo"></i></button>
+    </div>
+  </form>
 </div>

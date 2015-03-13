@@ -7,7 +7,7 @@
       <input value="{config.image}" data-bind="visible:editing, value:value" style="display:none">
       <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
       <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-      <button class="pure-button pull-right button-minimal" style="display:none" data-bind="visible:!editing(), click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
+      <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
     </div>
   </form>
   <form class="pure-form pure-form-aligned" data-bind="with:description">
@@ -17,7 +17,7 @@
       <input value="{config.description}" data-bind="visible:editing, value:value" style="display:none">
       <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
       <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-      <button class="pure-button pull-right button-minimal" style="display:none" data-bind="visible:!editing(), click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
+      <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
     </div>
   </form>
   <form class="pure-form pure-form-aligned" data-bind="with:url">
@@ -27,7 +27,7 @@
       <input value="{config.url}" data-bind="visible:editing, value:value" style="display:none">
       <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
       <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-      <button class="pure-button pull-right button-minimal" style="display:none" data-bind="visible:!editing(), click:edit" title="Change url"><i class="fa fa-fw fa-pencil"></i></button>
+      <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change url"><i class="fa fa-fw fa-pencil"></i></button>
     </div>
   </form>
 </div>

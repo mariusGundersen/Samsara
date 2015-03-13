@@ -6,8 +6,16 @@ define(['EditEnvVarVM', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, qvc){
       return new EditEnvVar({key: envVar.key, value: envVar.value, name: model.name});
     }));
     
+    this.creating = ko.observable(false);
+    
     this.add = function(){
-      self.envVars.push(new EditEnvVar({key: '', value: '', name: model.name, editing: true}));
+      self.create.clearValidationMessages();
+      self.creating(true);
+    };
+    
+    this.fresh = {
+      key: ko.observable(),
+      value: ko.observable()
     };
     
     this.remove = function(entry){
@@ -17,6 +25,23 @@ define(['EditEnvVarVM', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, qvc){
       }).success(function(){
         self.envVars.remove(entry);
       })();
+    };
+        
+    this.create = qvc.createCommand("addEnvVar", {
+      name: model.name,
+      key: self.fresh.key,
+      value: self.fresh.value
+    }).success(function(){
+      self.envVars.push(new EditEnvVar({key: self.fresh.key(), value: self.fresh.value(), name: model.name}));
+      self.fresh.value('');
+      self.fresh.key('');
+      self.creating(false);
+    });
+    
+    this.cancelCreate = function(){
+      self.fresh.value('');
+      self.fresh.key('');
+      self.creating(false);
     };
   };
   

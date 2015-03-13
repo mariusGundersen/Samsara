@@ -5,12 +5,12 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     var oldKey = model && model.key;
     var oldValue = model && model.value;
     
-    this.editing = ko.observable(model.editing || false);
+    this.state = ko.observable('show');
     this.value = ko.observable(oldValue);
     this.key = ko.observable(oldKey);
     
     this.edit = function(){
-      self.editing(true);
+      self.state('editing');
     };
     
     this.save = qvc.createCommand("setEnvVar", {
@@ -20,13 +20,13 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     }).success(function(){
       oldValue = self.value();
       oldKey = self.key();
-      self.editing(false);
+      self.state('show');
     });
     
     this.cancel = function(){
       self.value(oldValue);
       self.key(oldKey);
-      self.editing(false);
+      self.state('show');
     };
   };
 });

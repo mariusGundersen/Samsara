@@ -106,10 +106,38 @@ module.exports = [
       done(null, true);
     }, done);
   }),
+  qvc.command('addEnvVar', function(command, done){
+    mutateAppConfig(command.name, function(config){
+      if(!config.env){
+        config.env = {};
+      }
+      config.env[command.key] = command.value;
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }, {
+    parameters: [
+      {
+        name: 'key',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify a key for the new environment variable'
+            }
+          }
+        ]
+      }
+    ]
+  }),
   qvc.command('setEnvVar', function(command, done){
     mutateAppConfig(command.name, function(config){
       if(!config.env){
         config.env = {};
+      }
+      if(command.key != config.env){
+        throw new Error(command.key+" is not in the environment variable list");
       }
       config.env[command.key] = command.value;
     })
