@@ -1,0 +1,17 @@
+<div class="pane menu">
+  <h2><a href="#"><i class="fa fa-th-large fa-fw"></i></a><a href="/containers">Containers</a></h2>
+  <ul>
+    {#menu.containers}
+      <li data-viewmodel="MenuListContainerVM" 
+          data-model="{.|js}" 
+          class="container-state-{state} {?selected}selected{/selected}" 
+          data-bind="css:{'container-state-running':running(), 'container-state-stopped':!running()}">
+        <a href="/container/{id}">
+          <i class="fa fa-play fa-fw"></i>
+          <i class="fa fa-stop fa-fw"></i>
+          {name}
+        </a>
+      </li>
+    {/menu.containers}
+  </ul>
+</div>
