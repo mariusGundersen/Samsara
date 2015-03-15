@@ -39,7 +39,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/qvc', qvc(
   require('./handlers/container'),
-  require('./handlers/app')
+  require('./handlers/app'),
+  require('./handlers/appConfig')
 ));
 
 app.use('/container(s?)/', require('./routes/container'));
