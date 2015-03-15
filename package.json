@@ -24,7 +24,8 @@
     "fs-promise": "~0.3.1",
     "deep-freeze": "0.0.1",
     "extend": "~2.0.0",
-    "moment": "~2.9.0"
+    "moment": "~2.9.0",
+    "ansi-to-html": "~0.3.0"
   },
   "devDependencies": {
     "gulp": "^3.8.10"

@@ -21,5 +21,6 @@ function promiseifyContainer(container){
     start: Promise.denodeify(container.start.bind(container)),
     stop: Promise.denodeify(container.stop.bind(container)),
     remove: Promise.denodeify(container.remove.bind(container)),
+    logs: Promise.denodeify(container.logs.bind(container))
   };
 }

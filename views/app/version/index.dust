@@ -2,6 +2,7 @@
 {<appVersionPage}
 <div class="pane content">
   <h2 class="dragger">{name} v{version}</h2>
+  <pre>{log|s}</pre>
   <pre>{json}</pre>
 </div>
 {/appVersionPage}

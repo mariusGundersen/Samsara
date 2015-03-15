@@ -29,5 +29,6 @@
     </button>
   </div>
   <pre>{json}</pre>
+  <pre>{log|s}</pre>
 </div>
 {/containerPage}

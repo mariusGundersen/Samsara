@@ -6,6 +6,7 @@ var appContainers = require('../providers/appContainers');
 var makePageModel = require('../private/makeAppPageModel');
 var docker = require('../private/docker');
 var moment = require('moment');
+var prettifyLogs = require('../private/prettifyLogs');
 
 router.get('/', function(req, res, next) {
   app
@@ -76,17 +77,22 @@ router.get('/:name/version/:version', function(req, res, next){
     
     found.selected = true;
         
-    return docker.getContainer(found.id).inspect().then(function(result){
+    var container = docker.getContainer(found.id);
     
-      return makePageModel(req.params.name + ' - ' + req.params.version, {
-        menu: containers,
-        name: req.params.name,
-        content:{
+    return container.inspect().then(function(config){
+    
+      return container.logs({stdout:true, stderr:true}).then(prettifyLogs).then(function(logs){
+        return makePageModel(req.params.name + ' - ' + req.params.version, {
+          menu: containers,
           name: req.params.name,
-          version: req.params.version,
-          json: JSON.stringify(result, null, '  ')
-        }
-      }, req.params.name);
+          content:{
+            name: req.params.name,
+            version: req.params.version,
+            json: JSON.stringify(config, null, '  '),
+            log: logs
+          }
+        }, req.params.name);
+      });
     });
   })
   .then(function(pageModel){
