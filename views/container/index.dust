@@ -13,9 +13,9 @@
     <tbody>
       {#containers}
         <tr>
-          <td><a href="/container/{Id}" title="{Id}">{Name}</a></td>
-          <td>{Image}</td>
-          <td>{Status}</td>
+          <td><a href="/container/{id}" title="{id}">{name}</a></td>
+          <td>{image}</td>
+          <td>{status}</td>
         </tr>
       {/containers}
     </tbody>

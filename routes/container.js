@@ -2,28 +2,19 @@ var express = require('express');
 var router = express.Router();
 var Promise = require('promise');
 var docker = require('../private/docker');
+var container = require('../providers/container');
 var makePageModel = require('../private/makeContainerPageModel');
 var prettifyLogs = require('../private/prettifyLogs');
 
 router.get('/', function(req, res, next) {
   
-  docker.listContainers({all: true})
-  .then(function(containers){
-    return containers.map(function(container){
-      return {
-        Id: container.Id,
-        Name: container.Names[0].substr(1),
-        Status: container.Status,
-        Image: container.Image
-      }
-    });
-  })
+  container.list()
   .then(function(list){
     return makePageModel('Containers', {containers: list}, null);
   })
   .then(function (pageModel) {
     res.render('container/index', pageModel);
-  }).catch(function(err){
+  }).catch(function(error){
     res.render('error', {content:{message: error.message, error: error}});
   });
 });
