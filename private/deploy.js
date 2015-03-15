@@ -54,11 +54,12 @@ module.exports = function deploy(config){
 function getPreviousContainer(name){
   return docker.listContainers({all: true})
   .then(function (containers) {
-
     var oldContainers = containers.filter(function(container){
-      return container.Names[0].indexOf('/'+name+'_v') == 0;
+      var match =  /^(.*?)(_v(\d+))?$/.exec(container.name);
+      return match && match[1] == name;
     }).map(function(container){
-      return {version: /_v(\d+)$/.exec(container.Names[0])[1]*1, id: container.Id};
+      var match = /_v(\d+)$/.exec(container.Names[0]);
+      return {version: match ? [1]*1 : 0, id: container.Id};
     }).sort(function(a, b){
       return a.version<b.version ? 1 : a.version>b.version ? -1 : 0;
     });

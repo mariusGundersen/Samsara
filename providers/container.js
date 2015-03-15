@@ -24,7 +24,7 @@ container.list = function(){
       return app.list().then(function(apps){
         return list.filter(function(container){
           return !apps.some(function(app){
-            var match =  /^(.*)_v(\d+)$/.exec(container.name);
+            var match =  /^(.*?)(_v\d+)?$/.exec(container.name);
             return match && match[1] == app;
           });
         }).sort(function(a, b){

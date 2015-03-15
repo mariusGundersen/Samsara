@@ -2,7 +2,7 @@
 {<containerPage}
 <div class="pane content">
   <h2 class="dragger">{name}</h2>
-  <div data-viewmodel="ContainerViewModel" data-model="{info|js}">
+  <div data-viewmodel="ContainerViewModel" data-model="{controls|js}">
     <button class="pure-button button-success" 
             data-bind="click: start, visible:!running(), disable: isBusy" 
             style="{?info.State.Running}display: none{/info.State.Running}">
@@ -26,6 +26,12 @@
             style="{?info.State.Running}display: none{/info.State.Running}; float:right">
       <i class="fa fa-fw fa-trash-o" data-bind="css: {'fa-spin': remove.isBusy, 'fa-refresh': remove.isBusy, 'fa-trash-o': !remove.isBusy()}"></i>&nbsp;
       Remove
+    </button>
+    <button class="pure-button button-secondary" 
+            data-bind="click: toSpirit, disable: isBusy" 
+            style="float:right">
+      <i class="fa fa-fw fa-sun-o" data-bind="css: {'fa-spin': remove.isBusy, 'fa-refresh': remove.isBusy, 'fa-sun-o': !remove.isBusy()}"></i>&nbsp;
+      Create Spirit
     </button>
   </div>
   <pre>{json}</pre>

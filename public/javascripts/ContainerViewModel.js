@@ -3,40 +3,48 @@ define(['knockout', 'deco/qvc', 'containerEvents'], function(ko, qvc, container)
   return function(model, when){
     var self = this;
     
-    this.running = ko.observable(model.State.Running);
+    this.running = ko.observable(model.running);
     
     this.stop = qvc.createCommand('stopContainer', {
-      id: model.Id
+      id: model.id
     }).success(function(){
       self.running(false);
-      container.hasStopped(model.Id);
+      container.hasStopped(model.id);
     });
     
     this.start = qvc.createCommand('startContainer', {
-      id: model.Id
+      id: model.id
     }).success(function(){
       self.running(true);
-      container.hasStarted(model.Id);
+      container.hasStarted(model.id);
     });
     
     this.restart = qvc.createCommand('restartContainer', {
-      id: model.Id
+      id: model.id
     }).success(function(){
       self.running(true);
-      container.hasStarted(model.Id);
+      container.hasStarted(model.id);
     });
     
     this.remove = qvc.createCommand('removeContainer', {
-      id: model.Id
+      id: model.id
     }).success(function(){
-      document.location = '/';
+      document.location = '/containers';
+    });
+    
+    this.toSpirit = qvc.createCommand('newApp', {
+      name: model.name,
+      image: model.image
+    }).success(function(){
+      document.location = '/app/'+model.name;
     });
     
     this.isBusy = ko.computed(function(){
       return self.stop.isBusy()
         || self.start.isBusy()
         || self.restart.isBusy()
-        || self.remove.isBusy();
+        || self.remove.isBusy()
+        || self.toSpirit.isBusy();
     });
   };
 });

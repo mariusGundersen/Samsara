@@ -31,7 +31,13 @@ router.get('/:id', function(req, res, next) {
         info: config, 
         name: config.Name.substr(1), 
         json: JSON.stringify(config, null, '  '),
-        log: logs
+        log: logs,
+        controls: {
+          id: config.Id,
+          name: config.Name.substr(1),
+          image: config.Config.Image,
+          running: config.State.Running
+        }
       }, req.params.id);
     });
   })

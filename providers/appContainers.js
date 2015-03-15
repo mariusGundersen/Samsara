@@ -19,7 +19,7 @@ module.exports = function(name){
   })
   .then(function(allContainers){
     return allContainers.filter(function(container){
-      var match =  /^(.*)_v(\d+)$/.exec(container.name);
+      var match =  /^(.*?)(_v(\d+))?$/.exec(container.name);
       return match && match[1] == name;
     }).map(function(container){
       return {
@@ -27,7 +27,7 @@ module.exports = function(name){
         id: container.id,
         image: container.image,
         state: container.state,
-        version: /^(.*)_v(\d+)$/.exec(container.name)[2],
+        version: /^(.*?)(_v(\d+))?$/.exec(container.name)[3] || 0,
         info: container.info
       };
     }).sort(function(a,b){
