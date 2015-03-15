@@ -1,6 +1,7 @@
 {>"app/layout"/}
 {<appPage}
   <div class="pane content">
+    {>"app/_controls"/}
     {>"app/_mainInfo"/}
     {>"app/_deploy"/}
     {>"app/_webhook"/}    

@@ -7,7 +7,7 @@ module.exports = function(title, content, currentAppName){
   return apps.list()
   .then(function(apps){
     return Promise.all(apps.map(function(name){
-      return appContainers(name).then(function(versions){        
+      return appContainers(name).then(function(versions){
         var runningContainer = versions.filter(function(c){ return c.state == 'running'})[0];
         
         return {

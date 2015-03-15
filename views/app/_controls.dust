@@ -1,0 +1,20 @@
+<div data-viewmodel="app/ControlsVM" data-model="{controls|js}">
+  <button class="pure-button button-success" 
+          data-bind="click: start, visible:!running(), disable: isBusy" 
+          style="{?controls.running}display: none{/controls.running}">
+    <i class="fa fa-fw fa-play" data-bind="css: {'fa-spin': start.isBusy, 'fa-refresh': start.isBusy, 'fa-play': !start.isBusy()}"></i>&nbsp;
+    Start
+  </button>
+  <button class="pure-button button-error" 
+          data-bind="click: stop, visible: running(), disable: isBusy" 
+          style="{^controls.running}display: none{/controls.running}">
+    <i class="fa fa-fw fa-stop" data-bind="css: {'fa-spin': stop.isBusy, 'fa-refresh': stop.isBusy, 'fa-stop': !stop.isBusy()}"></i>&nbsp;
+    Stop
+  </button>
+  <button class="pure-button button-secondary" 
+          data-bind="click: restart, visible: running(), disable: isBusy" 
+          style="{^controls.running}display: none{/controls.running}">
+    <i class="fa fa-fw fa-refresh" data-bind="css: {'fa-spin': restart.isBusy}"></i>&nbsp;
+    Restart
+  </button>
+</div>

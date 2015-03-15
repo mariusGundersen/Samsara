@@ -42,7 +42,12 @@ router.get('/:name', function(req, res, next) {
     .then(function(containers){
       return makePageModel(req.params.name, {
         config: config,
-        containers: containers
+        containers: containers,
+        controls: {
+          name: req.params.name,
+          state: containers.some(function(c){ return c.state == 'running'}) ? 'running' : 'stopped',
+          running: containers.some(function(c){ return c.state == 'running'})
+        }
       }, req.params.name);
     });
   })
