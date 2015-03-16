@@ -2,6 +2,8 @@ window.onload = function(){
   var PANEL_WIDTH = 200;
   var ICON_WIDTH = 35;
   
+  var ACCELERATION = 1320;
+  
   var pointer = null;
   var delta = 0;
   var draggers = document.querySelectorAll('.pane.menu');
@@ -40,7 +42,9 @@ window.onload = function(){
       pointer = {
         id: e.pointerId,
         startX: e.clientX - delta,
-        startY: e.clientY
+        startY: e.clientY,
+        prevX: e.clientX,
+        prevT: e.timeStamp
       };
     }
   }
@@ -52,7 +56,7 @@ window.onload = function(){
       delta = pane.maxPull;
     }
     setTimeout(function(){
-      delta = repositionMenus(delta);
+      delta = repositionMenus(delta, true);
     },1);
   }
   
@@ -66,8 +70,11 @@ window.onload = function(){
         return;
       }else{
         pointer.stable = true;
+        pointer.velocity = (e.clientX - pointer.prevX)/(e.timeStamp - pointer.prevT)*1000;
+        pointer.prevX = e.clientX;
+        pointer.prevT = e.timeStamp;
       }
-      delta = repositionMenus(dx);
+      delta = repositionMenus(dx, false);
       e.preventDefault();
     }
   }
@@ -75,14 +82,19 @@ window.onload = function(){
   function handlePointerUp(e){
     if(pointer && pointer.id === e.pointerId){
       var dx = e.clientX - pointer.startX;
-      pointer = null;
       document.body.setAttribute('animate-menus', 'true');
-      delta = animateRepositionMenus(dx);
+      delta = animateRepositionMenus(dx, e.timeStamp - pointer.prevT>100 ? 0 : pointer.velocity);
+      pointer = null;
     }
   }
   
-  function animateRepositionMenus(dx){
+  function animateRepositionMenus(dx, velocity){
     var size = screenSize();
+    
+    var t = Math.abs(velocity/ACCELERATION);
+    var a = velocity > 0 ? -ACCELERATION : ACCELERATION;
+    dx = dx + velocity*t + a/2*t*t;
+
     if(size == -1){
       if(dx < PANEL_WIDTH/2){
         dx = 0;
@@ -91,31 +103,60 @@ window.onload = function(){
       }else{
         dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+ICON_WIDTH))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+ICON_WIDTH);
       }
-      return repositionMenus(dx);
+      return repositionMenus(dx, true, velocity);
     }else{
       dx = Math.ceil(Math.floor(dx/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH);
-      return repositionMenus(dx);
+      return repositionMenus(dx, true, velocity);
     }
   }
   
-  function repositionMenus(delta){
+  function repositionMenus(delta, animate, velocity){
     var width = document.body.offsetWidth;
     var pulled = panes.reduce(function(pulled, pane){
-      return spendPulledOnElement(pane.element, pulled, Math.min(pane.maxPull, width - pane.rightEdge), pane.marginLeft);
+      return spendPulledOnElement(pane.element, pulled, Math.min(pane.maxPull, width - pane.rightEdge), pane.marginLeft, animate, velocity);
     }, Math.max(0, delta));
     
     return Math.max(0, delta - pulled);
   }
 
-  function spendPulledOnElement(element, pulled, maxTotalPull, maxPull){
-    translateElement(element, Math.min(pulled, maxTotalPull));
+  function spendPulledOnElement(element, pulled, maxTotalPull, maxPull, animate, velocity){
+    var diff = translateElement(element, Math.min(pulled, maxTotalPull));
+    transformElement(element, animate ? diff : 0, velocity);
     var sub = Math.min(maxPull, maxTotalPull);
     return pulled < sub ? 0 : pulled - sub;
   }
   
   function translateElement(element, value){
+    var now = /\((\d+)px/.exec(element.style.transform||element.style.webkitTransform);
     element.style.transform = "translate3d("+value+"px, 0px, 0px)";
-    element.style.webkitTransform = "translate3d("+value+"px, 0px, 0px)";
+    element.style.webkitTransform = "translate3d("+value+"px, 0, 0)";
+    return now ? now[1]-value : 0;
+  }
+  
+  function transformElement(element, value, velocity){
+    if(value == 0){
+      element.style.transition = "none";
+      element.style.webkitTransition = "none";
+    }else{
+      var a = value > 0 ? ACCELERATION : -ACCELERATION;
+      var b = velocity;
+      var c = value;
+      var r = b*b-4*a*c;
+      var t = quadEq(2*a, b, r);
+      element.style.transition = "transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
+      element.style.webkitTransition = "-webkit-transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
+    }
+  }
+  
+  function quadEq(a2, b, r){
+    if(r < 0){
+      return 0.5;
+    }
+    
+    var s = Math.sqrt(r);
+    var t0 = (+s - b)/a2;
+    var t1 = (-s - b)/a2;
+    return t0<0 ? t1 : Math.min(t0, t1);
   }
 
   function screenSize(){

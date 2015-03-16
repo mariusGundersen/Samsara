@@ -43,14 +43,6 @@ div.content{
   overflow-x: auto;
   position: relative;
 }
-body[animate-menus=true] div.content,
-body[animate-menus=true] .menu{
-  -webkit-transition: -webkit-transform .5s ease-out; /*stupid ios*/
-  transition: transform .5s ease-out;
-}
-body[animate-menus=false] *{
-  cursor: grabbing;
-}
 
 ul{
   margin: 0;
