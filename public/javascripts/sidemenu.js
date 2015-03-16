@@ -123,7 +123,7 @@ window.onload = function(){
   function translateElement(element, value){
     var now = /\((\d+)px/.exec(element.style.transform||element.style.webkitTransform);
     transform(element, value);
-    return now ? now[1]-value : 0;
+    return (now ? now[1] : 0)-value;
   }
   
   function transitionElement(element, value, velocity){
