@@ -2,7 +2,7 @@ window.onload = function(){
   var PANEL_WIDTH = 200;
   var ICON_WIDTH = 35;
   
-  var ACCELERATION = 1320;
+  var ACCELERATION = 2400;
   
   var pointer = null;
   var delta = 0;
@@ -28,17 +28,12 @@ window.onload = function(){
   document.querySelector('.content h2.dragger').addEventListener('pointerdown', handlePointerDown, false);
   
   function handleWindowResize(){
-    document.body.setAttribute('animate-menus', 'false');
     panes = createPanes(paneElements, screenSize());
-    delta = animateRepositionMenus(delta);
-    setTimeout(function(){
-      document.body.setAttribute('animate-menus', 'true');
-    },1);
+    delta = animateRepositionMenus(delta, 0);
   }
   
   function handlePointerDown(e){
     if(pointer == null && e.pointerType != "mouse"){
-      document.body.setAttribute('animate-menus', 'false');
       pointer = {
         id: e.pointerId,
         startX: e.clientX - delta,
@@ -66,7 +61,6 @@ window.onload = function(){
       var dy = e.clientY - pointer.startY;
       if(!pointer.stable && Math.abs(dx-delta) < Math.abs(dy)){
         pointer = null;
-        document.body.setAttribute('animate-menus', 'true');
         return;
       }else{
         pointer.stable = true;
@@ -82,7 +76,6 @@ window.onload = function(){
   function handlePointerUp(e){
     if(pointer && pointer.id === e.pointerId){
       var dx = e.clientX - pointer.startX;
-      document.body.setAttribute('animate-menus', 'true');
       delta = animateRepositionMenus(dx, e.timeStamp - pointer.prevT>100 ? 0 : pointer.velocity);
       pointer = null;
     }
@@ -98,8 +91,10 @@ window.onload = function(){
     if(size == -1){
       if(dx < PANEL_WIDTH/2){
         dx = 0;
-      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)/2+(PANEL_WIDTH-ICON_WIDTH)){
-        dx = PANEL_WIDTH+(panes.length == 3 ? 0 : ICON_WIDTH);
+      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)/2){
+        dx = PANEL_WIDTH+(panes.length >= 3 ? 0 : ICON_WIDTH);
+      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)){
+        dx = PANEL_WIDTH*2;
       }else{
         dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+ICON_WIDTH))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+ICON_WIDTH);
       }
