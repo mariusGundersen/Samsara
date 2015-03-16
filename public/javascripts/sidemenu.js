@@ -50,9 +50,7 @@ window.onload = function(){
     }else{
       delta = pane.maxPull;
     }
-    setTimeout(function(){
-      delta = repositionMenus(delta, true);
-    },1);
+    delta = animateRepositionMenus(delta, 0);
   }
   
   function handlePointerMove(e){
@@ -92,7 +90,7 @@ window.onload = function(){
       if(dx < PANEL_WIDTH/2){
         dx = 0;
       }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)/2){
-        dx = PANEL_WIDTH+(panes.length >= 3 ? 0 : ICON_WIDTH);
+        dx = PANEL_WIDTH+(panes.length == 3 ? 0 : ICON_WIDTH);
       }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)){
         dx = PANEL_WIDTH*2;
       }else{
@@ -108,41 +106,39 @@ window.onload = function(){
   function repositionMenus(delta, animate, velocity){
     var width = document.body.offsetWidth;
     var pulled = panes.reduce(function(pulled, pane){
-      return spendPulledOnElement(pane.element, pulled, Math.min(pane.maxPull, width - pane.rightEdge), pane.marginLeft, animate, velocity);
+      return spendPulledOnElement(pane, pulled, width, animate, velocity);
     }, Math.max(0, delta));
     
     return Math.max(0, delta - pulled);
   }
 
-  function spendPulledOnElement(element, pulled, maxTotalPull, maxPull, animate, velocity){
-    var diff = translateElement(element, Math.min(pulled, maxTotalPull));
-    transformElement(element, animate ? diff : 0, velocity);
-    var sub = Math.min(maxPull, maxTotalPull);
+  function spendPulledOnElement(pane, pulled, width, animate, velocity){
+    var maxTotalPull = Math.min(pane.maxPull, width - pane.rightEdge);
+    var diff = translateElement(pane.element, Math.min(pulled, maxTotalPull));
+    transitionElement(pane.element, animate ? diff : 0, velocity);
+    var sub = Math.min(pane.marginLeft, maxTotalPull);
     return pulled < sub ? 0 : pulled - sub;
   }
   
   function translateElement(element, value){
     var now = /\((\d+)px/.exec(element.style.transform||element.style.webkitTransform);
-    element.style.transform = "translate3d("+value+"px, 0px, 0px)";
-    element.style.webkitTransform = "translate3d("+value+"px, 0, 0)";
+    transform(element, value);
     return now ? now[1]-value : 0;
   }
   
-  function transformElement(element, value, velocity){
+  function transitionElement(element, value, velocity){
     if(value == 0){
-      element.style.transition = "none";
-      element.style.webkitTransition = "none";
+      transition(element, 0);
     }else{
       var a = value > 0 ? ACCELERATION : -ACCELERATION;
       var b = velocity;
       var c = value;
       var r = b*b-4*a*c;
       var t = quadEq(2*a, b, r);
-      element.style.transition = "transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
-      element.style.webkitTransition = "-webkit-transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
+      transition(element, t);
     }
   }
-  
+    
   function quadEq(a2, b, r){
     if(r < 0){
       return 0.5;
@@ -202,4 +198,21 @@ window.onload = function(){
     
     return panes;
   }
+  
+  var transition = document.body.style.transition == null && document.body.webkitTransition ? 
+    function(element, t){
+      element.style.webkitTransition = "-webkit-transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
+    }
+    :
+    function(element, t){
+      element.style.transition = "transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
+    };
+  var transform = document.body.style.transition == null && document.body.webkitTransition ? 
+    function(element, x){
+      element.style.webkitTransform = "translate3d("+value+"px, 0, 0)";
+    }
+    :
+    function(element, x){
+      element.style.transform = "translate3d("+x+"px, 0px, 0px)";
+    }
 };
