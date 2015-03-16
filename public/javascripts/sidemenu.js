@@ -2,6 +2,8 @@ window.onload = function(){
   var PANEL_WIDTH = 200;
   var ICON_WIDTH = 35;
   
+  var ACCELERATION = 2400;
+  
   var pointer = null;
   var delta = 0;
   var draggers = document.querySelectorAll('.pane.menu');
@@ -26,21 +28,18 @@ window.onload = function(){
   document.querySelector('.content h2.dragger').addEventListener('pointerdown', handlePointerDown, false);
   
   function handleWindowResize(){
-    document.body.setAttribute('animate-menus', 'false');
     panes = createPanes(paneElements, screenSize());
-    delta = animateRepositionMenus(delta);
-    setTimeout(function(){
-      document.body.setAttribute('animate-menus', 'true');
-    },1);
+    delta = animateRepositionMenus(delta, 0);
   }
   
   function handlePointerDown(e){
     if(pointer == null && e.pointerType != "mouse"){
-      document.body.setAttribute('animate-menus', 'false');
       pointer = {
         id: e.pointerId,
         startX: e.clientX - delta,
-        startY: e.clientY
+        startY: e.clientY,
+        prevX: e.clientX,
+        prevT: e.timeStamp
       };
     }
   }
@@ -51,9 +50,7 @@ window.onload = function(){
     }else{
       delta = pane.maxPull;
     }
-    setTimeout(function(){
-      delta = repositionMenus(delta);
-    },1);
+    delta = animateRepositionMenus(delta, 0);
   }
   
   function handlePointerMove(e){
@@ -62,12 +59,14 @@ window.onload = function(){
       var dy = e.clientY - pointer.startY;
       if(!pointer.stable && Math.abs(dx-delta) < Math.abs(dy)){
         pointer = null;
-        document.body.setAttribute('animate-menus', 'true');
         return;
       }else{
         pointer.stable = true;
+        pointer.velocity = (e.clientX - pointer.prevX)/(e.timeStamp - pointer.prevT)*1000;
+        pointer.prevX = e.clientX;
+        pointer.prevT = e.timeStamp;
       }
-      delta = repositionMenus(dx);
+      delta = repositionMenus(dx, false);
       e.preventDefault();
     }
   }
@@ -75,47 +74,80 @@ window.onload = function(){
   function handlePointerUp(e){
     if(pointer && pointer.id === e.pointerId){
       var dx = e.clientX - pointer.startX;
+      delta = animateRepositionMenus(dx, e.timeStamp - pointer.prevT>100 ? 0 : pointer.velocity);
       pointer = null;
-      document.body.setAttribute('animate-menus', 'true');
-      delta = animateRepositionMenus(dx);
     }
   }
   
-  function animateRepositionMenus(dx){
+  function animateRepositionMenus(dx, velocity){
     var size = screenSize();
+    
+    var t = Math.abs(velocity/ACCELERATION);
+    var a = velocity > 0 ? -ACCELERATION : ACCELERATION;
+    dx = dx + velocity*t + a/2*t*t;
+
     if(size == -1){
       if(dx < PANEL_WIDTH/2){
         dx = 0;
-      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)/2+(PANEL_WIDTH-ICON_WIDTH)){
+      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)/2){
         dx = PANEL_WIDTH+(panes.length == 3 ? 0 : ICON_WIDTH);
+      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)){
+        dx = PANEL_WIDTH*2;
       }else{
         dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+ICON_WIDTH))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+ICON_WIDTH);
       }
-      return repositionMenus(dx);
+      return repositionMenus(dx, true, velocity);
     }else{
       dx = Math.ceil(Math.floor(dx/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH);
-      return repositionMenus(dx);
+      return repositionMenus(dx, true, velocity);
     }
   }
   
-  function repositionMenus(delta){
+  function repositionMenus(delta, animate, velocity){
     var width = document.body.offsetWidth;
     var pulled = panes.reduce(function(pulled, pane){
-      return spendPulledOnElement(pane.element, pulled, Math.min(pane.maxPull, width - pane.rightEdge), pane.marginLeft);
+      return spendPulledOnElement(pane, pulled, width, animate, velocity);
     }, Math.max(0, delta));
     
     return Math.max(0, delta - pulled);
   }
 
-  function spendPulledOnElement(element, pulled, maxTotalPull, maxPull){
-    translateElement(element, Math.min(pulled, maxTotalPull));
-    var sub = Math.min(maxPull, maxTotalPull);
+  function spendPulledOnElement(pane, pulled, width, animate, velocity){
+    var maxTotalPull = Math.min(pane.maxPull, width - pane.rightEdge);
+    var diff = translateElement(pane.element, Math.min(pulled, maxTotalPull));
+    transitionElement(pane.element, animate ? diff : 0, velocity);
+    var sub = Math.min(pane.marginLeft, maxTotalPull);
     return pulled < sub ? 0 : pulled - sub;
   }
   
   function translateElement(element, value){
-    element.style.transform = "translate3d("+value+"px, 0px, 0px)";
-    element.style.webkitTransform = "translate3d("+value+"px, 0px, 0px)";
+    var now = /\((\d+)px/.exec(element.style.transform||element.style.webkitTransform);
+    transform(element, value);
+    return now ? now[1]-value : 0;
+  }
+  
+  function transitionElement(element, value, velocity){
+    if(value == 0){
+      transition(element, 0);
+    }else{
+      var a = value > 0 ? ACCELERATION : -ACCELERATION;
+      var b = velocity;
+      var c = value;
+      var r = b*b-4*a*c;
+      var t = quadEq(2*a, b, r);
+      transition(element, t);
+    }
+  }
+    
+  function quadEq(a2, b, r){
+    if(r < 0){
+      return 0.5;
+    }
+    
+    var s = Math.sqrt(r);
+    var t0 = (+s - b)/a2;
+    var t1 = (-s - b)/a2;
+    return t0<0 ? t1 : Math.min(t0, t1);
   }
 
   function screenSize(){
@@ -166,4 +198,21 @@ window.onload = function(){
     
     return panes;
   }
+  
+  var transition = document.body.style.transition == null && document.body.webkitTransition ? 
+    function(element, t){
+      element.style.webkitTransition = "-webkit-transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
+    }
+    :
+    function(element, t){
+      element.style.transition = "transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
+    };
+  var transform = document.body.style.transition == null && document.body.webkitTransition ? 
+    function(element, x){
+      element.style.webkitTransform = "translate3d("+value+"px, 0, 0)";
+    }
+    :
+    function(element, x){
+      element.style.transform = "translate3d("+x+"px, 0px, 0px)";
+    }
 };
