@@ -2,6 +2,7 @@ var docker = require('./docker');
 var Promise = require('promise');
 var extend = require('extend');
 var createContainerFromConfig = require('./createContainerFromConfig');
+var appContainers = require('../providers/appContainers');
 
 module.exports = function deploy(config){
   console.log(config.image);
@@ -17,9 +18,18 @@ module.exports = function deploy(config){
       });
     });
   })
-  .then(getPreviousContainer)
-  .then(function(oldContainer){
-    var newName = oldContainer.name+'_v'+(oldContainer.version+1);
+  .then(function(name){
+    return appContainers(name)
+    .then(function (oldContainers) {
+      return {
+        oldContainers: oldContainers, 
+        version: (oldContainers[0] || {version:0}).version,
+        name: name
+      };
+    });
+  })
+  .then(function(spirit){
+    var newName = spirit.name + '_v' + (spirit.version+1);
     console.log("creating container", newName);
     return docker.createContainer(createContainerFromConfig(newName, config))
     .then(function(container){
@@ -27,55 +37,21 @@ module.exports = function deploy(config){
       return container.start();
     }).then(function(){
       console.log("container started");
-      return oldContainer.ids;
+      return spirit.oldContainers;
     });
   })
-  .then(function stopOldContainers(ids){
-    if(!ids || !ids.length){
-      return Promise.resolve();
-    }
-    
-    console.log("stopping old containers", ids);
-    return Promise.all(ids.map(function(id){
+  .then(function stopOldContainers(containers){    
+    console.log("stopping old containers", containers.length);
+    return Promise.all(containers.filter(function(container){
+      return container.state === 'running';
+    }).map(function(container){
+      var id = container.id;
       var container = docker.getContainer(id);
       console.log("old container found, will be stopped and removed", id);
       return container.stop()
       .then(function(){
         console.log("stopped old container", id);
-        //return container.remove();
-      }, function(){
-        console.log("container already stopped", id);
-        //return container.remove();
       });
     }));
   });
 };
-
-function getPreviousContainer(name){
-  return docker.listContainers({all: true})
-  .then(function (containers) {
-    var oldContainers = containers.filter(function(container){
-      var match =  /^\/(.*?)(_v(\d+))?$/.exec(container.Names[0]);
-      return match && match[1] == name;
-    }).map(function(container){
-      var match = /_v(\d+)$/.exec(container.Names[0]);
-      return {version: match ? [1]*1 : 0, id: container.Id};
-    }).sort(function(a, b){
-      return a.version<b.version ? 1 : a.version>b.version ? -1 : 0;
-    });
-
-    if(oldContainers.length){
-      return {
-        ids: oldContainers.map(function(container){return container.id;}), 
-        version: oldContainers[0].version,
-        name: name
-      };
-    }else{
-      return {
-        ids: [], 
-        version: 0, 
-        name: name
-      };
-    }
-  });
-}

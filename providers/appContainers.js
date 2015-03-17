@@ -27,11 +27,11 @@ module.exports = function(name){
         id: container.id,
         image: container.image,
         state: container.state,
-        version: /^(.*?)(_v(\d+))?$/.exec(container.name)[3] || 0,
+        version: (/^(.*?)(_v(\d+))?$/.exec(container.name)[3] || 0)|0,
         info: container.info
       };
     }).sort(function(a,b){
-      return a.version*1 < b.version*1 ? 1 : a.version*1 > b.version*1 ? -1 : 0;
+      return a.version < b.version ? 1 : a.version > b.version ? -1 : 0;
     });
   });
 };
