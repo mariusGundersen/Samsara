@@ -11,7 +11,7 @@
     <tbody>
       {#containers}
         <tr>
-          <td><a href="/app/{config.name}/version/{version}" title="{id}">v{version}</a></td>
+          <td><a href="/app/{spirit}/version/{version}" title="{id}">v{version}</a></td>
           <td>{state}</td>
         </tr>
       {/containers}

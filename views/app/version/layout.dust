@@ -5,11 +5,11 @@
     <ul>
       {#menu}
         <li class="container-state-{state} {?selected}selected{/selected}">
-          <a href="/app/{name}/version/{version}">
+          <a href="/app/{spirit}/version/{version}">
             <span class="version">
               {version}
             </span>- 
-            {description}
+            {status}
           </a>
         </li>
       {/menu}

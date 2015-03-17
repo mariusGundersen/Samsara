@@ -1,37 +1,25 @@
 var docker = require('../private/docker');
+var allContainers = require('./allContainers');
 var Promise = require('promise');
 
 module.exports = function(name){
-  return docker.listContainers({all:true})
+  return allContainers()
   .then(function(containers){
-    return Promise.all(containers.map(function(container){
-      return docker.getContainer(container.Id).inspect()
-      .then(function(info){
-        return {
-          name: info.Name.substr(1),
-          id: info.Id,
-          image: info.Image,
-          state: info.State.Running ? 'running' : 'stopped',
-          info: info
-        };
-      });
-    }))
-  })
-  .then(function(allContainers){
-    return allContainers.filter(function(container){
+    return containers.filter(function(container){
       var match =  /^(.*?)(_v(\d+))?$/.exec(container.name);
       return match && match[1] == name;
+    }).sort(function(a,b){
+      return a.version < b.version ? 1 : a.version > b.version ? -1 : 0;
     }).map(function(container){
       return {
+        spirit: name,
         name: container.name,
         id: container.id,
         image: container.image,
         state: container.state,
-        version: (/^(.*?)(_v(\d+))?$/.exec(container.name)[3] || 0)|0,
-        info: container.info
+        status: container.status.split(' ').slice(container.state == 'running' ? 1 : 2).join(' '),
+        version: (/^(.*?)(_v(\d+))?$/.exec(container.name)[3] || 0)|0
       };
-    }).sort(function(a,b){
-      return a.version < b.version ? 1 : a.version > b.version ? -1 : 0;
     });
   });
 };

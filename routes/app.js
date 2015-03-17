@@ -67,13 +67,7 @@ router.get('/:name/edit', function(req, res, next) {
 
 router.get('/:name/version/:version', function(req, res, next){
   appContainers(req.params.name)
-  .then(function(containers){
-    
-    containers.forEach(function(c){
-      c.name = req.params.name;
-      c.description = moment(c.state == 'running' ? c.info.State.StartedAt : c.info.State.FinishedAt).fromNow(c.state == 'running');
-    });
-    
+  .then(function(containers){    
     var found = containers.filter(function(c){
       return c.version == req.params.version;
     })[0];
