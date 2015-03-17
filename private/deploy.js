@@ -55,7 +55,7 @@ function getPreviousContainer(name){
   return docker.listContainers({all: true})
   .then(function (containers) {
     var oldContainers = containers.filter(function(container){
-      var match =  /^(.*?)(_v(\d+))?$/.exec(container.Names[0]);
+      var match =  /^\/(.*?)(_v(\d+))?$/.exec(container.Names[0]);
       return match && match[1] == name;
     }).map(function(container){
       var match = /_v(\d+)$/.exec(container.Names[0]);
