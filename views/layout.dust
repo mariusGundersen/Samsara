@@ -7,7 +7,7 @@
   <link rel='stylesheet' href='/bower_components/pure/pure-min.css' />
   <link rel='stylesheet' href='/stylesheets/sidemenu.css' />
   <link rel='stylesheet' href='/stylesheets/style.css' />
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
 </head>
 <body>
   {>"_menu" menu=menu/}
@@ -19,7 +19,7 @@
   {/content}
     
   <script src="/bower_components/es6-promise/promise.js"></script>
-  <script src="/javascripts/hand-1.3.8.js"></script>
+  <script src="/bower_components/cs-handjs/hand.minified.js"></script>
   <script src="/javascripts/sidemenu.js"></script>
   <script src="/bower_components/requirejs/require.js" data-main="/javascripts/main"></script>
 </body>

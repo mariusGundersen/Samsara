@@ -17,8 +17,10 @@ var paths = {
   bower: [
     'bower_components/pure/pure-min.css',
     'bower_components/es6-promise/promise.js',
-    'bower_components/deco/Dist/*.js',
+    'bower_components/deco/Dist/*',
     'bower_components/requirejs/require.js',
-    'bower_components/knockout/dist/*.js'
+    'bower_components/knockout/dist/*',
+    'bower_components/cs-handjs/hand.minified.js',
+    'bower_components/font-awesome/{css,fonts}/*'
   ]
 };
