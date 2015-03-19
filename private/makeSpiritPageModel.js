@@ -1,13 +1,13 @@
-var apps = require('../providers/app');
-var appContainers = require('../providers/appContainers');
+var spirits = require('../providers/spirit');
+var spiritContainers = require('../providers/spiritContainers');
 var Promise = require('promise');
 var makePageModel = require('./makePageModel');
 
-module.exports = function(title, content, currentAppName){
-  return apps.list()
-  .then(function(apps){
-    return Promise.all(apps.map(function(name){
-      return appContainers(name).then(function(versions){
+module.exports = function(title, content, currentSpiritName){
+  return spirits.list()
+  .then(function(spirits){
+    return Promise.all(spirits.map(function(name){
+      return spiritContainers(name).then(function(versions){
         var runningContainer = versions.filter(function(c){ return c.state == 'running'})[0];
         
         return {
@@ -19,10 +19,10 @@ module.exports = function(title, content, currentAppName){
       });
     }))
     .then(function(list){
-      list.filter(function(app){
-        return app.name == currentAppName;
-      }).forEach(function(app){
-        app.selected = true;
+      list.filter(function(spirit){
+        return spirit.name == currentSpiritName;
+      }).forEach(function(spirit){
+        spirit.selected = true;
       });
       
       return list.sort(function(a, b){
@@ -34,13 +34,13 @@ module.exports = function(title, content, currentAppName){
       });
     });
   })
-  .then(function(apps){
+  .then(function(spirits){
     return makePageModel(title, {
       menu: {
-        newApp: currentAppName == 'new',
-        apps: apps
+        newSpirit: currentSpiritName == 'new',
+        spirits: spirits
       },
       content: content || {}
-    }, 'app');
+    }, 'spirit');
   });
 }

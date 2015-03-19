@@ -1,4 +1,4 @@
-<div data-viewmodel="app/WebhookVM" data-model="{config|js}">
+<div data-viewmodel="spirit/WebhookVM" data-model="{config|js}">
   <form class="pure-form pure-form-aligned" data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
     <h2>
       Webhook
@@ -31,7 +31,7 @@
     <h2>
       Webhook
     </h2>
-    <p style="text-align: center">By enabling the webhook the Docker Hub can deploy a new version of this app</p>
+    <p style="text-align: center">By enabling the webhook the Docker Hub can deploy a new version of this spirit</p>
     <span class="pure-u-1-4"></span>
     <button class="pure-button pure-button-primary button-xlarge pure-input-1-2" data-bind="click:enable"><i class="fa fa-fw fa-check"></i>&nbsp;Enable</button>
   </form>

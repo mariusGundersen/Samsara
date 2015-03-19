@@ -1,0 +1,11 @@
+{>"spirit/layout"/}
+{<spiritPage}
+  <div class="pane content">
+    {>"spirit/_controls"/}
+    {>"spirit/_mainInfo"/}
+    {>"spirit/_deploy"/}
+    {>"spirit/_webhook"/}    
+    {>"spirit/_envVars"/}
+    {>"spirit/_versionTable"/}
+  </div>
+{/spiritPage}

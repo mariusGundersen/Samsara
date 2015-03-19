@@ -1,17 +1,17 @@
 var qvc = require('qvc');
-var app = require('../providers/app');
+var spirit = require('../providers/spirit');
 var deploy = require('../private/deploy');
-var appContainers = require('../providers/appContainers');
+var spiritContainers = require('../providers/spiritContainers');
 var docker = require('../private/docker');
 var fs = require('fs-promise');
 var Promise = require('promise');
 
 module.exports = [
-  qvc.command('newApp', function(command, done){
-    console.log("newApp", command.name);
-    fs.mkdir('config/apps/'+command.name)
+  qvc.command('newSpirit', function(command, done){
+    console.log("newSpirit", command.name);
+    fs.mkdir('config/spirits/'+command.name)
     .then(function(){
-      return fs.writeFile('config/apps/'+command.name+'/config.json', JSON.stringify({
+      return fs.writeFile('config/spirits/'+command.name+'/config.json', JSON.stringify({
         name: command.name,
         image: command.image,
         description: '',
@@ -31,7 +31,7 @@ module.exports = [
           {
             name: 'NotEmpty',
             attributes: {
-              message: 'Please specify a name for the new app'
+              message: 'Please specify a name for the new spirit'
             }
           }
         ]
@@ -42,15 +42,15 @@ module.exports = [
           {
             name: 'NotEmpty',
             attributes: {
-              message: 'Please specify an image for the new app'
+              message: 'Please specify an image for the new spirit'
             }
           }
         ]
       }
     ]
   }),
-  qvc.command('deployApp', function(command, done){
-    app(command.name).config()
+  qvc.command('deploySpirit', function(command, done){
+    spirit(command.name).config()
     .then(deploy)
     .then(function(){
       done(null, true);
@@ -58,8 +58,8 @@ module.exports = [
       done(error);
     });
   }),
-  qvc.command('stopApp', function(command, done){
-    appContainers(command.name).then(function(containers){
+  qvc.command('stopSpirit', function(command, done){
+    spiritContainers(command.name).then(function(containers){
       return containers.filter(function(container){
         return container.state == 'running';
       });
@@ -74,8 +74,8 @@ module.exports = [
       done(error);
     });
   }),
-  qvc.command('startApp', function(command, done){
-    appContainers(command.name).then(function(containers){
+  qvc.command('startSpirit', function(command, done){
+    spiritContainers(command.name).then(function(containers){
       return containers.filter(function(container){
         return container.state == 'stopped';
       })[0];
@@ -88,8 +88,8 @@ module.exports = [
       done(error);
     });
   }),
-  qvc.command('restartApp', function(command, done){
-    appContainers(command.name).then(function(containers){
+  qvc.command('restartSpirit', function(command, done){
+    spiritContainers(command.name).then(function(containers){
       return containers.filter(function(container){
         return container.state == 'running';
       })[0];

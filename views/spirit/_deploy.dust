@@ -1,4 +1,4 @@
-<div class="pure-g" data-viewmodel="app/DeployVM" data-model="{config|js}">
+<div class="pure-g" data-viewmodel="spirit/DeployVM" data-model="{config|js}">
   <h2 class="pure-u-1">
     Deploy
   </h2>

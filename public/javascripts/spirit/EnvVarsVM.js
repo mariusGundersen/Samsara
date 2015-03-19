@@ -1,5 +1,5 @@
 define(['EditEnvVarVM', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, qvc){
-  return function AppEnvVarsVM(model, when){
+  return function EnvVarsVM(model, when){
     var self = this;
     
     this.envVars = ko.observableArray(toEnvList(model.env).map(function(envVar){

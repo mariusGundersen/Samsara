@@ -1,0 +1,13 @@
+{>"spirit/layout"/}
+{<spiritPage}
+  <div class="pane content">
+    <h2 class="dragger">Spirits</h2>
+    <ul class="pure-menu-list">
+      {#spirits}
+        <li class="pure-menu-item">
+          <a href="spirit/{name}" class="pure-menu-link">{name} <span class="text-faded">({image})</span></a>
+        </li>
+      {/spirits}
+    </ul>
+  </div>
+{/spiritPage}

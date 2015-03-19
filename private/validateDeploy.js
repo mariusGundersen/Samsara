@@ -1,10 +1,10 @@
 var Promise = require('promise');
-var app = require('../providers/app');
+var spirit = require('../providers/spirit');
 var Netmask = require('netmask').Netmask;
 
 function validateDeploy(name, secret, image, ip, callback_url){
   console.log('reading file', name);
-  return app(name).config().then(function(config){
+  return spirit(name).config().then(function(config){
     
     console.log('config', config);
     if(config.name !== name){

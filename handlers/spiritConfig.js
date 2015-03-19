@@ -1,26 +1,26 @@
 var qvc = require('qvc');
-var app = require('../providers/app');
-var mutateAppConfig = require('../mutators/appConfig');
+var spirit = require('../providers/spirit');
+var mutateSpiritConfig = require('../mutators/spiritConfig');
 
 module.exports = [
-  qvc.command('setAppImage', function(command, done){
-    mutateAppConfig(command.name, function(config){
+  qvc.command('setSpiritImage', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
       config.image = command.value;
     })
     .then(function(){
       done(null, true);
     }, done);
   }),
-  qvc.command('setAppDescription', function(command, done){
-    mutateAppConfig(command.name, function(config){
+  qvc.command('setSpiritDescription', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
       config.description = command.value;
     })
     .then(function(){
       done(null, true);
     }, done);
   }),
-  qvc.command('setAppUrl', function(command, done){
-    mutateAppConfig(command.name, function(config){
+  qvc.command('setSpiritUrl', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
       config.url = command.value;
     })
     .then(function(){
@@ -28,7 +28,7 @@ module.exports = [
     }, done);
   }),
   qvc.command('enableWebhook', function(command, done){
-    mutateAppConfig(command.name, function(config){
+    mutateSpiritConfig(command.name, function(config){
       config.webhook.enable = true;
     })
     .then(function(){
@@ -36,7 +36,7 @@ module.exports = [
     }, done);
   }),
   qvc.command('disableWebhook', function(command, done){
-    mutateAppConfig(command.name, function(config){
+    mutateSpiritConfig(command.name, function(config){
       config.webhook.enable = false;
     })
     .then(function(){
@@ -44,7 +44,7 @@ module.exports = [
     }, done);
   }),
   qvc.command('saveWebhook', function(command, done){
-    mutateAppConfig(command.name, function(config){
+    mutateSpiritConfig(command.name, function(config){
       config.webhook['secret'] = command.secret;
       config.webhook['from-ip'] = command.fromIp;
     })
@@ -53,7 +53,7 @@ module.exports = [
     }, done);
   }),
   qvc.command('addEnvVar', function(command, done){
-    mutateAppConfig(command.name, function(config){
+    mutateSpiritConfig(command.name, function(config){
       if(!config.env){
         config.env = {};
       }
@@ -78,11 +78,11 @@ module.exports = [
     ]
   }),
   qvc.command('setEnvVar', function(command, done){
-    mutateAppConfig(command.name, function(config){
+    mutateSpiritConfig(command.name, function(config){
       if(!config.env){
         config.env = {};
       }
-      if(command.key != config.env){
+      if(command.key in config.env == false){
         throw new Error(command.key+" is not in the environment variable list");
       }
       config.env[command.key] = command.value;
@@ -92,7 +92,7 @@ module.exports = [
     }, done);
   }),
   qvc.command('removeEnvVar', function(command, done){
-    mutateAppConfig(command.name, function(config){
+    mutateSpiritConfig(command.name, function(config){
       if(!config.env){
         config.env = {};
       }

@@ -1,5 +1,5 @@
 var Promise = require('promise');
-var app = require('./app');
+var spirit = require('./spirit');
 var allContainers = require('./allContainers');
 
 function container(){
@@ -9,11 +9,11 @@ function container(){
 container.list = function(){
   return allContainers()
   .then(function(containers){
-    return app.list().then(function(apps){
+    return spirit.list().then(function(spirits){
       return containers.filter(function(container){
-        return !apps.some(function(app){
+        return !spirits.some(function(spirit){
           var match =  /^(.*?)(_v\d+)?$/.exec(container.name);
-          return match && match[1] == app;
+          return match && match[1] == spirit;
         });
       }).sort(function(a, b){
         return a.state == 'running' && b.state != 'running' ? -1 : 

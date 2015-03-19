@@ -1,26 +1,26 @@
 var express = require('express');
 var router = express.Router();
 var Promise = require('promise');
-var app = require('../providers/app');
-var appContainers = require('../providers/appContainers');
-var makePageModel = require('../private/makeAppPageModel');
+var spirit = require('../providers/spirit');
+var spiritContainers = require('../providers/spiritContainers');
+var makePageModel = require('../private/makeSpiritPageModel');
 var docker = require('../private/docker');
 var moment = require('moment');
 var prettifyLogs = require('../private/prettifyLogs');
 
 router.get('/', function(req, res, next) {
-  app
+  spirit
   .list()
-  .then(function(apps){
-    return Promise.all(apps.map(function(name){
-      return app(name).config();
+  .then(function(spirits){
+    return Promise.all(spirits.map(function(name){
+      return spirit(name).config();
     }));
   })
   .then(function(result){
-    return makePageModel('Apps', {apps:result});
+    return makePageModel('Spirits', {spirits:result});
   })
   .then(function(pageModel){
-    res.render('app/index', pageModel);
+    res.render('spirit/index', pageModel);
   }).catch(function(error){
     res.render('error', {content: {message: error.message, error: error}});
   });
@@ -28,17 +28,17 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/new', function(req, res, next) {
-  makePageModel('New app', {})
+  makePageModel('New spirit', {}, 'new')
   .then(function(pageModel){
-    res.render('app/new', pageModel);
+    res.render('spirit/new', pageModel);
   });
 });
 
 router.get('/:name', function(req, res, next) {
-  app(req.params.name)
+  spirit(req.params.name)
   .config()
   .then(function(config){
-    return appContainers(req.params.name)
+    return spiritContainers(req.params.name)
     .then(function(containers){
       return makePageModel(req.params.name, {
         config: config,
@@ -52,7 +52,7 @@ router.get('/:name', function(req, res, next) {
     });
   })
   .then(function(pageModel){
-    res.render('app/info', pageModel);
+    res.render('spirit/info', pageModel);
   }).catch(function(error){
     res.render('error', {content:{message: error.message, error: error}});
   });
@@ -61,12 +61,12 @@ router.get('/:name', function(req, res, next) {
 router.get('/:name/edit', function(req, res, next) {
   makePageModel('Edit '+req.params.name)
   .then(function(pageModel){
-    res.render('app/edit', pageModel);
+    res.render('spirit/edit', pageModel);
   });
 });
 
 router.get('/:name/version/:version', function(req, res, next){
-  appContainers(req.params.name)
+  spiritContainers(req.params.name)
   .then(function(containers){    
     var found = containers.filter(function(c){
       return c.version == req.params.version;
@@ -95,7 +95,7 @@ router.get('/:name/version/:version', function(req, res, next){
     });
   })
   .then(function(pageModel){
-    res.render('app/version/index', pageModel);
+    res.render('spirit/version/index', pageModel);
   }).catch(function(error){
     res.render('error', {content:{message: error.message, error: error}});
   });

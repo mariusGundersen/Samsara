@@ -1,10 +1,10 @@
 define(['knockout', 'deco/qvc'], function(ko, qvc){
-  return function AppInfoVM(model, when){
+  return function DeployVM(model, when){
     var self = this;
     
     this.result = ko.observable();
     
-    this.deploy = qvc.createCommand('deployApp', {
+    this.deploy = qvc.createCommand('deploySpirit', {
       name: model.name
     }).beforeExecute(function(){
       self.result('');

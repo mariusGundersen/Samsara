@@ -4,7 +4,7 @@ module.exports = function(title, content, selected){
     content: content,
     menu: {
       constellations: selected == 'constellations',
-      spirits: selected == 'app',
+      spirits: selected == 'spirit',
       containers: selected == 'container',
       settings: selected == 'settings'
     }

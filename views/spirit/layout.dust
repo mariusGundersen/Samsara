@@ -1,24 +1,24 @@
 {>layout/}
 {<content}
-  {>"app/_menu" menu=menu/}
+  {>"spirit/_menu" menu=menu/}
   
   
   {#content}
-  {+appPage}
+  {+spiritPage}
   <div class="content pane">
     <h2>Create a new page!</h2>
     <pre>
 {`
-{&gt;"app/layout"/}
-{&lt;appPage}
+{&gt;"spirit/layout"/}
+{&lt;spiritPage}
   &lt;div class="pane content"&gt;
     &lt;h2&gt;Put something here&lt;/h2&gt;
     &lt;p&gt;And something more here...&lt;/p&gt;
   &lt;/div&gt;
-{/appPage}
+{/spiritPage}
 `}
     </pre>
   </div>
-  {/appPage}
+  {/spiritPage}
   {/content}
 {/content}

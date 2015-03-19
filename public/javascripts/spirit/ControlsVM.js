@@ -1,25 +1,24 @@
 define(['knockout', 'deco/qvc'], function(ko, qvc){
-  
-  return function(model, when){
+  return function ControlsVM(model, when){
     var self = this;
     
     this.running = ko.observable(model.state == 'running');
     
-    this.stop = qvc.createCommand('stopApp', {
+    this.stop = qvc.createCommand('stopSpirit', {
       name: model.name
     }).success(function(){
       self.running(false);
       document.location.reload();
     });
     
-    this.start = qvc.createCommand('startApp', {
+    this.start = qvc.createCommand('startSpirit', {
       name: model.name
     }).success(function(){
       self.running(true);
       document.location.reload();
     });
     
-    this.restart = qvc.createCommand('restartApp', {
+    this.restart = qvc.createCommand('restartSpirit', {
       name: model.name
     }).success(function(){
       self.running(true);

@@ -1,4 +1,4 @@
-<div data-viewmodel="app/EnvVarsVM" data-model="{config|js}">
+<div data-viewmodel="spirit/EnvVarsVM" data-model="{config|js}">
   <h2>
     Environment variables
     <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add environment variable"><i class="fa fa-fw fa-plus"></i></button>

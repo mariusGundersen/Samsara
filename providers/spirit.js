@@ -2,21 +2,21 @@ var fs = require('fs-promise');
 var Promise = require('promise');
 var freeze = require('deep-freeze');
 
-function app(name){
+function spirit(name){
   return {
     config: function(){
-      return fs.readFile('config/apps/'+name+'/config.json')
+      return fs.readFile('config/spirits/'+name+'/config.json')
       .then(JSON.parse);
       //.then(freeze);
     }
   };
 };
 
-app.list = function(){
-  return fs.readdir('config/apps')
+spirit.list = function(){
+  return fs.readdir('config/spirits')
   .then(function(files){
     return Promise.all(files.map(function(file){
-      return fs.stat('config/apps/'+file)
+      return fs.stat('config/spirits/'+file)
       .then(function(stat){
         return {name: file, isDir: stat.isDirectory()};
       });
@@ -31,4 +31,4 @@ app.list = function(){
   })
 };
 
-module.exports = app;
+module.exports = spirit;

@@ -1,8 +1,8 @@
-{>"app/layout"/}
-{<appPage}
+{>"spirit/layout"/}
+{<spiritPage}
 <div class="pane content">
-  <form class="pure-form pure-form-aligned" data-viewmodel="NewAppVM" data-bind="submit: create">
-    <h2 class="dragger">New app</h2>
+  <form class="pure-form pure-form-aligned" data-viewmodel="NewSpiritVM" data-bind="submit: create">
+    <h2 class="dragger">New spirit</h2>
     <div class="pure-control-group">
       <label>
         Name
@@ -25,4 +25,4 @@
     </div>
   </form>
 </div>
-{/appPage}
+{/spiritPage}

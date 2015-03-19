@@ -1,4 +1,4 @@
-<div data-viewmodel="app/MainInfoVM" data-model="{config|js}">
+<div data-viewmodel="spirit/MainInfoVM" data-model="{config|js}">
   <h2 class="dragger">{config.name}</h2>
   <form class="pure-form pure-form-aligned" data-bind="with:image">
     <div class="pure-control-group">

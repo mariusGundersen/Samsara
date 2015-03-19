@@ -32,11 +32,11 @@ define(['knockout', 'deco/qvc', 'containerEvents'], function(ko, qvc, container)
       document.location = '/containers';
     });
     
-    this.toSpirit = qvc.createCommand('newApp', {
+    this.toSpirit = qvc.createCommand('newSpirit', {
       name: model.name,
       image: model.image
     }).success(function(){
-      document.location = '/app/'+model.name;
+      document.location = '/spirit/'+model.name;
     });
     
     this.isBusy = ko.computed(function(){

@@ -1,5 +1,5 @@
 define(['knockout', 'deco/qvc'], function(ko, qvc){
-  return function AppInfoWebhookVM(model, when){
+  return function WebhookVM(model, when){
     var self = this;
     
     this.fromIp = ko.observable(model.webhook['from-ip']);

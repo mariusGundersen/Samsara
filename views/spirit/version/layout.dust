@@ -1,11 +1,11 @@
-{>"app/layout"/}
-{<appPage}
+{>"spirit/layout"/}
+{<spiritPage}
   <div class="menu pane">
-    <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/app/{name}">Versions</a></h2>
+    <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/spirit/{name}">Versions</a></h2>
     <ul>
       {#menu}
         <li class="container-state-{state} {?selected}selected{/selected}">
-          <a href="/app/{spirit}/version/{version}">
+          <a href="/spirit/{spirit}/version/{version}">
             <span class="version">
               {version}
             </span>- 
@@ -18,21 +18,21 @@
   
   
   {#content}
-  {+appVersionPage}
+  {+spiritVersionPage}
   <div class="content pane">
     <h2>Create a new page!</h2>
     <pre>
 {`
-{&gt;"app/version/layout"/}
-{&lt;appVersionPage}
+{&gt;"spirit/version/layout"/}
+{&lt;spiritVersionPage}
   &lt;div class="pane content"&gt;
     &lt;h2&gt;Put something here&lt;/h2&gt;
     &lt;p&gt;And something more here...&lt;/p&gt;
   &lt;/div&gt;
-{/appVersionPage}
+{/spiritVersionPage}
 `}
     </pre>
   </div>
-  {/appVersionPage}
+  {/spiritVersionPage}
   {/content}
-{/appPage}
+{/spiritPage}

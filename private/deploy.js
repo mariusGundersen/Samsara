@@ -2,7 +2,7 @@ var docker = require('./docker');
 var Promise = require('promise');
 var extend = require('extend');
 var createContainerFromConfig = require('./createContainerFromConfig');
-var appContainers = require('../providers/appContainers');
+var spiritContainers = require('../providers/spiritContainers');
 
 module.exports = function deploy(config){
   console.log(config.image);
@@ -19,7 +19,7 @@ module.exports = function deploy(config){
     });
   })
   .then(function(name){
-    return appContainers(name)
+    return spiritContainers(name)
     .then(function (oldContainers) {
       return {
         oldContainers: oldContainers, 
