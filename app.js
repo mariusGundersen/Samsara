@@ -10,9 +10,12 @@ var dust = require('dustjs-linkedin');
 var cons = require('consolidate');
 
 var auth = require('http-auth');
+var mkdirp = require('mkdirp');
+
+mkdirp.sync(__dirname+'/config/spirits');
 
 var basic = auth.basic({
-    realm: "Docker SpacePort",
+    realm: "Samsara",
     file: __dirname+"/config/authentication"
 });
 

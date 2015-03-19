@@ -4,12 +4,13 @@ var deploy = require('../private/deploy');
 var spiritContainers = require('../providers/spiritContainers');
 var docker = require('../private/docker');
 var fs = require('fs-promise');
+var mkdirp = require('mkdirp');
 var Promise = require('promise');
 
 module.exports = [
   qvc.command('newSpirit', function(command, done){
     console.log("newSpirit", command.name);
-    fs.mkdir('config/spirits/'+command.name)
+    Promise.denodeify(mkdirp)('config/spirits/'+command.name)
     .then(function(){
       return fs.writeFile('config/spirits/'+command.name+'/config.json', JSON.stringify({
         name: command.name,
