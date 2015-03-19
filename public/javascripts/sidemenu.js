@@ -87,14 +87,15 @@ window.onload = function(){
     dx = dx + velocity*t + a/2*t*t;
 
     if(size == -1){
+      //here be magic! this needs to be improved
       if(dx < PANEL_WIDTH/2){
         dx = 0;
       }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)/2){
-        dx = PANEL_WIDTH+(panes.length == 3 ? 0 : ICON_WIDTH);
+        dx = PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3));
       }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)){
-        dx = PANEL_WIDTH*2;
+        dx = PANEL_WIDTH*2+Math.max(0, ICON_WIDTH*(panes.length-4));
       }else{
-        dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+ICON_WIDTH))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+ICON_WIDTH);
+        dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3))))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3)));
       }
       return repositionMenus(dx, true, velocity);
     }else{
@@ -169,7 +170,7 @@ window.onload = function(){
     });
 
     if(size == -1 && panes.length > 2){
-      panes[panes.length-2].widthIcon = panes.length == 3 ? 0 : -ICON_WIDTH;
+      panes[panes.length-2].widthIcon = -ICON_WIDTH*(panes.length-3);
     }
 
     panes.reduce(function(v, pane, index, panes){
@@ -191,10 +192,10 @@ window.onload = function(){
     panes.reverse();
 
     panes.reduce(function(widthIcons, pane){
-      widthIcons += pane.widthIcon;
-      pane.rightEdge = pane.leftEdge + widthIcons;
+      pane.rightEdge = pane.leftEdge + widthIcons + pane.widthIcon;
+      widthIcons += ICON_WIDTH;
       return widthIcons;
-    },0);
+    }, 0);
     
     return panes;
   }

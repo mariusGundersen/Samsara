@@ -3,7 +3,7 @@ var router = express.Router();
 var Promise = require('promise');
 var docker = require('../private/docker');
 var container = require('../providers/container');
-var makePageModel = require('../private/makeContainerPageModel');
+var makePageModel = require('../pageModels/containers');
 var prettifyLogs = require('../private/prettifyLogs');
 
 router.get('/', function(req, res, next) {

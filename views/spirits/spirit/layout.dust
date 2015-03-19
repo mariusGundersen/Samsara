@@ -1,6 +1,6 @@
-{>layout/}
-{<content}
-  {>"spirit/_menu" menu=menu/}
+{>"spirits/layout"/}
+{<spiritsPage}
+  {>"spirits/spirit/_menu" menu=menu/}
   
   
   {#content}
@@ -9,7 +9,7 @@
     <h2>Create a new page!</h2>
     <pre>
 {`
-{&gt;"spirit/layout"/}
+{&gt;"spirits/spirit/layout"/}
 {&lt;spiritPage}
   &lt;div class="pane content"&gt;
     &lt;h2&gt;Put something here&lt;/h2&gt;
@@ -21,4 +21,4 @@
   </div>
   {/spiritPage}
   {/content}
-{/content}
+{/spiritsPage}

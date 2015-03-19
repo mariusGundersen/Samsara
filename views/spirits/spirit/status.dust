@@ -1,0 +1,8 @@
+{>"spirits/spirit/layout"/}
+{<spiritPage}
+  <div class="pane content">
+    <h2 class="dragger">Status</h2>
+    {>"spirits/spirit/_controls"/}
+    {>"spirits/spirit/_deploy"/}
+  </div>
+{/spiritPage}

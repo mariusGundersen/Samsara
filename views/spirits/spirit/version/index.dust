@@ -1,4 +1,4 @@
-{>"spirit/version/layout"/}
+{>"spirits/spirit/version/layout"/}
 {<spiritVersionPage}
 <div class="pane content">
   <h2 class="dragger">{name} v{version}</h2>

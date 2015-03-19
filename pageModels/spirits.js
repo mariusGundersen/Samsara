@@ -1,7 +1,7 @@
 var spirits = require('../providers/spirit');
 var spiritContainers = require('../providers/spiritContainers');
 var Promise = require('promise');
-var makePageModel = require('./makePageModel');
+var makePageModel = require('./root');
 
 module.exports = function(title, content, currentSpiritName){
   return spirits.list()
@@ -41,6 +41,6 @@ module.exports = function(title, content, currentSpiritName){
         spirits: spirits
       },
       content: content || {}
-    }, 'spirit');
+    }, 'spirits');
   });
 }

@@ -1,5 +1,5 @@
-{>"spirit/layout"/}
-{<spiritPage}
+{>"spirits/layout"/}
+{<spiritsPage}
   <div class="pane content">
     <h2 class="dragger">Spirits</h2>
     <ul class="pure-menu-list">
@@ -10,4 +10,4 @@
       {/spirits}
     </ul>
   </div>
-{/spiritPage}
+{/spiritsPage}

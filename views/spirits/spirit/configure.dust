@@ -1,0 +1,8 @@
+{>"spirits/spirit/layout"/}
+{<spiritPage}
+  <div class="pane content">
+    {>"spirits/spirit/_mainInfo"/}
+    {>"spirits/spirit/_webhook"/}    
+    {>"spirits/spirit/_envVars"/}
+  </div>
+{/spiritPage}

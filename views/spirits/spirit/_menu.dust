@@ -1,0 +1,14 @@
+<div class="menu pane">
+  <h2><a href="#"><i class="fa fa-sun-o fa-fw"></i></a><a href="/spirits/{menu.spirit}">{menu.spirit}</a></h2>
+  <ul>
+    <li class="{?menu.status}selected{/menu.status}">
+      <a href="/spirit/{menu.spirit}"><i class="fa fa-info fa-fw"></i>Status</a>
+    </li>
+    <li class="{?menu.config}selected{/menu.config}">
+      <a href="/spirit/{menu.spirit}/configure"><i class="fa fa-pencil fa-fw"></i>Configure</a>
+    </li>
+    <li class="{?menu.versions}selected{/menu.versions}">
+      <a href="/spirit/{menu.spirit}/versions"><i class="fa fa-history fa-fw"></i>History</a>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,6 @@
+{>"spirits/spirit/layout"/}
+{<spiritPage}
+  <div class="pane content">
+    {>"spirits/spirit/_versionTable"/}
+  </div>
+{/spiritPage}

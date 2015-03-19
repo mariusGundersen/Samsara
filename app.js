@@ -44,7 +44,9 @@ spirit.use('/qvc', qvc(
 ));
 
 spirit.use('/container(s?)/', require('./routes/container'));
+spirit.use('/spirit(s?)/', require('./routes/spirits'));
 spirit.use('/spirit(s?)/', require('./routes/spirit'));
+spirit.use('/spirit(s?)/', require('./routes/version'));
 spirit.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler

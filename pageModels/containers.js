@@ -1,6 +1,6 @@
-var docker = require('./docker');
+var docker = require('../private/docker');
 var Promise = require('promise');
-var makePageModel = require('./makePageModel');
+var makePageModel = require('./root');
 var container = require('../providers/container');
 
 module.exports = function(title, content, currentContainerId){
@@ -19,6 +19,6 @@ module.exports = function(title, content, currentContainerId){
         containers: containers
       },
       content: content || {}
-    }, 'container');
+    }, 'containers');
   });
 }

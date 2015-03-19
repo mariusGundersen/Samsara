@@ -4,8 +4,8 @@ module.exports = function(title, content, selected){
     content: content,
     menu: {
       constellations: selected == 'constellations',
-      spirits: selected == 'spirit',
-      containers: selected == 'container',
+      spirits: selected == 'spirits',
+      containers: selected == 'containers',
       settings: selected == 'settings'
     }
   };
