@@ -16,41 +16,41 @@ var basic = auth.basic({
     file: __dirname+"/config/authentication"
 });
 
-var spirit = express();
-spirit.enable('trust proxy');
+var app = express();
+app.enable('trust proxy');
 
 // view engine setup
-spirit.engine('dust', cons.dust);
-spirit.set('views', path.join(__dirname, 'views'));
-spirit.set('view engine', 'dust');
-spirit.set('template_engine', 'dust');
+app.engine('dust', cons.dust);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'dust');
+app.set('template_engine', 'dust');
 
 // uncomment after placing your favicon in /public
-//spirit.use(favicon(__dirname + '/public/favicon.ico'));
-spirit.use(logger('dev'));
-spirit.use(bodyParser.json());
-spirit.use(bodyParser.urlencoded({ extended: false }));
-spirit.use(cookieParser());
+//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-spirit.use('/deploy', require('./routes/deploy'));
+app.use('/deploy', require('./routes/deploy'));
 
-spirit.use(auth.connect(basic));
-spirit.use(express.static(path.join(__dirname, 'public')));
+app.use(auth.connect(basic));
+app.use(express.static(path.join(__dirname, 'public')));
 
-spirit.use('/qvc', qvc(
+app.use('/qvc', qvc(
   require('./handlers/container'),
   require('./handlers/spirit'),
   require('./handlers/spiritConfig')
 ));
 
-spirit.use('/container(s?)/', require('./routes/container'));
-spirit.use('/spirit(s?)/', require('./routes/spirits'));
-spirit.use('/spirit(s?)/', require('./routes/spirit'));
-spirit.use('/spirit(s?)/', require('./routes/version'));
-spirit.use('/', require('./routes/index'));
+app.use('/container(s?)/', require('./routes/container'));
+app.use('/spirit(s?)/', require('./routes/spirits'));
+app.use('/spirit(s?)/', require('./routes/spirit'));
+app.use('/spirit(s?)/', require('./routes/version'));
+app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler
-spirit.use(function(req, res, next) {
+app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
@@ -60,8 +60,8 @@ spirit.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (spirit.get('env') === 'development') {
-    spirit.use(function(err, req, res, next) {
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
           title: 'Error',
@@ -76,7 +76,7 @@ if (spirit.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-spirit.use(function(err, req, res, next) {
+app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       title: 'Error',
@@ -89,4 +89,4 @@ spirit.use(function(err, req, res, next) {
 });
 
 
-module.exports = spirit;
+module.exports = app;
