@@ -1,7 +1,7 @@
 {>"spirits/spirit/layout"/}
 {<spiritPage}
   <div class="menu pane">
-    <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/spirit/{name}">Versions</a></h2>
+    <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/spirit/{name}/versions">Versions</a></h2>
     <ul>
       {#menu}
         <li class="container-state-{state} {?selected}selected{/selected}">

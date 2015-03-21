@@ -11,6 +11,7 @@ router.get('/:name', function(req, res, next) {
     return spiritContainers(req.params.name)
     .then(function(containers){
       return makePageModel(req.params.name, {
+        name: req.params.name,
         config: config,
         containers: containers,
         controls: {
@@ -33,6 +34,7 @@ router.get('/:name/configure', function(req, res, next) {
   .config()
   .then(function(config){
     return makePageModel(req.params.name, {
+      name: req.params.name,
       config: config
     }, req.params.name, 'config');
   })
@@ -47,6 +49,7 @@ router.get('/:name/versions', function(req, res, next) {
   return spiritContainers(req.params.name)
   .then(function(containers){
     return makePageModel(req.params.name, {
+      name: req.params.name,
       containers: containers
     }, req.params.name, 'versions');
   })

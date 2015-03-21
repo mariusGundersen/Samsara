@@ -1,6 +1,7 @@
 {>"spirits/spirit/layout"/}
 {<spiritPage}
   <div class="pane content">
+    <h2 class="dragger">{name} history</h2>
     {>"spirits/spirit/_versionTable"/}
   </div>
 {/spiritPage}

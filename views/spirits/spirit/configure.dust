@@ -1,6 +1,8 @@
 {>"spirits/spirit/layout"/}
 {<spiritPage}
   <div class="pane content">
+    <h2 class="dragger">{name} configuration</h2>
+    <p style="text-align: center">Changes made here will take effect in the next version. Use the Deploy button on the status page to put the new configuration into effect.</p>
     {>"spirits/spirit/_mainInfo"/}
     {>"spirits/spirit/_webhook"/}    
     {>"spirits/spirit/_envVars"/}

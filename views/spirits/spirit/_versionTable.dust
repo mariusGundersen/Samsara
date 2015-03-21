@@ -1,6 +1,4 @@
 <div>
-  <h2 class="dragger">Versions</h2>
-
   <table class="pure-table pure-table-striped table-fixed">
     <thead>
       <tr>
