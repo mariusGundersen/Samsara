@@ -1,8 +1,8 @@
 define(['knockout', 'deco/qvc'], function(ko, qvc){
-  return function EditEntryVM(model, when){
+  return function EditEntry(entry, spiritName){
     var self = this;
     
-    var oldValue = model && model.value;
+    var oldValue = entry && entry.value;
     
     this.editing = ko.observable(false);
     this.value = ko.observable(oldValue);
@@ -11,8 +11,8 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
       self.editing(true);
     };
     
-    this.save = qvc.createCommand(model.command, {
-      name: model.name,
+    this.save = qvc.createCommand(entry.command, {
+      name: spiritName,
       value: this.value
     }).success(function(){
       oldValue = self.value();

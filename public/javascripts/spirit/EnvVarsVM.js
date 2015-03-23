@@ -1,9 +1,9 @@
-define(['EditEnvVarVM', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, qvc){
+define(['spirit/EditEnvVar', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, qvc){
   return function EnvVarsVM(model, when){
     var self = this;
     
     this.envVars = ko.observableArray(toEnvList(model.env).map(function(envVar){
-      return new EditEnvVar({key: envVar.key, value: envVar.value, name: model.name});
+      return new EditEnvVar(envVar, model.name);
     }));
     
     this.creating = ko.observable(false);
@@ -32,7 +32,7 @@ define(['EditEnvVarVM', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, qvc){
       key: self.fresh.key,
       value: self.fresh.value
     }).success(function(){
-      self.envVars.push(new EditEnvVar({key: self.fresh.key(), value: self.fresh.value(), name: model.name}));
+      self.envVars.push(new EditEnvVar({key: self.fresh.key(), value: self.fresh.value()}, model.name));
       self.fresh.value('');
       self.fresh.key('');
       self.creating(false);

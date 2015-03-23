@@ -1,9 +1,9 @@
 define(['knockout', 'deco/qvc'], function(ko, qvc){
-  return function EditEnvVarVM(model, when){
+  return function EditEnvVar(envVar, spiritName){
     var self = this;
     
-    var oldKey = model && model.key;
-    var oldValue = model && model.value;
+    var oldKey = envVar && envVar.key;
+    var oldValue = envVar && envVar.value;
     
     this.state = ko.observable('show');
     this.value = ko.observable(oldValue);
@@ -14,7 +14,7 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     };
     
     this.save = qvc.createCommand("setEnvVar", {
-      name: model.name,
+      name: spiritName,
       key: this.key,
       value: this.value
     }).success(function(){
