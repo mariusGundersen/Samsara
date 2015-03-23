@@ -101,5 +101,61 @@ module.exports = [
     .then(function(){
       done(null, true);
     }, done);
+  }),,
+  qvc.command('addVolume', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.volumes){
+        config.volumes = {};
+      }
+      config.volumes[command.containerPath] = {
+        hostPath: command.hostPath,
+        readOnly: command.readOnly
+      };
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }, {
+    parameters: [
+      {
+        name: 'containerPath',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify a containerPath for the new volume'
+            }
+          }
+        ]
+      }
+    ]
+  }),
+  qvc.command('setVolume', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.volumes){
+        config.volumes = {};
+      }
+      if(command.containerPath in config.volumes == false){
+        throw new Error(command.containerPath+" is not in the volumesironment variable list");
+      }
+      config.volumes[command.containerPath] = {
+        hostPath: command.hostPath,
+        readOnly: command.readOnly
+      };
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('removeVolume', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.volumes){
+        config.volumes = {};
+      }
+      config.volumes[command.containerPath] = undefined;
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
   }),
 ];

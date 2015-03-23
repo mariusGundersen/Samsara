@@ -18,7 +18,9 @@ module.exports = [
         description: '',
         url: '',
         webhook: {},
-        raw: {}
+        raw: {},
+        env: {},
+        volumes: {},
       }, null, '  '))
     })
     .then(function(){
@@ -33,6 +35,13 @@ module.exports = [
             name: 'NotEmpty',
             attributes: {
               message: 'Please specify a name for the new spirit'
+            }
+          },
+          {
+            name: 'Pattern',
+            attributes: {
+              message: 'The name of the spirit can only contain letters, digits, dashes and underscores',
+              regexp: '[a-zA-Z0-9_-]+'
             }
           }
         ]
