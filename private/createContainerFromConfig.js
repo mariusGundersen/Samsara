@@ -43,13 +43,13 @@ function makeBinds(volumes){
       if(volumes.hasOwnProperty(containerPath)){
         var volume = volumes[containerPath];
         if(typeof(volume) == 'string'){
-          result.push(containerPath+':'+volume);
+          result.push(volume+':'+containerPath);
         }else if(volume.hostPath == ''){
           result.push(containerPath);
         }else if(volume.readOnly){
-          result.push(containerPath+':'+volume.hostPath+':ro');
+          result.push(volume.hostPath+':'+containerPath+':ro');
         }else{
-          result.push(containerPath+':'+volume.hostPath);
+          result.push(volume.hostPath+':'+containerPath);
         }
       }
     }
