@@ -14,7 +14,7 @@
     <form class="pure-form pure-form-aligned" data-bind="visible:state()=='editing', submit:save" style="display:none">
       <div class="pure-control-group">
         <label class="control-like" data-bind="text:key"></label>
-        <input value="" data-bind="value:value" placeholder="value">
+        <input value="" data-bind="value:value, hasFocus:state()=='editing'" placeholder="value">
         <button class="pure-button pull-right button-error" data-bind="click:$parent.remove"><i class="fa fa-fw fa-trash"></i>&nbsp;Remove</button>
         <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
         <button class="pure-button pull-right button-minimal" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-undo"></i></button>
@@ -23,7 +23,7 @@
   </div> 
   <form class="pure-form pure-form-aligned" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <div class="pure-control-group">
-      <input value="" data-bind="value:fresh.key" placeholder="key">
+      <input value="" data-bind="value:fresh.key, hasFocus:creating()" placeholder="key">
       <input value="" data-bind="value:fresh.value" placeholder="value">
       <span class="validation-error-message" data-bind="validationMessageFor:fresh.key"></span>
       <button class="pure-button pull-right button-success" type="submit" data-bind="click:create"><i class="fa fa-fw fa-check"></i>&nbsp;Create</button>

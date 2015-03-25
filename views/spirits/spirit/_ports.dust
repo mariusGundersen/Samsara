@@ -8,18 +8,18 @@
       <div class="pure-control-group">
         <label class="control-like" data-bind="text:hostPort"></label>
         <span class="control-like" data-bind="text:containerPort"></span>
-        &nbsp;(<span class="control-like" data-bind="text:hostIp"></span>)
+        <span class="control-like" data-bind="visible:hostIp">&nbsp;(<span data-bind="text:hostIp"></span>)</span>
         <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
     </form>   
     <form class="pure-form pure-form-aligned" data-bind="visible:state()=='editing', submit:save" style="display:none">
       <div class="pure-control-group">
         <label class="control-like" data-bind="text:hostPort"></label>
-        <input value="" data-bind="value:containerPort" placeholder="container port">
-        <input value="" data-bind="value:hostIp" placeholder="host ip">
+        <input value="" data-bind="value:containerPort, hasFocus:state()=='editing'" placeholder="container port">
+        <input value="" data-bind="value:hostIp" placeholder="host ip (optional)">
         <span class="validation-error-message" data-bind="validationMessageFor: containerPort"></span>
         <span class="validation-error-message" data-bind="validationMessageFor: hostIp"></span>
-        <button class="pure-button pull-right button-error" data-bind="click:$parent.remove"><i class="fa fa-fw fa-trash"></i>&nbsp;Remove</button>
+        <button class="pure-button pull-right button-error" type="button" data-bind="click:$parent.remove"><i class="fa fa-fw fa-trash"></i>&nbsp;Remove</button>
         <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
         <button class="pure-button pull-right button-minimal" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-undo"></i></button>
       </div>
@@ -27,9 +27,9 @@
   </div> 
   <form class="pure-form pure-form-aligned" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <div class="pure-control-group">
-      <input value="" data-bind="value:fresh.hostPort" placeholder="host port">
+      <input value="" data-bind="value:fresh.hostPort, hasFocus: creating()" placeholder="host port">
       <input value="" data-bind="value:fresh.containerPort" placeholder="container port">
-      <input value="" data-bind="value:fresh.hostIp" placeholder="host ip">
+      <input value="" data-bind="value:fresh.hostIp" placeholder="host ip (optional)">
       <span class="validation-error-message" data-bind="validationMessageFor: fresh.hostPort"></span>
       <span class="validation-error-message" data-bind="validationMessageFor: fresh.containerPort"></span>
       <span class="validation-error-message" data-bind="validationMessageFor: fresh.hostIp"></span>

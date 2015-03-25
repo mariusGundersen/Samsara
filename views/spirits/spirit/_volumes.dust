@@ -15,7 +15,7 @@
     <form class="pure-form pure-form-aligned" data-bind="visible:state()=='editing', submit:save" style="display:none">
       <div class="pure-control-group">
         <label class="control-like" data-bind="text:containerPath"></label>
-        <input value="" data-bind="value:hostPath" placeholder="hostPath (optional)">
+        <input value="" data-bind="value:hostPath, hasFocus:state()=='editing'" placeholder="hostPath (optional)">
         <label>
           <i class="fa fa-fw fa-eye" title="read only" data-bind="visible: readOnly"></i>
           Read only <input type="checkbox" data-bind="checked: readOnly">
@@ -28,7 +28,7 @@
   </div> 
   <form class="pure-form pure-form-aligned" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <div class="pure-control-group">
-      <input value="" data-bind="value:fresh.containerPath" placeholder="path inside container">
+      <input value="" data-bind="value:fresh.containerPath, hasFocus: creating()" placeholder="path inside container">
       <input value="" data-bind="value:fresh.hostPath" placeholder="host path (optional)">
       <label>
         <i class="fa fa-fw fa-eye" title="read only" data-bind="visible: fresh.readOnly"></i>

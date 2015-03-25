@@ -14,9 +14,9 @@ define(['spirit/EditPort', 'knockout', 'deco/qvc'], function(EditPort, ko, qvc){
     };
     
     this.fresh = {
-      hostPort: ko.observable(),
-      containerPort: ko.observable(),
-      hostIp: ko.observable()
+      hostPort: ko.observable(''),
+      containerPort: ko.observable(''),
+      hostIp: ko.observable('')
     };
     
     this.remove = function(entry){
@@ -41,14 +41,14 @@ define(['spirit/EditPort', 'knockout', 'deco/qvc'], function(EditPort, ko, qvc){
       }, model.name));
       self.fresh.containerPort('');
       self.fresh.hostPort('');
-      self.fresh.hostIp(false);
+      self.fresh.hostIp('');
       self.creating(false);
     });
     
     this.cancelCreate = function(){
       self.fresh.containerPort('');
       self.fresh.hostPort('');
-      self.fresh.hostIp(false);
+      self.fresh.hostIp('');
       self.creating(false);
     };
   };

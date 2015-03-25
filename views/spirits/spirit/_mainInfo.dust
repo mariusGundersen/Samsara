@@ -4,7 +4,7 @@
     <div class="pure-control-group">
       <label class="control-like">Image</label>
       <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="visible:!editing(), text:value, attr:{href:'https://registry.hub.docker.com/u/'+value()}" target="_blank">{config.image}</a>
-      <input value="{config.image}" data-bind="visible:editing, value:value" style="display:none">
+      <input value="{config.image}" data-bind="visible:editing, value:value, hasFocus:editing()" style="display:none">
       <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
       <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
       <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
@@ -14,7 +14,7 @@
     <div class="pure-control-group">
       <label class="control-like">Description</label>
       <span class="control-like" data-bind="visible:!editing(), text:value">{config.description}</span>
-      <input value="{config.description}" data-bind="visible:editing, value:value" style="display:none">
+      <input value="{config.description}" data-bind="visible:editing, value:value, hasFocus:editing()" style="display:none">
       <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
       <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
       <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
@@ -24,7 +24,7 @@
     <div class="pure-control-group">
       <label class="control-like">Website</label>
       <a class="control-like" href="{config.url}" data-bind="visible:!editing(), text:value, attr:{href:value}" target="_blank">{config.url}</a>
-      <input value="{config.url}" data-bind="visible:editing, value:value" style="display:none">
+      <input value="{config.url}" data-bind="visible:editing, value:value, hasFocus:editing()" style="display:none">
       <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
       <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
       <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change url"><i class="fa fa-fw fa-pencil"></i></button>
