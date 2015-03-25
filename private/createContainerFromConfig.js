@@ -7,7 +7,8 @@ module.exports = function(name, config){
     Env: makeEnv(config.env),
     Volumes: makeVolumes(config.volumes),
     HostConfig: {
-      Binds: makeBinds(config.volumes)
+      Binds: makeBinds(config.volumes),
+      PortBindings: makePortBindings(config.ports)
     }
   }, config.raw);
 };
@@ -50,6 +51,23 @@ function makeBinds(volumes){
           result.push(volume.hostPath+':'+containerPath+':ro');
         }else{
           result.push(volume.hostPath+':'+containerPath);
+        }
+      }
+    }
+  }
+  return result;
+}
+
+function makePortBindings(ports){
+  var result = {};
+  if(ports){
+    for(var hostPort in ports){
+      if(ports.hasOwnProperty(hostPort)){
+        var port = ports[hostPort];
+        if(typeof(port) == 'string'){
+          result[port+'/tcp'] = [{"HostPort": hostPort}];
+        }else{
+          result[port.containerPort+'/'+(port.protocol||'tcp')] = [{"HostPort": hostPort, "HostIp": port.hostIp || ''}];
         }
       }
     }
