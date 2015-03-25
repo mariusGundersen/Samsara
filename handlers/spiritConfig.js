@@ -101,7 +101,7 @@ module.exports = [
     .then(function(){
       done(null, true);
     }, done);
-  }),,
+  }),
   qvc.command('addVolume', function(command, done){
     mutateSpiritConfig(command.name, function(config){
       if(!config.volumes){
@@ -153,6 +153,150 @@ module.exports = [
         config.volumes = {};
       }
       config.volumes[command.containerPath] = undefined;
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('addPort', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.ports){
+        config.ports = {};
+      }
+      config.ports[command.hostPort] = {
+        containerPort: command.containerPort,
+        hostIp: command.hostIp
+      };
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }, {
+    parameters: [
+      {
+        name: 'hostPort',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify a host port for the new port'
+            }
+          },
+          {
+            name: 'Pattern',
+            attributes: {
+              regexp: '^\\d+$',
+              message: 'The host port must be a number'
+            }
+          }
+        ]
+      },
+      {
+        name: 'containerPort',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify a container port for the new port'
+            }
+          },
+          {
+            name: 'Pattern',
+            attributes: {
+              regexp: '^\\d+$',
+              message: 'The container port must be a number'
+            }
+          }
+        ]
+      },
+      {
+        name: 'hostIp',
+        constraints: [
+          {
+            name: 'Pattern',
+            attributes: {
+              regexp: '^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})?$',
+              message: 'The host ip must follow the pattern #.#.#.#'
+            }
+          }
+        ]
+      }
+    ]
+  }),
+  qvc.command('setPort', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.ports){
+        config.ports = {};
+      }
+      if(command.hostPort in config.ports == false){
+        throw new Error(command.hostPort+" is not in the ports list");
+      }
+      config.ports[command.hostPort] = {
+        containerPort: command.containerPort,
+        hostIp: command.hostIp
+      };
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }, {
+    parameters: [
+      {
+        name: 'hostPort',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify a host port for the new port'
+            }
+          },
+          {
+            name: 'Pattern',
+            attributes: {
+              regexp: '^\\d+$',
+              message: 'The host port must be a number'
+            }
+          }
+        ]
+      },
+      {
+        name: 'containerPort',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify a container port for the new port'
+            }
+          },
+          {
+            name: 'Pattern',
+            attributes: {
+              regexp: '^\\d+$',
+              message: 'The container port must be a number'
+            }
+          }
+        ]
+      },
+      {
+        name: 'hostIp',
+        constraints: [
+          {
+            name: 'Pattern',
+            attributes: {
+              regexp: '^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})?$',
+              message: 'The host ip must follow the pattern #.#.#.#'
+            }
+          }
+        ]
+      }
+    ]
+  }),
+  qvc.command('removePort', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.ports){
+        config.ports = {};
+      }
+      config.ports[command.hostPort] = undefined;
     })
     .then(function(){
       done(null, true);

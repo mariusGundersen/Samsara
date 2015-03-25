@@ -6,6 +6,7 @@
     {>"spirits/spirit/_mainInfo"/}
     {>"spirits/spirit/_webhook"/}    
     {>"spirits/spirit/_envVars"/}    
-    {>"spirits/spirit/_volumes"/}
+    {>"spirits/spirit/_volumes"/}    
+    {>"spirits/spirit/_ports"/}
   </div>
 {/spiritPage}
