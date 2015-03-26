@@ -5,7 +5,19 @@ var docker = new Docker();
 
 module.exports = {
   listContainers: Promise.denodeify(docker.listContainers.bind(docker)),
-  pull: Promise.denodeify(docker.pull.bind(docker)),
+  pull: function(repoTag){
+    return new Promise(function(resolve, reject){
+      docker.pull(repoTag, function(err, stream){
+        if(err) return reject(err);
+        
+        docker.modem.followProgress(stream, function(err, output){
+          if(err) return reject(err);
+          
+          resolve(output);
+        });
+      });
+    });
+  },
   createContainer: function(){
     return Promise.denodeify(docker.createContainer.bind(docker)).apply(this, arguments).then(promiseifyContainer);
   },

@@ -8,15 +8,9 @@ module.exports = function deploy(config){
   console.log(config.image);
   
   return docker.pull(config.image)
-  .then(function (stream) {
-    return new Promise(function(resolve, reject){
-      console.log("pulling")
-      stream.pipe(process.stdout);
-      stream.on('end', function(){
-        console.log('done pulling');
-        resolve(config.name);
-      });
-    });
+  .then(function () {
+    console.log('done pulling');
+    return config.name;
   })
   .then(function(name){
     return spiritContainers(name)
