@@ -25,7 +25,11 @@ module.exports = function deploy(config){
   .then(function(spirit){
     var newName = spirit.name + '_v' + (spirit.version+1);
     console.log("creating container", newName);
-    return docker.createContainer(createContainerFromConfig(newName, config))
+    return createContainerFromConfig(newName, config)
+    .then(function(config){
+      console.log("config created");
+      return docker.createContainer(config)
+    })
     .then(function(container){
       console.log("starting container");
       return container.start();

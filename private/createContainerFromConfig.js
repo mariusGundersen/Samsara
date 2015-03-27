@@ -1,16 +1,22 @@
 var extend = require('extend');
+var spiritContainers = require('../providers/spiritContainers');
+var Promise = require('promise');
 
 module.exports = function(name, config){
-  return extend({
-    Image: config.image, 
-    name: name,
-    Env: makeEnv(config.env),
-    Volumes: makeVolumes(config.volumes),
-    HostConfig: {
-      Binds: makeBinds(config.volumes),
-      PortBindings: makePortBindings(config.ports)
-    }
-  }, config.raw);
+  return makeLinks(config.links)
+  .then(function(links){
+    return extend({
+      Image: config.image, 
+      name: name,
+      Env: makeEnv(config.env),
+      Volumes: makeVolumes(config.volumes),
+      HostConfig: {
+        Links: links,
+        Binds: makeBinds(config.volumes),
+        PortBindings: makePortBindings(config.ports)
+      }
+    }, config.raw);
+  });
 };
 
 function makeEnv(env){
@@ -73,4 +79,32 @@ function makePortBindings(ports){
     }
   }
   return result;
+}
+
+
+function makeLinks(links){
+  var result = [];
+  if(links){
+    for(var name in links){
+      if(links.hasOwnProperty(name)){
+        var link = links[name];
+        if(typeof(link) == 'string'){
+          result.push(link+':'+name);
+        }else if('spirit' in link){
+          result.push(getLinkToApp(link.spirit, name));
+        }else if('container' in link){
+          result.push(link.container+':'+name);
+        }
+      }
+    }
+  }
+  
+  function getLinkToApp(spirit, name){
+    return spiritContainers(spirit)
+    .then(function(containers){
+      return containers[0].name+':'+name;
+    });
+  }
+  
+  return Promise.all(result);
 }
