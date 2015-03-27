@@ -9,7 +9,7 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     }).beforeExecute(function(){
       self.result('');
     }).success(function(){
-      document.location.reload();
+      document.location += '/version/latest';
     }).error(function(){
       self.result('Deploy failed!');
     });

@@ -5,6 +5,14 @@ var makePageModel = require('../pageModels/version');
 var docker = require('../private/docker');
 var prettifyLogs = require('../private/prettifyLogs');
 
+router.get('/:name/version/latest', function(req, res, next){
+  spiritContainers(req.params.name)
+  .then(function(containers){
+    console.log('latest', containers[0].version);
+    res.redirect(containers[0].version);
+  });
+});
+
 router.get('/:name/version/:version', function(req, res, next){
   spiritContainers(req.params.name)
   .then(function(containers){    
