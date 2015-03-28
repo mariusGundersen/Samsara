@@ -136,7 +136,7 @@ module.exports = [
         config.volumes = {};
       }
       if(command.containerPath in config.volumes == false){
-        throw new Error(command.containerPath+" is not in the volumesironment variable list");
+        throw new Error(command.containerPath+" is not in the volume list");
       }
       config.volumes[command.containerPath] = {
         hostPath: command.hostPath,
@@ -302,4 +302,58 @@ module.exports = [
       done(null, true);
     }, done);
   }),
+  qvc.command('addLink', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.links){
+        config.links = {};
+      }
+      config.links[command.alias] = {
+        spirit: command.spirit
+      };
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }, {
+    parameters: [
+      {
+        name: 'alias',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify a alias for the new link'
+            }
+          }
+        ]
+      }
+    ]
+  }),
+  qvc.command('setLink', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.links){
+        config.links = {};
+      }
+      if(command.alias in config.links == false){
+        throw new Error(command.alias+" is not in the links list");
+      }
+      config.links[command.alias] = {
+        spirit: command.spirit
+      };
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('removeLink', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.links){
+        config.links = {};
+      }
+      config.links[command.alias] = undefined;
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  })
 ];

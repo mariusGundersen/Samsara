@@ -111,5 +111,12 @@ module.exports = [
     }, function(error){
       done(error);
     });
+  }),
+  qvc.query('getListOfSpirits', function(query, done){
+    spirit.list().then(function(spirits){
+      done(null, spirits);
+    }, function(error){
+      done(error);
+    });
   })
 ];
