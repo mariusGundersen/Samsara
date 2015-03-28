@@ -15,6 +15,10 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
       self.state('editing');
     };
     
+    this.toggleReadOnly = function(){
+      self.readOnly(!self.readOnly());
+    };
+    
     this.save = qvc.createCommand("setVolume", {
       name: spiritName,
       containerPath: this.containerPath,

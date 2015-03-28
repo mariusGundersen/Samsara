@@ -88,6 +88,13 @@ h2{
   border-bottom: 1px solid #ccc; 
 }
 
+h2 i.fa{
+  font-size: smaller;
+  vertical-align: middle;
+  width: 20px;
+  margin-right: 8px;
+}
+
 .table-fixed{
   table-layout: fixed;
   width: 100%;
@@ -96,6 +103,12 @@ h2{
 .control-like{
   padding: 0.5em 0.6em;
   border: 1px solid transparent;
+  display: inline-block;
+  box-sizing: border-box;
+  line-height: normal;
+}
+.button-like{
+  padding: 0.5em 1em;
   display: inline-block;
   box-sizing: border-box;
   line-height: normal;
@@ -176,6 +189,7 @@ h2{
 .config-section-form{
   padding: 10px;
 }
-.config-section-form input{
+.config-section-form>input,
+.config-section-form>select{
  width:100%; 
 }
