@@ -123,6 +123,10 @@ h2{
   display: block;
 }
 
+.pure-button{
+  border-radius: 4px;
+}
+
 .pure-form button[type="submit"] {
   margin-top:0;/*fix an issue with pure for small screens*/
 }
@@ -159,6 +163,9 @@ h2{
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
-.config-section-footer{
+.config-section-form{
   padding: 0 10px;
+}
+.config-section-form input{
+ width:100%; 
 }

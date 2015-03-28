@@ -18,7 +18,7 @@
       </form>
     </div>
   </div> 
-  <form class="config-section-footer pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
+  <form class="config-section-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <label class="small-label">Alias&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:fresh.alias"></span></label>
     <input value="" data-bind="value:fresh.alias, hasFocus: creating()" placeholder="name of link inside container">
     
