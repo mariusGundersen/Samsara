@@ -2,6 +2,7 @@
   
   <div data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
     <h2>
+      <i class="fa fa-fw fa-anchor"></i>
       Webhook
       <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit webhook"><i class="fa fa-fw fa-pencil"></i></button>
     </h2>
@@ -13,6 +14,7 @@
   
   <div data-bind="visible: editing" style="display:none">
     <h2>
+      <i class="fa fa-fw fa-anchor"></i>
       Webhook
       <button class="pure-button button-xsmall pull-right button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
     </h2>
@@ -32,10 +34,11 @@
   
   <div data-bind="visible: disabled" style="{?config.webhook.enable}display:none{/config.webhook.enable}">
     <h2>
+      <i class="fa fa-fw fa-anchor"></i>
       Webhook
     </h2>
     <form class="pure-form config-section-form">
-      <p style="text-align: center">By enabling the webhook the Docker Hub can deploy a new version of this spirit</p>
+      <p class="text-center">By enabling the webhook the Docker Hub can deploy a new version of this spirit</p>
       <span class="pure-u-1-4"></span>
       <button class="pure-button pure-button-primary button-xlarge pure-input-1-2" data-bind="click:enable"><i class="fa fa-fw fa-anchor"></i>&nbsp;Enable</button>
     </form>

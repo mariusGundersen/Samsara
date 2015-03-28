@@ -1,5 +1,6 @@
 <section data-viewmodel="spirit/LinksVM" data-model="{config|js}" class="config-section">
   <h2>
+    <i class="fa fa-fw fa-link"></i>
     Links
     <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add new link"><i class="fa fa-fw fa-plus"></i></button>
   </h2>
@@ -17,7 +18,12 @@
         <button class="pure-button button-error" data-bind="click:$parent.remove"><i class="fa fa-fw fa-trash"></i></button>
       </form>
     </div>
-  </div> 
+  </div>
+  <div data-bind="ifnot:links().length" class="config-list">
+    <div class="config-section-form config-list-item">
+      <p class="text-center text-muted">Click the pluss icon above to add a new link to another spirit</p>
+    </div>
+  </div>
   <form class="config-section-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <label class="small-label">Alias&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:fresh.alias"></span></label>
     <input value="" data-bind="value:fresh.alias, hasFocus: creating()" placeholder="name of link inside container">

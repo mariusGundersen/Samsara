@@ -2,12 +2,12 @@
   <h2 class="pure-u-1">
     Deploy
   </h2>
-  <p class="pure-u-1" style="text-align: center">Pull the latest version of <code>{config.image}</code> from the Docker Hub and start it, then stop and remove the previous version</p>
+  <p class="pure-u-1 text-center">Pull the latest version of <code>{config.image}</code> from the Docker Hub and start it, then stop and remove the previous version</p>
   <span class="pure-u-1-4"></span>
   <button class="pure-button pure-button-primary button-xlarge pure-u-1-2" data-bind="click: deploy, disable: deploy.isBusy">
   <i class="fa fa-fw fa-cloud-upload" data-bind="css: {'fa-spin': deploy.isBusy, 'fa-refresh': deploy.isBusy, 'fa-cloud-upload': !deploy.isBusy()}"></i>&nbsp;
     Deploy
   </button>
   <span class="pure-u-1-4"></span>
-  <div style="text-align: center" data-bind="text: result" class="validation-error-message pure-u-1"></div>
+  <div data-bind="text: result" class="text-center validation-error-message pure-u-1"></div>
 </div>
