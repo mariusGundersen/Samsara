@@ -94,7 +94,8 @@ h2{
 }
 
 .control-like{
-  padding: 0.5em 0 0.6em;
+  padding: 0.5em 0.6em;
+  border: 1px solid transparent;
   display: inline-block;
   box-sizing: border-box;
   line-height: normal;
@@ -102,4 +103,62 @@ h2{
 
 .text-faded{
   color: #ccc;
+}
+
+.button-group>.pure-button{
+  border-radius: 0;
+}
+.button-group>.pure-button:first-of-type{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.button-group>.pure-button:last-of-type{
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.small-label{
+  font-size: small;
+  font-weight: bold;
+  display: block;
+}
+
+.pure-form button[type="submit"] {
+  margin-top:0;/*fix an issue with pure for small screens*/
+}
+
+.config-section{
+  margin-bottom: 2em;
+}
+.config-section h2{
+  margin: 0;
+  padding: 0 10px;
+}
+.config-list{
+  
+}
+.config-list-item{
+  border-bottom: 1px solid #eee;
+  padding: 0 10px;
+}
+.config-list-item-edit{
+  display: flex;
+}
+.config-list-item .config-list-item-edit>select{
+  flex: 1 1 auto;
+}
+.config-list-item .config-list-item-edit>*{
+  flex: 0 0 auto;
+  border-radius: 0;
+}
+.config-list-item .config-list-item-edit>*:first-child{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.config-list-item .config-list-item-edit>*:last-child{
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.config-section-footer{
+  padding: 0 10px;
 }
