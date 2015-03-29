@@ -1,0 +1,200 @@
+.container-state-running i.fa-play{
+  color: #0a0;
+}
+.container-state-stopped i.fa-stop{
+  color: #c00;
+}
+.container-state-stopped i.fa-play{
+  display: none;
+}
+.container-state-running i.fa-stop{
+  display: none;
+}
+
+
+.container-version{
+  color: #567;
+}
+.selected .container-version{
+  color: #789;
+}
+
+
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+  color: white;
+}
+.button-success {
+  background: rgb(28, 184, 65);
+}
+
+.button-error {
+  background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.button-warning {
+  background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.button-secondary {
+  background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+.button-minimal,
+.button-minimal:hover,
+.button-minimal:focus,
+.button-minimal:active{
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.button-no-padding{
+  padding-right: 0;
+}
+
+.button-xsmall {
+    font-size: 70%;
+}
+
+.button-small {
+    font-size: 85%;
+}
+
+.button-large {
+    font-size: 110%;
+}
+
+.button-xlarge {
+    font-size: 125%;
+}
+
+dt{
+  font-weight: bold;
+}
+
+.validation-error-message{
+  color: #d00; 
+}
+
+.pull-right{
+  float: right; 
+}
+
+h2{
+  margin-top: 3em;
+  border-bottom: 1px solid #ccc; 
+}
+
+h2 i.fa{
+  font-size: smaller;
+  vertical-align: middle;
+  width: 20px;
+  margin-right: 8px;
+}
+
+.table-fixed{
+  table-layout: fixed;
+  width: 100%;
+}
+
+.control-like{
+  padding: 0.5em 0.6em;
+  border: 1px solid transparent;
+  display: inline-block;
+  box-sizing: border-box;
+  line-height: normal;
+}
+.button-like{
+  padding: 0.5em 1em;
+  display: inline-block;
+  box-sizing: border-box;
+  line-height: normal;
+}
+
+.text-faded{
+  color: #ccc;
+}
+.text-muted{
+  color: #999;
+}
+.text-center{
+  text-align:center;
+}
+
+.button-group>.pure-button{
+  border-radius: 0;
+}
+.button-group>.pure-button:first-of-type{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.button-group>.pure-button:last-of-type{
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.small-label{
+  font-size: small;
+  font-weight: bold;
+  display: block;
+}
+
+.pure-button{
+  border-radius: 4px;
+}
+
+.pure-form button[type="submit"] {
+  margin-top:0;/*fix an issue with pure for small screens*/
+}
+.pure-form input:not([type]), .pure-form input[type="text"], .pure-form input[type="password"], .pure-form input[type="email"], .pure-form input[type="url"], .pure-form input[type="date"], .pure-form input[type="month"], .pure-form input[type="time"], .pure-form input[type="datetime"], .pure-form input[type="datetime-local"], .pure-form input[type="week"], .pure-form input[type="number"], .pure-form input[type="search"], .pure-form input[type="tel"], .pure-form input[type="color"], .pure-form label {
+  margin-bottom:0;/*fix an issue with pure for small screens*/
+}
+
+.config-section{
+  margin-bottom: 2em;
+  padding-bottom: 11px;
+  background: linear-gradient(to top, #fff, #f0f0f0 10px, #ccc 11px, #fff 11px);
+}
+.config-section h3{
+  margin: 0;
+  padding: 0 10px 0 7px;
+  background: linear-gradient(to top, #f0f0f0, #fff 11px);
+  border-bottom: 1px solid #ccc;
+}
+.config-list{
+  
+}
+.config-list-item{
+  border-bottom: 1px solid #eee;
+  padding: 0 10px;
+}
+.config-list-item-edit{
+  display: flex;
+}
+.config-list .config-list-item .config-list-item-edit>select,
+.config-list .config-list-item .config-list-item-edit>input{
+  flex: 1 1 auto;
+  width: 1px;
+}
+.config-list .config-list-item .config-list-item-edit>*{
+  flex: 0 0 auto;
+  border-radius: 0;
+}
+.config-list .config-list-item .config-list-item-edit>*:first-child{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.config-list .config-list-item .config-list-item-edit>*:last-child{
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.config-section-form{
+  padding: 10px;
+}
+.config-section-form>input,
+.config-section-form>select{
+ width:100%; 
+}

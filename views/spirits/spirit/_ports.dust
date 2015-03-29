@@ -1,40 +1,46 @@
-<div data-viewmodel="spirit/PortsVM" data-model="{config|js}">
-  <h2>
+<div data-viewmodel="spirit/PortsVM" data-model="{config|js}" class="config-section">
+  <h3>
+    <i class="fa fa-fw fa-plug"></i>
     Ports
     <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add new port binding"><i class="fa fa-fw fa-plus"></i></button>
-  </h2>
-  <div data-bind="foreach: ports">        
-    <form class="pure-form pure-form-aligned" data-bind="visible:state()=='show'" style="display:none">
-      <div class="pure-control-group">
-        <label class="control-like" data-bind="text:hostPort"></label>
+  </h3>
+  <div data-bind="foreach: ports" class="config-list">
+    <div class="config-list-item">
+      <label class="small-label" data-bind="text:hostPort"></label>
+      <span class="validation-error-message" data-bind="validationMessageFor: containerPort"></span>
+      <span class="validation-error-message" data-bind="validationMessageFor: hostIp"></span>
+      <div class="config-list-item-show" data-bind="visible:state()=='show'" style="display:none">
         <span class="control-like" data-bind="text:containerPort"></span>
         <span class="control-like" data-bind="visible:hostIp">&nbsp;(<span data-bind="text:hostIp"></span>)</span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit port"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-    </form>   
-    <form class="pure-form pure-form-aligned" data-bind="visible:state()=='editing', submit:save" style="display:none">
-      <div class="pure-control-group">
-        <label class="control-like" data-bind="text:hostPort"></label>
+      <form class="pure-form config-list-item-edit" data-bind="visible:state()=='editing', submit:save" style="display:none">
         <input value="" data-bind="value:containerPort, hasFocus:state()=='editing'" placeholder="container port">
         <input value="" data-bind="value:hostIp" placeholder="host ip (optional)">
-        <span class="validation-error-message" data-bind="validationMessageFor: containerPort"></span>
-        <span class="validation-error-message" data-bind="validationMessageFor: hostIp"></span>
-        <button class="pure-button pull-right button-error" type="button" data-bind="click:$parent.remove"><i class="fa fa-fw fa-trash"></i>&nbsp;Remove</button>
-        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
-        <button class="pure-button pull-right button-minimal" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-      </div>
-    </form>
-  </div> 
-  <form class="pure-form pure-form-aligned" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
-    <div class="pure-control-group">
-      <input value="" data-bind="value:fresh.hostPort, hasFocus: creating()" placeholder="host port">
-      <input value="" data-bind="value:fresh.containerPort" placeholder="container port">
-      <input value="" data-bind="value:fresh.hostIp" placeholder="host ip (optional)">
-      <span class="validation-error-message" data-bind="validationMessageFor: fresh.hostPort"></span>
-      <span class="validation-error-message" data-bind="validationMessageFor: fresh.containerPort"></span>
-      <span class="validation-error-message" data-bind="validationMessageFor: fresh.hostIp"></span>
-      <button class="pure-button pull-right button-success" type="submit" data-bind="click:create"><i class="fa fa-fw fa-check"></i>&nbsp;Create</button>
-      <button class="pure-button pull-right button-minimal" type="cancel" data-bind="click:cancelCreate"><i class="fa fa-fw fa-undo"></i></button>
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>
+        <button class="pure-button button-error" type="button" data-bind="click:$parent.remove"><i class="fa fa-fw fa-trash"></i></button>
+      </form>
+    </div>
+  </div>
+  <div data-bind="ifnot:ports().length" class="config-list">
+    <div class="config-section-form config-list-item">
+      <p class="text-center text-muted">Click the pluss icon above to expose another port</p>
+    </div>
+  </div>
+  <form class="config-section-form pure-form pure-form-aligned" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
+    <label class="small-label">Host port&nbsp;<span class="validation-error-message" data-bind="validationMessageFor: fresh.hostPort"></span></label>
+    <input value="" data-bind="value:fresh.hostPort, hasFocus: creating()" placeholder="for example: 80">
+    
+    <label class="small-label">Container port&nbsp;<span class="validation-error-message" data-bind="validationMessageFor: fresh.containerPort"></span></label>
+    <input value="" data-bind="value:fresh.containerPort" placeholder="for example: 8080">
+    
+    <label class="small-label">Host IP (optional)&nbsp;<span class="validation-error-message" data-bind="validationMessageFor: fresh.hostIp"></span></label>
+    <input value="" data-bind="value:fresh.hostIp" placeholder="for example: 127.0.0.1">
+    
+    <div class="button-group">
+      <button class="pure-button button-success" type="submit" data-bind="click:create"><i class="fa fa-fw fa-check"></i>&nbsp;Create</button>
+      <button class="pure-button" type="cancel" data-bind="click:cancelCreate"><i class="fa fa-fw fa-close"></i>&nbsp;Cancel</button>
     </div>
   </form>
 </div>
