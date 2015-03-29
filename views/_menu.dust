@@ -5,7 +5,7 @@
       <li class="{?constellations}selected{/constellations}"><a href="#"><i class="fa fa-share-alt fa-rotate-90 fa-fw"></i>Constellations</a>
       <li class="{?spirits}selected{/spirits}"><a href="/spirits"><i class="fa fa-sun-o fa-fw"></i>Spirits</a>
       <li class="{?containers}selected{/containers}"><a href="/containers"><i class="fa fa-th-large fa-fw"></i>Containers</a>
-      <li class="{?settings}selected{/settings}"><a href="#"><i class="fa fa-cog fa-fw"></i>Settings</a>
+      <li class="{?settings}selected{/settings}"><a href="/settings"><i class="fa fa-cog fa-fw"></i>Settings</a>
     {/menu}
   </ul>
 </div>

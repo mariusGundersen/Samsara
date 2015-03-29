@@ -14,7 +14,7 @@ var mkdirp = require('mkdirp');
 
 mkdirp.sync(__dirname+'/config/spirits');
 
-var basic = auth.basic({
+var basic = auth.digest({
     realm: "Samsara",
     file: __dirname+"/config/authentication"
 });
@@ -43,13 +43,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/qvc', qvc(
   require('./handlers/container'),
   require('./handlers/spirit'),
-  require('./handlers/spiritConfig')
+  require('./handlers/spiritConfig'),
+  require('./handlers/settings')
 ));
 
 app.use('/container(s?)/', require('./routes/container'));
 app.use('/spirit(s?)/', require('./routes/spirits'));
 app.use('/spirit(s?)/', require('./routes/spirit'));
 app.use('/spirit(s?)/', require('./routes/version'));
+app.use('/setting(s?)/', require('./routes/settings'));
 app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler
