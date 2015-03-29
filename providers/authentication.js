@@ -11,8 +11,7 @@ module.exports = function(){
       var parts = entry.split(':');
       return {
         username: parts[0],
-        realm: parts[1],
-        secret: parts[2]
+        secret: parts[1]
       };
     });
   });

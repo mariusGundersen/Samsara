@@ -14,7 +14,7 @@ var mkdirp = require('mkdirp');
 
 mkdirp.sync(__dirname+'/config/spirits');
 
-var basic = auth.digest({
+var basic = auth.basic({
     realm: "Samsara",
     file: __dirname+"/config/authentication"
 });

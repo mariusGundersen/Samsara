@@ -6,7 +6,6 @@ var users = require('../providers/authentication');
 
 router.get('/', function(req, res, next) {
   users().then(function(users){
-    console.log('users', users);
     return makePageModel('Settings', {
       users: users
     }, 'settings')

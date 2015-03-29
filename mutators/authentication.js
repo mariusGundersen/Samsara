@@ -8,7 +8,7 @@ module.exports = function(mutate){
   })
   .then(function(entries){
     return entries.map(function(entry){
-      return entry.username+':'+entry.realm+':'+entry.secret;
+      return entry.username+':'+entry.secret;
     }).join('\n')+'\n';
   })
   .then(function(contents){

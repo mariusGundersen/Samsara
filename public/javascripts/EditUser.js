@@ -12,7 +12,7 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     };
     
     this.save = qvc.createCommand("setAuthentication", {
-      username: user.username,
+      username: ko.observable(user.username),
       password: this.password
     }).success(function(){
       self.password('');

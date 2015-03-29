@@ -1,17 +1,9 @@
 var qvc = require('qvc');
 var authentication = require('../mutators/authentication');
-var crypto = require('crypto');
-
-function md5(username, realm, password){
-  hash = crypto.createHash('MD5');
-  hash.update(username+':'+realm+':'+password);
-  return hash.digest('hex');
-}
+var md5 = require('apache-md5');
 
 module.exports = [
   qvc.command('setAuthentication', function(command, done){
-    
-    console.log(command);
     
     authentication(function(entries){
       var found = entries.filter(function(entry){
@@ -20,14 +12,12 @@ module.exports = [
       
       if(found == null){
         found = {
-          username: command.username,
-          realm: 'Samsara'
+          username: command.username
         };
         entries.push(found);
       }
       
-      found.secret = md5(found.username, found.realm, command.password);
-      console.log(entries);
+      found.secret = md5(command.password);
     }).then(function(){
       done(null, true);
     }, function(err){
