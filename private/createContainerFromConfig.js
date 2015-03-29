@@ -3,17 +3,21 @@ var spiritContainers = require('../providers/spiritContainers');
 var Promise = require('promise');
 
 module.exports = function(name, config){
-  return makeLinks(config.links)
-  .then(function(links){
+  return Promise.all([
+    makeLinks(config.links),
+    makeVolumesFrom(config.volumesFrom)
+  ])
+  .then(function(configs){
     return extend({
       Image: config.image, 
       name: name,
       Env: makeEnv(config.env),
       Volumes: makeVolumes(config.volumes),
       HostConfig: {
-        Links: links,
+        Links: configs[0],
         Binds: makeBinds(config.volumes),
-        PortBindings: makePortBindings(config.ports)
+        PortBindings: makePortBindings(config.ports),
+        VolumesFrom: configs[1]
       }
     }, config.raw);
   });
@@ -81,7 +85,6 @@ function makePortBindings(ports){
   return result;
 }
 
-
 function makeLinks(links){
   var result = [];
   if(links){
@@ -99,12 +102,18 @@ function makeLinks(links){
     }
   }
   
-  function getLinkToApp(spirit, name){
-    return spiritContainers(spirit)
-    .then(function(containers){
-      return containers[0].name+':'+name;
-    });
-  }
-  
   return Promise.all(result);
+}
+
+function makeVolumesFrom(spirits){
+  return Promise.all((spirits || []).map(function(spirit){
+    return getLinkToApp(spirit.spirit, spirit.readOnly ? 'ro' : 'rw');
+  }));
+}
+
+function getLinkToApp(spirit, name){
+  return spiritContainers(spirit)
+  .then(function(containers){
+    return containers[0].name+':'+name;
+  });
 }
