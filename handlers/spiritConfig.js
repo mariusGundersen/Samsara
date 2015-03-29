@@ -355,5 +355,69 @@ module.exports = [
     .then(function(){
       done(null, true);
     }, done);
+  }),
+  qvc.command('addVolumesFrom', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.volumesFrom){
+        config.volumesFrom = [];
+      }
+      config.volumesFrom.push({
+        spirit: command.fromSpirit,
+        readOnly: command.readOnly
+      });
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }, {
+    parameters: [
+      {
+        name: 'fromSpirit',
+        constraints: [
+          {
+            name: 'NotEmpty',
+            attributes: {
+              message: 'Please specify the spirit to use volumes from'
+            }
+          }
+        ]
+      }
+    ]
+  }),
+  qvc.command('setVolumesFrom', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.volumesFrom){
+        config.volumesFrom = [];
+      }
+      
+      var found = config.volumesFrom.filter(function(volumesFrom){
+        return volumesFrom.spirit == command.oldFromSpirit;
+      })[0];
+            
+      if(found){
+        found.spirit = command.fromSpirit;
+        found.readOnly = command.readOnly;
+      }
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
+  }),
+  qvc.command('removeVolumesFrom', function(command, done){
+    mutateSpiritConfig(command.name, function(config){
+      if(!config.volumesFrom){
+        config.volumesFrom = [];
+      }
+      var found = config.volumesFrom.filter(function(volumesFrom){
+        return volumesFrom.spirit == command.fromSpirit;
+      })[0];
+      
+      if(found){
+        config.volumesFrom.splice(config.volumesFrom.indexOf(found), 1);
+      }
+    })
+    .then(function(){
+      done(null, true);
+    }, done);
   })
 ];

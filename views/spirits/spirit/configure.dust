@@ -8,6 +8,7 @@
     {>"spirits/spirit/_envVars"/}    
     {>"spirits/spirit/_volumes"/}    
     {>"spirits/spirit/_ports"/}    
-    {>"spirits/spirit/_links"/}
+    {>"spirits/spirit/_links"/}    
+    {>"spirits/spirit/_volumesFrom"/}
   </div>
 {/spiritPage}

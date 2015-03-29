@@ -118,5 +118,26 @@ module.exports = [
     }, function(error){
       done(error);
     });
+  }),
+  qvc.query('getVolumes', function(query, done){
+    spiritContainers(query.name).then(function(containers){
+      return containers[0];
+    })
+    .then(function(container){
+      return docker.getContainer(container.id);
+    }).then(function(container){
+      return container.inspect()
+    }).then(function(config){
+      var result = [];
+      for(var volume in config.Config.Volumes){
+        result.push(volume);
+      }
+      return result;
+    })
+    .then(function(volumes){
+      done(null, volumes);
+    }, function(error){
+      done(error);
+    });
   })
 ];
