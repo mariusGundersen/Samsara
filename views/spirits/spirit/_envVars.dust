@@ -1,9 +1,9 @@
 <div data-viewmodel="spirit/EnvVarsVM" data-model="{config|js}" class="config-section">
-  <h2>
+  <h3>
     <i class="fa fa-fw fa-tag"></i>
     Environment variables
     <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add environment variable"><i class="fa fa-fw fa-plus"></i></button>
-  </h2>
+  </h3>
   <div data-bind="foreach: envVars" class="config-list">
     <div class="config-list-item">
       <label class="small-label" data-bind="text:key"></label>

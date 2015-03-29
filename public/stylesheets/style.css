@@ -158,10 +158,11 @@ h2 i.fa{
   padding-bottom: 11px;
   background: linear-gradient(to top, #fff, #f0f0f0 10px, #ccc 11px, #fff 11px);
 }
-.config-section h2{
+.config-section h3{
   margin: 0;
   padding: 0 10px 0 7px;
-  background: linear-gradient(to top, #f0f0f0, #fff 11px)
+  background: linear-gradient(to top, #f0f0f0, #fff 11px);
+  border-bottom: 1px solid #ccc;
 }
 .config-list{
   

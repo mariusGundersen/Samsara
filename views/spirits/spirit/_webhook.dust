@@ -1,11 +1,11 @@
 <div data-viewmodel="spirit/WebhookVM" data-model="{config|js}" class="config-section">
   
   <div data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
-    <h2>
+    <h3>
       <i class="fa fa-fw fa-anchor"></i>
       Webhook
       <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit webhook"><i class="fa fa-fw fa-pencil"></i></button>
-    </h2>
+    </h3>
     <form class="config-section-form pure-form">
       <label class="small-label" for="url">Webhook url</label>
       <input id="url" readonly data-bind="value: url" value="http://example.com/deploy/{config.name}/{config.webhook.secret}">
@@ -13,11 +13,11 @@
   </div>
   
   <div data-bind="visible: editing" style="display:none">
-    <h2>
+    <h3>
       <i class="fa fa-fw fa-anchor"></i>
       Webhook
       <button class="pure-button button-xsmall pull-right button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
-    </h2>
+    </h3>
     <form class="pure-form pure-form-stacked config-section-form" data-bind="submit: save">
       <label class="small-label" for="secret">Secret</label>
       <input id="secret" data-bind="value: secret" class="pure-input-1-2">
@@ -33,10 +33,10 @@
   </div>
   
   <div data-bind="visible: disabled" style="{?config.webhook.enable}display:none{/config.webhook.enable}">
-    <h2>
+    <h3>
       <i class="fa fa-fw fa-anchor"></i>
       Webhook
-    </h2>
+    </h3>
     <form class="pure-form config-section-form">
       <p class="text-center">By enabling the webhook the Docker Hub can deploy a new version of this spirit</p>
       <span class="pure-u-1-4"></span>

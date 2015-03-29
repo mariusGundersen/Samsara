@@ -1,13 +1,13 @@
 <div data-viewmodel="spirit/MainInfoVM" data-model="{config|js}" class="config-section">
-  <h2 class="dragger">
+  <h3>
     <i class="fa fa-fw fa-info"></i>
     Main info
-  </h2>
+  </h3>
   <div class="config-list">
     <div class="config-list-item" data-bind="with:image">
       <label class="small-label">Image</label>
       <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
-        <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:value, attr:{href:'https://registry.hub.docker.com/u/'+value()}" target="_blank">{config.image}</a>
+        <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:value, attr:{href:'https://registry.hub.docker.com/u/'+value()}" target="_blank">{config.image}</a>&nbsp;
         <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
@@ -21,6 +21,7 @@
       <label class="small-label">Description</label>
       <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
         <span class="control-like" data-bind="text:value">{config.description}</span>
+        <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.description}display:none{/config.description}">(not set)</span>
         <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
@@ -34,6 +35,7 @@
       <label class="small-label">Website</label>
       <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
         <a class="control-like" href="{config.url}" data-bind="text:value, attr:{href:value}" target="_blank">{config.url}</a>
+        <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.url}display:none{/config.url}">(not set)</span>
         <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change website url"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">

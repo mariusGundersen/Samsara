@@ -1,9 +1,9 @@
 <div data-viewmodel="spirit/PortsVM" data-model="{config|js}" class="config-section">
-  <h2>
+  <h3>
     <i class="fa fa-fw fa-plug"></i>
     Ports
     <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add new port binding"><i class="fa fa-fw fa-plus"></i></button>
-  </h2>
+  </h3>
   <div data-bind="foreach: ports" class="config-list">
     <div class="config-list-item">
       <label class="small-label" data-bind="text:hostPort"></label>
