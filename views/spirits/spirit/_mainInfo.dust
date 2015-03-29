@@ -1,33 +1,46 @@
-<div data-viewmodel="spirit/MainInfoVM" data-model="{config|js}">
-  <h2 class="dragger">Main info</h2>
-  <form class="pure-form pure-form-aligned" data-bind="with:image">
-    <div class="pure-control-group">
-      <label class="control-like">Image</label>
-      <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="visible:!editing(), text:value, attr:{href:'https://registry.hub.docker.com/u/'+value()}" target="_blank">{config.image}</a>
-      <input value="{config.image}" data-bind="visible:editing, value:value, hasFocus:editing()" style="display:none">
-      <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
-      <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-      <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
+<div data-viewmodel="spirit/MainInfoVM" data-model="{config|js}" class="config-section">
+  <h2 class="dragger">
+    <i class="fa fa-fw fa-info"></i>
+    Main info
+  </h2>
+  <div class="config-list">
+    <div class="config-list-item" data-bind="with:image">
+      <label class="small-label">Image</label>
+      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+        <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:value, attr:{href:'https://registry.hub.docker.com/u/'+value()}" target="_blank">{config.image}</a>
+        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <input data-bind="value:value, hasFocus:editing()">
+        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+      </form>      
     </div>
-  </form>
-  <form class="pure-form pure-form-aligned" data-bind="with:description">
-    <div class="pure-control-group">
-      <label class="control-like">Description</label>
-      <span class="control-like" data-bind="visible:!editing(), text:value">{config.description}</span>
-      <input value="{config.description}" data-bind="visible:editing, value:value, hasFocus:editing()" style="display:none">
-      <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
-      <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-      <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
+    
+    <div class="config-list-item" data-bind="with:description">
+      <label class="small-label">Description</label>
+      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+        <span class="control-like" data-bind="text:value">{config.description}</span>
+        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <input data-bind="value:value, hasFocus:editing()">
+        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+      </form>      
     </div>
-  </form>
-  <form class="pure-form pure-form-aligned" data-bind="with:url">
-    <div class="pure-control-group">
-      <label class="control-like">Website</label>
-      <a class="control-like" href="{config.url}" data-bind="visible:!editing(), text:value, attr:{href:value}" target="_blank">{config.url}</a>
-      <input value="{config.url}" data-bind="visible:editing, value:value, hasFocus:editing()" style="display:none">
-      <button class="pure-button pull-right button-success" style="display:none" type="submit" data-bind="visible:editing, click:save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
-      <button class="pure-button pull-right button-minimal" style="display:none" type="cancel" data-bind="visible:editing, click:cancel"><i class="fa fa-fw fa-undo"></i></button>
-      <button class="pure-button pull-right button-minimal button-no-padding" style="display:none" data-bind="visible:!editing(), click:edit" title="Change url"><i class="fa fa-fw fa-pencil"></i></button>
+    
+    <div class="config-list-item" data-bind="with:url">
+      <label class="small-label">Website</label>
+      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+        <a class="control-like" href="{config.url}" data-bind="text:value, attr:{href:value}" target="_blank">{config.url}</a>
+        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change website url"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <input data-bind="value:value, hasFocus:editing()">
+        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+      </form>      
     </div>
-  </form>
+  </div>
 </div>
