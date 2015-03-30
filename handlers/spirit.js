@@ -40,7 +40,7 @@ module.exports = [
           {
             name: 'Pattern',
             attributes: {
-              message: 'The name of the spirit can only contain letters, digits, dashes and underscores',
+              message: 'The name of the spirit can only contain letters, digits, dashes, full stop and underscores',
               regexp: '[a-zA-Z0-9_-.]+'
             }
           }

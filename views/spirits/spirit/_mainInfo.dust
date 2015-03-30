@@ -7,7 +7,7 @@
     <div class="config-list-item" data-bind="with:image">
       <label class="small-label">Image</label>
       <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
-        <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:value, attr:{href:'https://registry.hub.docker.com/u/'+value()}" target="_blank">{config.image}</a>&nbsp;
+        <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:value, attr:{href:'https://registry.hub.docker.com/'+(value().indexOf('/')>0 ? 'u/'+value() : '_/'+value())}, click: function(){return true}, clickBubble:false" target="_blank">{config.image}</a>&nbsp;
         <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
@@ -34,12 +34,12 @@
     <div class="config-list-item" data-bind="with:url">
       <label class="small-label">Website</label>
       <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
-        <a class="control-like" href="{config.url}" data-bind="text:value, attr:{href:value}" target="_blank">{config.url}</a>
+        <a class="control-like" href="{config.url}" data-bind="text:value, attr:{href:value}, click: function(){return true}, clickBubble:false" target="_blank">{config.url}</a>
         <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.url}display:none{/config.url}">(not set)</span>
         <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change website url"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
-        <input data-bind="value:value, hasFocus:editing()">
+        <input data-bind="value:value, hasFocus:editing()" placeholder="http://">
         <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
         <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
       </form>      
