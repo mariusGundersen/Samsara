@@ -200,7 +200,7 @@ window.onload = function(){
     return panes;
   }
   
-  var transition = document.body.style.transition == null && document.body.webkitTransition ? 
+  var transition = ('webkitTransition' in document.body.style) ? 
     function(element, t){
       element.style.webkitTransition = "-webkit-transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
     }
@@ -208,12 +208,12 @@ window.onload = function(){
     function(element, t){
       element.style.transition = "transform "+t+"s cubic-bezier(0.39, 0.77, 0.71, 1.0)";
     };
-  var transform = document.body.style.transition == null && document.body.webkitTransition ? 
+  var transform = ('webkitTransform' in document.body.style) ? 
     function(element, x){
-      element.style.webkitTransform = "translate3d("+value+"px, 0, 0)";
+      element.style.webkitTransform = "translate3d("+x+"px, 0, 0)";
     }
     :
     function(element, x){
-      element.style.transform = "translate3d("+x+"px, 0px, 0px)";
+      element.style.transform = "translate3d("+x+"px, 0, 0)";
     }
 };
