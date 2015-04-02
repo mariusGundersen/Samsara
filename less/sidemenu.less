@@ -1,5 +1,4 @@
 *{
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 html{
@@ -11,10 +10,8 @@ body{
   margin: 0;
   padding: 0;
   height: 100%;
-  display: -webkit-flex;/*stupid ios*/
   display: flex;
   background: #303840;
-  -webkit-align-items: stretch;
   align-items: stretch;
   overflow: hidden;
 }
@@ -24,23 +21,24 @@ div.menu{
   color: white;
   padding: 0;
   background: #303840;
-  -webkit-flex: 0 1 200px; /*stupid ios*/
   flex: 0 1 200px;
   width: 200px;
   box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
   overflow-y: auto;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /*stupid iOS*/
   position: relative;
 }
+
 div.content{
   will-change: transform;
   padding: 0;
-  -webkit-flex: 1 0 85px; /*stupid ios*/
   flex: 1 0 85px;
   background: white;
   box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
   overflow-y: auto;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /*stupid iOS*/
   position: relative;
 }
 
