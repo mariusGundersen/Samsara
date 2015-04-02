@@ -25,6 +25,10 @@ gulp.task('css', function () {
         .pipe(gulp.dest('public/stylesheets/'));
 });
 
+gulp.task('watch', ['css'], function(){
+  gulp.watch('less/**/*.less', ['css']);
+});
+
 var paths = {
   bower: [
     'bower_components/pure/pure-min.css',
