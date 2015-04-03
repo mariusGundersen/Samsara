@@ -2,44 +2,20 @@ var qvc = require('qvc');
 var docker = require('../private/docker');
 
 module.exports = [
-  qvc.command('stopContainer', function(command, done){
+  qvc.command('stopContainer', function(command){
     console.log("stopContainer", command.id);
-    docker.getContainer(command.id).stop().then(function(){
-      console.log("stopped");
-      done(null, true);
-    }, function(err){
-      console.log("stopped failed", err);
-      done(err);
-    });
+    return docker.getContainer(command.id).stop();
   }),
-  qvc.command('startContainer', function(command, done){
+  qvc.command('startContainer', function(command){
     console.log("startContainer", command.id);
-    docker.getContainer(command.id).start().then(function(){
-      console.log("started");
-      done(null, true);
-    }, function(err){
-      console.log("started failed", err);
-      done(err);
-    });
+    return docker.getContainer(command.id).start();
   }),
-  qvc.command('removeContainer', function(command, done){
+  qvc.command('removeContainer', function(command){
     console.log("removeContainer", command.id);
-    docker.getContainer(command.id).remove().then(function(){
-      console.log("removed");
-      done(null, true);
-    }, function(err){
-      console.log("remove failed", err);
-      done(err);
-    });
+    return docker.getContainer(command.id).remove();
   }),
-  qvc.command('restartContainer', function(command, done){
+  qvc.command('restartContainer', function(command){
     console.log("restartContainer", command.id);
-    docker.getContainer(command.id).restart().then(function(){
-      console.log("restarted");
-      done(null, true);
-    }, function(err){
-      console.log("restarted failed", err);
-      done(err);
-    });
+    return docker.getContainer(command.id).restart();
   })
 ];

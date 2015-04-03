@@ -44,7 +44,10 @@ app.use('/qvc', qvc(
   require('./handlers/container'),
   require('./handlers/spirit'),
   require('./handlers/spiritConfig'),
-  require('./handlers/settings')
+  require('./handlers/settings'),
+  {
+    debug: true
+  }
 ));
 
 app.use('/container(s?)/', require('./routes/container'));

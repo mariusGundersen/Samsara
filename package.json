@@ -18,7 +18,7 @@
     "dockerode": "^2.1.1",
     "promise": "^6.1.0",
     "request": "^2.51.0",
-    "qvc": "^0.1.2",
+    "qvc": "^1.0.0",
     "http-auth": "~2.2.5",
     "netmask": "~1.0.5",
     "fs-promise": "~0.3.1",
