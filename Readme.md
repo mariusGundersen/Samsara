@@ -5,10 +5,10 @@
 Samsara is a Docker orchestration tool I made for my servers. Samsara runs in a docker container, so all you need to start using it is to run the following command:
 
 ```bash
-docker run -d --name samsara -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock mariusgundersen/samsara
+docker run -d --name samsara -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -v /app/config --privileged mariusgundersen/samsara
 ```
 
-Once started you should convert the container into a spirit.
+You can now log into Samsara using `admin/admin` on http://localhost:8080. By clicking on Containers in the main menu you should see a list of the docker containers on your host. 
 
 ## Spirits
 
