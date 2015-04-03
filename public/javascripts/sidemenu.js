@@ -39,7 +39,8 @@ window.onload = function(){
         startX: e.clientX - delta,
         startY: e.clientY,
         prevX: e.clientX,
-        prevT: e.timeStamp
+        prevT: e.timeStamp,
+        velocity: 0
       };
     }
   }
