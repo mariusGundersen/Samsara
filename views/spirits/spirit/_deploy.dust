@@ -10,5 +10,5 @@
       Deploy
     </button>
   </div>
-  <div data-bind="text: result" class="text-center validation-error-message"></div>
+  <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
 </div>

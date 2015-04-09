@@ -3,6 +3,7 @@ var spirit = require('../providers/spirit');
 var deploy = require('../private/deploy');
 var spiritContainers = require('../providers/spiritContainers');
 var docker = require('../private/docker');
+var dockerHub = require('../private/dockerHub');
 var fs = require('fs-promise');
 var mkdirp = require('mkdirp');
 var Promise = require('promise');
@@ -16,7 +17,7 @@ module.exports = [
     .then(function(){
       return fs.writeFile('config/spirits/'+command.name+'/config.json', JSON.stringify({
         name: command.name,
-        image: command.image,
+        image: command.image+':'+command.tag,
         description: '',
         url: '',
         webhook: {},
@@ -30,11 +31,36 @@ module.exports = [
       new NotEmpty('Please specify a name for the new spirit'),
       new Pattern(/^[a-zA-Z0-9_\.-]+$/, 'The name of the spirit can only contain letters, digits, dashes, full stop and underscores')
     ],
-    'image': new NotEmpty('Please specify an image for the new spirit')    
+    'image': [
+      new NotEmpty('Please specify an image for the new spirit'),
+      new Pattern(/^[a-z0-9_\.\/-]+$/, 'The image name can only contain lower-case letters, digits, dashes, full stop and underscores')
+    ],
+    'tag': [
+      new NotEmpty('Please specify an image tag to use')
+    ]
+  }),
+  qvc.query('searchImages', function(query){
+    return dockerHub.searchImages(query.term)
+    .then(function(result){
+      return result.results;
+    });
+  }, {
+    'term': new NotEmpty('')
+  }),
+  qvc.query('searchImageTags', function(query){
+    return dockerHub.searchImageTags(query.image)
+    .catch(function(error){
+      return [];
+    });
+  }, {
+    'image': new NotEmpty('')
   }),
   qvc.command('deploySpirit', function(command){
     return spirit(command.name).config()
-    .then(deploy);
+    .then(deploy)
+    .catch(function(error){
+      return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
+    });
   }),
   qvc.command('stopSpirit', function(command){
     return spiritContainers(command.name).then(function(containers){
