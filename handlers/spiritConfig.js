@@ -10,6 +10,11 @@ module.exports = [
       config.image = command.value;
     });
   }),
+  qvc.command('setSpiritTag', function(command){
+    return mutateSpiritConfig(command.name, function(config){
+      config.tag = command.value;
+    });
+  }),
   qvc.command('setSpiritDescription', function(command){
     return mutateSpiritConfig(command.name, function(config){
       config.description = command.value;

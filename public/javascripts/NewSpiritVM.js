@@ -31,14 +31,6 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
       self.tagHasFocus(true);
     };
 
-    this.create = qvc.createCommand("newSpirit", {
-      name: this.name,
-      image: this.image,
-      tag: this.tag
-    }).success(function(){
-      document.location = '/spirit/'+self.name();
-    });
-
     this.search = qvc.createQuery("searchImages", {
       term: this.query
     }).result(function(images){
@@ -52,12 +44,23 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
 
     this.searchTags = qvc.createQuery("searchImageTags", {
       image: ko.computed(this.query)
-    }).result(this.tags);
+    }).result(this.tags)
+    .success(function(){
+      self.tag('latest');
+    });
 
     this.query.subscribe(function(){
       self.images([])
       self.search();
       self.searchTags();
+    });
+
+    this.create = qvc.createCommand("newSpirit", {
+      name: this.name,
+      image: this.image,
+      tag: this.tag
+    }).success(function(){
+      document.location = '/spirit/'+self.name();
     });
   };
 });

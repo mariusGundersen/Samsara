@@ -9,7 +9,7 @@ module.exports = function(name, config){
   ])
   .then(function(configs){
     return extend({
-      Image: config.image, 
+      Image: config.image+':'+config.tag, 
       name: name,
       Env: makeEnv(config.env),
       Volumes: makeVolumes(config.volumes),

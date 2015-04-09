@@ -11,7 +11,37 @@
         <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
-        <input data-bind="value:value, hasFocus:editing()">
+        <div class="config-list-item-input">
+          <input data-bind="textInput:value, hasFocus:$parent.imageHasFocus, css:{'autocomplete-input-focus':$parent.imageHasFocus}" class="autocomplete-input">
+          <div class="autocomplete-list" data-bind="visible: $parent.imageHasFocus" style="display:none">
+            <ul class="pure-menu-list" data-bind="foreach: $parent.images">
+              <li class="pure-menu-item">
+                <a href="#" class="pure-menu-link" data-bind="text: name, click: $parents[1].selectImage, hasFocus: focus"></a>
+              </li>
+            </ul>
+            <div data-bind="visible: $parent.search.isBusy" style="display:none; padding: .5em 1em" class="text-muted">
+              <i class="fa fa-fw fa-spin fa-refresh"></i>&nbsp;Searching...
+            </div>
+          </div>
+        </div>
+        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+      </form>      
+    </div>
+    
+    <div class="config-list-item" data-bind="with:tag">
+      <label class="small-label">Tag</label>
+      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+        <span class="control-like" href="https://registry.hub.docker.com/u/{config.tag}" data-bind="text:value">{config.tag}</span>&nbsp;
+        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <select data-bind="options: $parent.tags,
+                           optionsValue: 'name',
+                           optionsText: 'name',
+                           value: value,
+                           optionsCaption: $parent.tags().length ? 'Choose tag...' : 'Unknown image'">          
+        </select>
         <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
         <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
       </form>      

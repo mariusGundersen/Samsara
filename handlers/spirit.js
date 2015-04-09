@@ -17,7 +17,8 @@ module.exports = [
     .then(function(){
       return fs.writeFile('config/spirits/'+command.name+'/config.json', JSON.stringify({
         name: command.name,
-        image: command.image+':'+command.tag,
+        image: command.image,
+        tag: command.tag,
         description: '',
         url: '',
         webhook: {},
@@ -59,6 +60,7 @@ module.exports = [
     return spirit(command.name).config()
     .then(deploy)
     .catch(function(error){
+      console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
     });
   }),

@@ -7,7 +7,7 @@
       <input data-bind="value: name" placeholder="ex: website" autofocus>
     
       <label class="small-label">Image&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:image"></span></label>
-      <input data-bind="textInput: image, hasFocus:imageHasFocus" class="autocomplete-input" placeholder="ex: nginx">
+      <input data-bind="textInput: image, hasFocus:imageHasFocus, css:{'autocomplete-input-focus':imageHasFocus}" class="autocomplete-input" placeholder="ex: nginx">
       <div class="autocomplete-list" data-bind="visible: imageHasFocus" style="display:none">
         <ul class="pure-menu-list" data-bind="foreach: images">
           <li class="pure-menu-item">
