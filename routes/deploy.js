@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express-promise-router')();
 const co = require('co');
 const deploy = require('../private/deploy');
 const validateDeploy = require('../private/validateDeploy');
