@@ -4,29 +4,14 @@ var deploy = require('../private/deploy');
 var spiritContainers = require('../providers/spiritContainers');
 var docker = require('../private/docker');
 var dockerHub = require('../private/dockerHub');
-var fs = require('fs-promise');
-var mkdirp = require('mkdirp');
-var Promise = require('promise');
+var createSpirit = require('../private/createSpirit');
 var NotEmpty = require('qvc/constraints/NotEmpty');
 var Pattern = require('qvc/constraints/Pattern');
 
 module.exports = [
   qvc.command('newSpirit', function(command){
     console.log("newSpirit", command.name);
-    return Promise.denodeify(mkdirp)('config/spirits/'+command.name)
-    .then(function(){
-      return fs.writeFile('config/spirits/'+command.name+'/config.json', JSON.stringify({
-        name: command.name,
-        image: command.image,
-        tag: command.tag,
-        description: '',
-        url: '',
-        webhook: {},
-        raw: {},
-        env: {},
-        volumes: {},
-      }, null, '  '))
-    });
+    return createSpirit(command.name, command.image, command.tag);
   }, {
     'name': [
       new NotEmpty('Please specify a name for the new spirit'),

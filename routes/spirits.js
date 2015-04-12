@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var Promise = require('promise');
 var spirit = require('../providers/spirit');
 var makePageModel = require('../pageModels/spirits');
 

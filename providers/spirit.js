@@ -1,5 +1,5 @@
 var fs = require('fs-promise');
-var Promise = require('promise');
+var co = require('co');
 var freeze = require('deep-freeze');
 
 function spirit(name){
@@ -12,23 +12,21 @@ function spirit(name){
   };
 };
 
-spirit.list = function(){
-  return fs.readdir('config/spirits')
-  .then(function(files){
-    return Promise.all(files.map(function(file){
-      return fs.stat('config/spirits/'+file)
-      .then(function(stat){
-        return {name: file, isDir: stat.isDirectory()};
-      });
-    }));
-  })
-  .then(function(files){
-    return files.filter(function(file){
-      return file.isDir;
-    }).map(function(dir){
-      return dir.name;
-    });
-  })
-};
+spirit.list = co.wrap(function*(){
+  const dirEntry = yield fs.readdir('config/spirits');
+  const files = yield dirEntry.map(co.wrap(function*(file){
+    const stat = yield fs.stat('config/spirits/'+file);
+    return {
+      name: file, 
+      isDir: stat.isDirectory()
+    };
+  }));
+  
+  return files.filter(function(file){
+    return file.isDir;
+  }).map(function(dir){
+    return dir.name;
+  });
+});
 
 module.exports = spirit;

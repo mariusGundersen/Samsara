@@ -1,27 +1,24 @@
 var extend = require('extend');
 var spiritContainers = require('../providers/spiritContainers');
-var Promise = require('promise');
+var co = require('co');
 
-module.exports = function(name, config){
-  return Promise.all([
-    makeLinks(config.links),
-    makeVolumesFrom(config.volumesFrom)
-  ])
-  .then(function(configs){
-    return extend({
-      Image: config.image+':'+config.tag, 
-      name: name,
-      Env: makeEnv(config.env),
-      Volumes: makeVolumes(config.volumes),
-      HostConfig: {
-        Links: configs[0],
-        Binds: makeBinds(config.volumes),
-        PortBindings: makePortBindings(config.ports),
-        VolumesFrom: configs[1]
-      }
-    }, config.raw);
-  });
-};
+module.exports = co.wrap(function*(name, config){
+  const links = yield makeLinks(config.links);
+  const volumes = yield makeVolumesFrom(config.volumesFrom);
+  
+  return extend({
+    Image: config.image+':'+config.tag, 
+    name: name,
+    Env: makeEnv(config.env),
+    Volumes: makeVolumes(config.volumes),
+    HostConfig: {
+      Links: links,
+      Binds: makeBinds(config.volumes),
+      PortBindings: makePortBindings(config.ports),
+      VolumesFrom: volumes
+    }
+  }, config.raw);
+});
 
 function makeEnv(env){
   var result = [];

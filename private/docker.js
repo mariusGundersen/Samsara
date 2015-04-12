@@ -1,10 +1,10 @@
 var Docker = require('dockerode');
-var Promise = require('promise');
+var denodeify = require('denodeify');
 
 var docker = new Docker();
 
 module.exports = {
-  listContainers: Promise.denodeify(docker.listContainers.bind(docker)),
+  listContainers: denodeify(docker.listContainers.bind(docker)),
   pull: function(repoTag){
     return new Promise(function(resolve, reject){
       docker.pull(repoTag, function(err, stream){
@@ -19,7 +19,7 @@ module.exports = {
     });
   },
   createContainer: function(){
-    return Promise.denodeify(docker.createContainer.bind(docker)).apply(this, arguments).then(promiseifyContainer);
+    return denodeify(docker.createContainer.bind(docker)).apply(this, arguments).then(promiseifyContainer);
   },
   getContainer: function(id){
     return promiseifyContainer(docker.getContainer(id));
@@ -28,11 +28,11 @@ module.exports = {
 
 function promiseifyContainer(container){
   return {
-    inspect: Promise.denodeify(container.inspect.bind(container)),
-    restart: Promise.denodeify(container.restart.bind(container)),
-    start: Promise.denodeify(container.start.bind(container)),
-    stop: Promise.denodeify(container.stop.bind(container)),
-    remove: Promise.denodeify(container.remove.bind(container)),
-    logs: Promise.denodeify(container.logs.bind(container))
+    inspect: denodeify(container.inspect.bind(container)),
+    restart: denodeify(container.restart.bind(container)),
+    start: denodeify(container.start.bind(container)),
+    stop: denodeify(container.stop.bind(container)),
+    remove: denodeify(container.remove.bind(container)),
+    logs: denodeify(container.logs.bind(container))
   };
 }

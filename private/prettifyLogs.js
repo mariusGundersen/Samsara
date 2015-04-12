@@ -1,4 +1,3 @@
-var Promise = require('promise');
 var ansi = new (require('ansi-to-html'))();
 
 module.exports = function prettifyLogs(logs){
