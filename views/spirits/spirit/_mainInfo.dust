@@ -47,6 +47,23 @@
       </form>      
     </div>
     
+    <div class="config-list-item" data-bind="with:deploymentMethod">
+      <label class="small-label">Deployment</label>
+      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+        <span class="control-like" data-bind="text:value">{config.deploymentMethod}</span>
+        <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.deploymentMethod}display:none{/config.deploymentMethod}">(not set)</span>
+        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change deployment method"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <select data-bind="value:value, hasFocus:editing()">
+          <option value="start-before-stop">start-before-stop (zero downtime)</option>
+          <option value="stop-before-start">stop-before-start (stop during deploy)</option>
+        </select>
+        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+      </form>      
+    </div>
+    
     <div class="config-list-item" data-bind="with:description">
       <label class="small-label">Description</label>
       <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">

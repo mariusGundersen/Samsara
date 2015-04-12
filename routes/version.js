@@ -32,7 +32,12 @@ router.get('/:name/version/:version', co.wrap(function*(req, res, next){
     name: req.params.name,
     version: req.params.version,
     json: JSON.stringify(config, null, '  '),
-    log: prettyLogs
+    log: prettyLogs,
+    stopped: found.state === 'stopped',
+    model: {
+      name: req.params.name,
+      version: req.params.version
+    }
   }, req.params.name, req.params.version);
   res.render('spirits/spirit/version/index', pageModel);
 }));

@@ -2,6 +2,16 @@
 {<spiritVersionPage}
 <div class="pane content">
   <h2 class="dragger">{name} v{version}</h2>
+  <div class="text-center" data-viewmodel="spirit/VersionVM" data-model="{model|js}">
+    <div class="button-group">
+      {?stopped}
+        <button class="pure-button container-state-running" data-bind="click: rollback, disable: rollback.isBusy">
+          <i class="fa fa-play fa-fw"></i>&nbsp;Roll back to version {version}
+        </button>
+      {/stopped}
+    </div>
+    <span class="validation-error-message text-center" data-bind="validationMessageFor: rollback"></span>
+  </div>
   <pre>{log|s}</pre>
   <pre>{json}</pre>
 </div>
