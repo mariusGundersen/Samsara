@@ -28,6 +28,7 @@ module.exports = {
 
 function promiseifyContainer(container){
   return {
+    id: container.id,
     inspect: denodeify(container.inspect.bind(container)),
     restart: denodeify(container.restart.bind(container)),
     start: denodeify(container.start.bind(container)),

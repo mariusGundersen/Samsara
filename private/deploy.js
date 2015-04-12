@@ -19,6 +19,8 @@ module.exports = co.wrap(function*(config){
   
   const runningContainers = oldContainers.filter(function(container){
     return container.state === 'running';
+  }).map(function(container){
+    return docker.getContainer(container.id);
   });
   
   if(config.deploymentMethod === 'stop-before-start'){
@@ -29,6 +31,9 @@ module.exports = co.wrap(function*(config){
   
   console.log(config.name, 'deployed');
 });
+
+module.exports.startBeforeStop = co.wrap(startBeforeStop);
+module.exports.stopBeforeStart = co.wrap(stopBeforeStart);
 
 function *startBeforeStop(container, runningContainers){
   console.log('start-before-stop');
@@ -47,7 +52,11 @@ function *stopBeforeStart(runningContainers, container){
     yield start(container);
   }catch(e){
     if(runningContainers && runningContainers.length){
-      yield start(runningContainers[0]);
+      try{
+        yield start(runningContainers[0]);
+      }catch(innerException){
+        e.innerException = innerException;
+      }
     }
     throw e;
   }
@@ -88,7 +97,7 @@ function *stop(containers){
   console.log('stopping old containers', containers.length);
   yield containers.map(function*(container){
     console.log('old container found, will be stopped', container.id);
-    yield docker.getContainer(container.id).stop();
+    yield container.stop();
     console.log('stopped old container', container.id);
   });
 }

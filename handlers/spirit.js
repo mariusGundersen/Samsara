@@ -51,6 +51,35 @@ module.exports = [
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
     }
   })),
+  qvc.command('rollbackSpirit', co.wrap(function*(command){
+    console.log('rolling back container');
+    const containers = yield spiritContainers(command.name);
+    
+    const runningContainers = containers.filter(function(container){
+      return container.state === 'running';
+    }).map(function(container){
+      return docker.getContainer(container.id);
+    });
+    
+    const found = containers.filter(function(container){
+      return container.version == command.version;
+    })[0];
+    
+    if(!found) return {success:false, valid:false, violations: [{fieldName:'', message:'no such version '+command.version}]};
+    
+    const container = docker.getContainer(found.id);
+    const config = yield spirit(command.name).config();
+
+    try{
+      if(config.deploymentMethod === 'stop-before-start'){
+        yield deploy.stopBeforeStart(runningContainers, container);
+      }else{
+        yield deploy.startBeforeStop(container, runningContainers);
+      }
+    }catch(error){
+      return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
+    }
+  })),
   qvc.command('stopSpirit', co.wrap(function*(command){
     const containers = yield spiritContainers(command.name);
     
