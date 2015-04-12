@@ -1,32 +1,20 @@
-var express = require('express');
-var router = express.Router();
-var Promise = require('promise');
-var spirit = require('../providers/spirit');
-var makePageModel = require('../pageModels/spirits');
+const router = require('express-promise-router')();
+const spirit = require('../providers/spirit');
+const makePageModel = require('../pageModels/spirits');
+const co = require('co');
 
-router.get('/', function(req, res, next) {
-  spirit
-  .list()
-  .then(function(spirits){
-    return Promise.all(spirits.map(function(name){
-      return spirit(name).config();
-    }));
-  })
-  .then(function(result){
-    return makePageModel('Spirits', {spirits:result});
-  })
-  .then(function(pageModel){
-    res.render('spirits/index', pageModel);
-  }).catch(function(error){
-    res.render('error', {content: {message: error.message, error: error}});
+router.get('/', co.wrap(function*(req, res, next) {
+  const spirits = yield spirit.list();
+  const configs = yield spirits.map(function(name){
+    return spirit(name).config();
   });
-});
+  const pageModel = yield makePageModel('Spirits', {spirits: configs});
+  res.render('spirits/index', pageModel);
+}));
 
-router.get('/new', function(req, res, next) {
-  makePageModel('New spirit', {}, 'new')
-  .then(function(pageModel){
-    res.render('spirits/new', pageModel);
-  });
-});
+router.get('/new', co.wrap(function*(req, res, next) {
+  const pageModel = yield makePageModel('New spirit', {}, 'new');
+  res.render('spirits/new', pageModel);
+}));
 
 module.exports = router;

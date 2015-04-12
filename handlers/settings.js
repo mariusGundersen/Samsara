@@ -1,12 +1,12 @@
-var qvc = require('qvc');
-var NotEmpty = require('qvc/constraints/NotEmpty');
-var authentication = require('../mutators/authentication');
-var md5 = require('apache-md5');
+const qvc = require('qvc');
+const NotEmpty = require('qvc/constraints/NotEmpty');
+const authentication = require('../mutators/authentication');
+const md5 = require('apache-md5');
 
 module.exports = [
   qvc.command('setAuthentication', function(command){
     return authentication(function(entries){
-      var found = entries.filter(function(entry){
+      const found = entries.filter(function(entry){
         return entry.username == command.username;
       })[0];
       

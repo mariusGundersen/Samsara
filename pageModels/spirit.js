@@ -1,4 +1,4 @@
-var makePageModel = require('./spirits');
+const makePageModel = require('./spirits');
 
 module.exports = function(title, content, spirit, selected){
   return makePageModel(title, {

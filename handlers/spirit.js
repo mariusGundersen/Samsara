@@ -1,32 +1,18 @@
-var qvc = require('qvc');
-var spirit = require('../providers/spirit');
-var deploy = require('../private/deploy');
-var spiritContainers = require('../providers/spiritContainers');
-var docker = require('../private/docker');
-var dockerHub = require('../private/dockerHub');
-var fs = require('fs-promise');
-var mkdirp = require('mkdirp');
-var Promise = require('promise');
-var NotEmpty = require('qvc/constraints/NotEmpty');
-var Pattern = require('qvc/constraints/Pattern');
+const qvc = require('qvc');
+const NotEmpty = require('qvc/constraints/NotEmpty');
+const Pattern = require('qvc/constraints/Pattern');
+const co = require('co');
+const spirit = require('../providers/spirit');
+const deploy = require('../private/deploy');
+const spiritContainers = require('../providers/spiritContainers');
+const docker = require('../private/docker');
+const dockerHub = require('../private/dockerHub');
+const createSpirit = require('../private/createSpirit');
 
 module.exports = [
   qvc.command('newSpirit', function(command){
     console.log("newSpirit", command.name);
-    return Promise.denodeify(mkdirp)('config/spirits/'+command.name)
-    .then(function(){
-      return fs.writeFile('config/spirits/'+command.name+'/config.json', JSON.stringify({
-        name: command.name,
-        image: command.image,
-        tag: command.tag,
-        description: '',
-        url: '',
-        webhook: {},
-        raw: {},
-        env: {},
-        volumes: {},
-      }, null, '  '))
-    });
+    return createSpirit(command.name, command.image, command.tag);
   }, {
     'name': [
       new NotEmpty('Please specify a name for the new spirit'),
@@ -40,75 +26,68 @@ module.exports = [
       new NotEmpty('Please specify an image tag to use')
     ]
   }),
-  qvc.query('searchImages', function(query){
-    return dockerHub.searchImages(query.term)
-    .then(function(result){
-      return result.results;
-    });
-  }, {
+  qvc.query('searchImages', co.wrap(function*(query){
+    const result = yield dockerHub.searchImages(query.term)
+    
+    return result.results;
+  }), {
     'term': new NotEmpty('')
   }),
-  qvc.query('searchImageTags', function(query){
-    return dockerHub.searchImageTags(query.image)
-    .catch(function(error){
+  qvc.query('searchImageTags', co.wrap(function*(query){
+    try{
+      return dockerHub.searchImageTags(query.image)
+    }catch(error){
       return [];
-    });
-  }, {
+    }
+  }), {
     'image': new NotEmpty('')
   }),
-  qvc.command('deploySpirit', function(command){
-    return spirit(command.name).config()
-    .then(deploy)
-    .catch(function(error){
+  qvc.command('deploySpirit', co.wrap(function*(command){
+    try{
+      const config = yield spirit(command.name).config();
+      return deploy(config);
+    }catch(error){
       console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
-    });
-  }),
-  qvc.command('stopSpirit', function(command){
-    return spiritContainers(command.name).then(function(containers){
-      return containers.filter(function(container){
-        return container.state == 'running';
-      });
-    }).then(function(containers){
-      return Promise.all(containers.map(function(container){
-        return docker.getContainer(container.id).stop();
-      }));
-    });
-  }),
-  qvc.command('startSpirit', function(command){
-    return spiritContainers(command.name).then(function(containers){
-      return containers.filter(function(container){
-        return container.state == 'stopped';
-      })[0];
-    }).then(function(container){
-      return docker.getContainer(container.id).start();
-    });
-  }),
-  qvc.command('restartSpirit', function(command){
-    return spiritContainers(command.name).then(function(containers){
-      return containers.filter(function(container){
-        return container.state == 'running';
-      })[0];
-    }).then(function(container){
-      return docker.getContainer(container.id).restart();
-    });
-  }),
+    }
+  })),
+  qvc.command('stopSpirit', co.wrap(function*(command){
+    const containers = yield spiritContainers(command.name);
+    
+    return Promise.all(containers.filter(function(container){
+      return container.state == 'running';
+    }).map(function(container){
+      return docker.getContainer(container.id).stop();
+    }));
+  })),
+  qvc.command('startSpirit', co.wrap(function*(command){
+    const containers = yield spiritContainers(command.name);
+    const container = containers.filter(function(container){
+      return container.state == 'stopped';
+    })[0];
+    
+    return docker.getContainer(container.id).start();
+  })),
+  qvc.command('restartSpirit', co.wrap(function*(command){
+    const containers = yield spiritContainers(command.name);
+    const container = containers.filter(function(container){
+      return container.state == 'running';
+    })[0];
+    
+    return docker.getContainer(container.id).restart();
+  })),
   qvc.query('getListOfSpirits', function(query){
     return spirit.list();
   }),
-  qvc.query('getVolumes', function(query){
-    return spiritContainers(query.name).then(function(containers){
-      return containers[0];
-    }).then(function(container){
-      return docker.getContainer(container.id);
-    }).then(function(container){
-      return container.inspect()
-    }).then(function(config){
-      var result = [];
-      for(var volume in config.Config.Volumes){
-        result.push(volume);
-      }
-      return result;
-    });
-  })
+  qvc.query('getVolumes', co.wrap(function*(query){
+    try{
+      const containers = yield spiritContainers(query.name);
+      const container = docker.getContainer(containers[0].id);
+      const config = yield container.inspect();
+
+      return Object.keys(config.Config.Volumes);
+    }catch(e){
+      return []
+    }
+  }))
 ];
