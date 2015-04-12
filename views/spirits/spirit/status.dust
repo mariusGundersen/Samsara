@@ -1,7 +1,15 @@
 {>"spirits/spirit/layout"/}
 {<spiritPage}
   <div class="pane content">
-    <h2 class="dragger"><i class="fa fa-fw fa-info-circle"></i>{name}</h2>
+    <h2 class="dragger"><i class="fa fa-fw fa-info-circle"></i>{name} (v{version})</h2>
+    <div class="config-section">
+      <p>
+        {description}
+      </p>
+      <p>
+        <a href="{url}">{url}</a>
+      </p>
+    </div>
     {>"spirits/spirit/_controls"/}
     {>"spirits/spirit/_deploy"/}
   </div>

@@ -1,19 +1,19 @@
 <div data-viewmodel="spirit/ControlsVM" data-model="{controls|js}" class="text-center" style="margin-bottom: 20px">
   <div class="button-group">
     <button class="pure-button container-state-running"
-            data-bind="click: start, disable: isBusy()||running()" 
-            {?controls.running}disabled{/controls.running}>
+            data-bind="click: start, disable: isBusy()||state()!='stopped'" 
+            {^controls.stopped}disabled{/controls.stopped}>
       <i class="fa fa-fw fa-play" data-bind="css: {'fa-spin': start.isBusy, 'fa-refresh': start.isBusy, 'fa-play': !start.isBusy()}"></i>&nbsp;
       Start
     </button>
     <button class="pure-button" 
-            data-bind="click: restart, disable: isBusy()||!running()" 
+            data-bind="click: restart, disable: isBusy()||state()!='running'" 
             {^controls.running}disabled{/controls.running}>
       <i class="fa fa-fw fa-refresh" data-bind="css: {'fa-spin': restart.isBusy}"></i>&nbsp;
       Restart
     </button>
     <button class="pure-button container-state-stopped" 
-            data-bind="click: stop, disable: isBusy()||!running()" 
+            data-bind="click: stop, disable: isBusy()||state()!='running'" 
             {^controls.running}disabled{/controls.running}>
       <i class="fa fa-fw fa-stop" data-bind="css: {'fa-spin': stop.isBusy, 'fa-refresh': stop.isBusy, 'fa-stop': !stop.isBusy()}"></i>&nbsp;
       Stop
