@@ -1,26 +1,24 @@
-var express = require('express');
-var router = express.Router();
-var spirit = require('../providers/spirit');
-var spiritContainers = require('../providers/spiritContainers');
-var makePageModel = require('../pageModels/spirit');
+const express = require('express');
+const router = express.Router();
+const spirit = require('../providers/spirit');
+const spiritContainers = require('../providers/spiritContainers');
+const makePageModel = require('../pageModels/spirit');
+const co = require('co');
 
 router.get('/:name', function(req, res, next) {
-  spirit(req.params.name)
-  .config()
-  .then(function(config){
-    return spiritContainers(req.params.name)
-    .then(function(containers){
-      return makePageModel(req.params.name, {
+  co(function*(){
+    const config = yield spirit(req.params.name).config();
+    const containers = yield spiritContainers(req.params.name);
+    return makePageModel(req.params.name, {
+      name: req.params.name,
+      config: config,
+      containers: containers,
+      controls: {
         name: req.params.name,
-        config: config,
-        containers: containers,
-        controls: {
-          name: req.params.name,
-          state: containers.some(function(c){ return c.state == 'running'}) ? 'running' : 'stopped',
-          running: containers.some(function(c){ return c.state == 'running'})
-        }
-      }, req.params.name, 'status');
-    });
+        state: containers.some(function(c){ return c.state == 'running'}) ? 'running' : 'stopped',
+        running: containers.some(function(c){ return c.state == 'running'})
+      }
+    }, req.params.name, 'status');
   })
   .then(function(pageModel){
     res.render('spirits/spirit/status', pageModel);
@@ -30,9 +28,8 @@ router.get('/:name', function(req, res, next) {
 });
 
 router.get('/:name/configure', function(req, res, next) {
-  spirit(req.params.name)
-  .config()
-  .then(function(config){
+  co(function*(){
+    const config = yield spirit(req.params.name).config();
     return makePageModel(req.params.name, {
       name: req.params.name,
       config: config
@@ -46,8 +43,8 @@ router.get('/:name/configure', function(req, res, next) {
 });
 
 router.get('/:name/versions', function(req, res, next) {
-  return spiritContainers(req.params.name)
-  .then(function(containers){
+  co(function*(){
+    const containers = yield spiritContainers(req.params.name);
     return makePageModel(req.params.name, {
       name: req.params.name,
       containers: containers

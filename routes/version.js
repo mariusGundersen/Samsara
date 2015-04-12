@@ -1,40 +1,40 @@
-var express = require('express');
-var router = express.Router();
-var spiritContainers = require('../providers/spiritContainers');
-var makePageModel = require('../pageModels/version');
-var docker = require('../private/docker');
-var prettifyLogs = require('../private/prettifyLogs');
+const express = require('express');
+const router = express.Router();
+const spiritContainers = require('../providers/spiritContainers');
+const makePageModel = require('../pageModels/version');
+const docker = require('../private/docker');
+const prettifyLogs = require('../private/prettifyLogs');
+const co = require('co');
 
 router.get('/:name/version/latest', function(req, res, next){
   spiritContainers(req.params.name)
   .then(function(containers){
-    console.log('latest', containers[0].version);
     res.redirect(containers[0].version);
   });
 });
 
 router.get('/:name/version/:version', function(req, res, next){
-  spiritContainers(req.params.name)
-  .then(function(containers){    
-    var found = containers.filter(function(c){
+  co(function*(){
+    const containers = yield spiritContainers(req.params.name);
+    const found = containers.filter(function(c){
       return c.version == req.params.version;
     })[0];
     
     if(!found) throw new Error('404');
     
-    var container = docker.getContainer(found.id);
+    const container = docker.getContainer(found.id);
     
-    return container.inspect().then(function(config){
+    const config = yield container.inspect();
     
-      return container.logs({stdout:true, stderr:true}).then(prettifyLogs).then(function(logs){
-        return makePageModel(req.params.name + ' - ' + req.params.version, {
-          name: req.params.name,
-          version: req.params.version,
-          json: JSON.stringify(config, null, '  '),
-          log: logs
-        }, req.params.name, req.params.version);
-      });
-    });
+    const logs = yield container.logs({stdout:true, stderr:true});
+    const prettyLogs = yield prettifyLogs(logs);
+
+    return makePageModel(req.params.name + ' - ' + req.params.version, {
+      name: req.params.name,
+      version: req.params.version,
+      json: JSON.stringify(config, null, '  '),
+      log: prettyLogs
+    }, req.params.name, req.params.version);
   })
   .then(function(pageModel){
     res.render('spirits/spirit/version/index', pageModel);

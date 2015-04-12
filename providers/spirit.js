@@ -1,14 +1,12 @@
-var fs = require('fs-promise');
-var co = require('co');
-var freeze = require('deep-freeze');
+const fs = require('fs-promise');
+const co = require('co');
 
 function spirit(name){
   return {
-    config: function(){
-      return fs.readFile('config/spirits/'+name+'/config.json')
-      .then(JSON.parse);
-      //.then(freeze);
-    }
+    config: co.wrap(function*(){
+      const result = yield fs.readFile('config/spirits/'+name+'/config.json');
+      return JSON.parse(result);
+    })
   };
 };
 

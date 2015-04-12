@@ -1,10 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var makePageModel = require('../pageModels/root');
-var users = require('../providers/authentication');
+const express = require('express');
+const router = express.Router();
+const makePageModel = require('../pageModels/root');
+const getUsers = require('../providers/authentication');
+const co = require('co');
 
 router.get('/', function(req, res, next) {
-  users().then(function(users){
+  co(function*(){
+    const users = yield getUsers();
     return makePageModel('Settings', {
       users: users
     }, 'settings')

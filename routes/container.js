@@ -1,15 +1,14 @@
-var express = require('express');
-var router = express.Router();
-var co = require('co');
-var docker = require('../private/docker');
-var container = require('../providers/container');
-var makePageModel = require('../pageModels/containers');
-var prettifyLogs = require('../private/prettifyLogs');
+const express = require('express');
+const router = express.Router();
+const co = require('co');
+const docker = require('../private/docker');
+const container = require('../providers/container');
+const makePageModel = require('../pageModels/containers');
+const prettifyLogs = require('../private/prettifyLogs');
 
 router.get('/', function(req, res, next) {
-  
-  container.list()
-  .then(function(list){
+  co(function*(){
+    const list = yield container.list();
     return makePageModel('Containers', {containers: list}, null);
   })
   .then(function (pageModel) {

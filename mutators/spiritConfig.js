@@ -1,12 +1,13 @@
-var fs = require('fs-promise');
+const fs = require('fs-promise');
+const co = require('co');
 
-module.exports = function(name, mutate){
-  return fs.readFile('config/spirits/'+name+'/config.json')
-  .then(JSON.parse)
-  .then(function(config){
-    return mutate(config) || config;
-  })
-  .then(function(config){
-    return fs.writeFile('config/spirits/'+name+'/config.json', JSON.stringify(config, null, '  '));
-  });
-};
+module.exports = co.wrap(function*(name, mutate){
+  const path = 'config/spirits/'+name+'/config.json';
+  
+  const json = yield fs.readFile(path);
+  const config = JSON.parse(json);
+  const mutatedConfig = yield (mutate(config) || config);
+  const contents = JSON.stringify(mutatedConfig, null, '  ');
+  
+  return fs.writeFile(path, contents);
+});

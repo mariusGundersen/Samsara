@@ -45,7 +45,7 @@ module.exports = [
   qvc.command('deploySpirit', co.wrap(function*(command){
     try{
       const config = yield spirit(command.name).config();
-      deploy(config);
+      return deploy(config);
     }catch(error){
       console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};

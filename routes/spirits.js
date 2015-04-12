@@ -1,18 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var spirit = require('../providers/spirit');
-var makePageModel = require('../pageModels/spirits');
+const express = require('express');
+const router = express.Router();
+const spirit = require('../providers/spirit');
+const makePageModel = require('../pageModels/spirits');
+const co = require('co');
 
 router.get('/', function(req, res, next) {
-  spirit
-  .list()
-  .then(function(spirits){
-    return Promise.all(spirits.map(function(name){
+  co(function*(){
+    const spirits = yield spirit.list();
+    const configs = yield spirits.map(function(name){
       return spirit(name).config();
-    }));
-  })
-  .then(function(result){
-    return makePageModel('Spirits', {spirits:result});
+    });
+    return makePageModel('Spirits', {spirits: configs});
   })
   .then(function(pageModel){
     res.render('spirits/index', pageModel);
