@@ -1,17 +1,13 @@
-var fs = require('fs-promise');
-var users = require('../providers/authentication');
+const fs = require('fs-promise');
+const users = require('../providers/authentication');
+const co = require('co');
 
-module.exports = function(mutate){
-  return users()
-  .then(function(entries){
-    return mutate(entries) || entries;
-  })
-  .then(function(entries){
-    return entries.map(function(entry){
-      return entry.username+':'+entry.secret;
-    }).join('\n')+'\n';
-  })
-  .then(function(contents){
-    return fs.writeFile('config/authentication', contents);
-  });
-};
+module.exports = co.wrap(function*(mutate){
+  const entries = yield users();
+  const mutatedEntries = yield (mutate(entries) || entries);
+  const contents = mutatedEntries.map(function(entry){
+    return entry.username+':'+entry.secret;
+  }).join('\n')+'\n';
+  
+  return fs.writeFile('config/authentication', contents);
+});

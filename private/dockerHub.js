@@ -1,16 +1,13 @@
-var request = require('request-promise');
+const request = require('request-promise');
+const co = require('co');
 
 module.exports = {
-  searchImages: function(term){
-    return request('https://registry.hub.docker.com/v1/search?q='+encodeURIComponent(term)+'&n=5')
-    .then(function(result){
-      return JSON.parse(result);
-    });
-  },
-  searchImageTags: function(term){
-    return request('https://registry.hub.docker.com/v1/repositories/'+term+'/tags')
-    .then(function(result){
-      return JSON.parse(result);
-    });
-  }
+  searchImages: co.wrap(function*(term){
+    const result = yield request('https://registry.hub.docker.com/v1/search?q='+encodeURIComponent(term)+'&n=5');
+    return JSON.parse(result);
+  }),
+  searchImageTags: co.wrap(function*(term){
+    const result = yield request('https://registry.hub.docker.com/v1/repositories/'+term+'/tags');
+    return JSON.parse(result);
+  })
 };

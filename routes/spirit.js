@@ -1,63 +1,41 @@
-var express = require('express');
-var router = express.Router();
-var spirit = require('../providers/spirit');
-var spiritContainers = require('../providers/spiritContainers');
-var makePageModel = require('../pageModels/spirit');
+const router = require('express-promise-router')();
+const spirit = require('../providers/spirit');
+const spiritContainers = require('../providers/spiritContainers');
+const makePageModel = require('../pageModels/spirit');
+const co = require('co');
 
-router.get('/:name', function(req, res, next) {
-  spirit(req.params.name)
-  .config()
-  .then(function(config){
-    return spiritContainers(req.params.name)
-    .then(function(containers){
-      return makePageModel(req.params.name, {
-        name: req.params.name,
-        config: config,
-        containers: containers,
-        controls: {
-          name: req.params.name,
-          state: containers.some(function(c){ return c.state == 'running'}) ? 'running' : 'stopped',
-          running: containers.some(function(c){ return c.state == 'running'})
-        }
-      }, req.params.name, 'status');
-    });
-  })
-  .then(function(pageModel){
-    res.render('spirits/spirit/status', pageModel);
-  }).catch(function(error){
-    res.render('error', {content:{message: error.message, error: error}});
-  });
-});
-
-router.get('/:name/configure', function(req, res, next) {
-  spirit(req.params.name)
-  .config()
-  .then(function(config){
-    return makePageModel(req.params.name, {
+router.get('/:name', co.wrap(function*(req, res, next) {
+  const config = yield spirit(req.params.name).config();
+  const containers = yield spiritContainers(req.params.name);
+  const pageModel = yield makePageModel(req.params.name, {
+    name: req.params.name,
+    config: config,
+    containers: containers,
+    controls: {
       name: req.params.name,
-      config: config
-    }, req.params.name, 'config');
-  })
-  .then(function(pageModel){
-    res.render('spirits/spirit/configure', pageModel);
-  }).catch(function(error){
-    res.render('error', {content:{message: error.message, error: error}});
-  });
-});
+      state: containers.some(function(c){ return c.state == 'running'}) ? 'running' : 'stopped',
+      running: containers.some(function(c){ return c.state == 'running'})
+    }
+  }, req.params.name, 'status');
+  res.render('spirits/spirit/status', pageModel);
+}));
 
-router.get('/:name/versions', function(req, res, next) {
-  return spiritContainers(req.params.name)
-  .then(function(containers){
-    return makePageModel(req.params.name, {
-      name: req.params.name,
-      containers: containers
-    }, req.params.name, 'versions');
-  })
-  .then(function(pageModel){
-    res.render('spirits/spirit/versions', pageModel);
-  }).catch(function(error){
-    res.render('error', {content:{message: error.message, error: error}});
-  });
-});
+router.get('/:name/configure', co.wrap(function*(req, res, next) {
+  const config = yield spirit(req.params.name).config();
+  const pageModel = yield makePageModel(req.params.name, {
+    name: req.params.name,
+    config: config
+  }, req.params.name, 'config');
+  res.render('spirits/spirit/configure', pageModel);
+}));
+
+router.get('/:name/versions', co.wrap(function*(req, res, next) {
+  const containers = yield spiritContainers(req.params.name);
+  const pageModel = yield makePageModel(req.params.name, {
+    name: req.params.name,
+    containers: containers
+  }, req.params.name, 'versions');
+  res.render('spirits/spirit/versions', pageModel);
+}));
 
 module.exports = router;

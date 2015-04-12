@@ -1,51 +1,34 @@
-var express = require('express');
-var router = express.Router();
-var Promise = require('promise');
-var docker = require('../private/docker');
-var container = require('../providers/container');
-var makePageModel = require('../pageModels/containers');
-var prettifyLogs = require('../private/prettifyLogs');
+const router = require('express-promise-router')();
+const co = require('co');
+const docker = require('../private/docker');
+const container = require('../providers/container');
+const makePageModel = require('../pageModels/containers');
+const prettifyLogs = require('../private/prettifyLogs');
 
-router.get('/', function(req, res, next) {
-  
-  container.list()
-  .then(function(list){
-    return makePageModel('Containers', {containers: list}, null);
-  })
-  .then(function (pageModel) {
-    res.render('container/index', pageModel);
-  }).catch(function(error){
-    res.render('error', {content:{message: error.message, error: error}});
-  });
-});
+router.get('/', co.wrap(function*(req, res, next) {
+  const list = yield container.list();
+  const pageModel = yield makePageModel('Containers', {containers: list}, null);
+  return res.render('container/index', pageModel);
+}));
 
-router.get('/:id', function(req, res, next) {
-  
-  var container = docker.getContainer(req.params.id);
-  container.inspect()
-  .then(function(config){
-    return container.logs({stdout:true, stderr:true})
-    .then(prettifyLogs)
-    .then(function(logs){
-      return makePageModel(config.Name.substr(1) + ' - Container', {
-        info: config, 
-        name: config.Name.substr(1), 
-        json: JSON.stringify(config, null, '  '),
-        log: logs,
-        controls: {
-          id: config.Id,
-          name: config.Name.substr(1),
-          image: config.Config.Image,
-          running: config.State.Running
-        }
-      }, req.params.id);
-    });
-  })
-  .then(function(pageModel){
-    res.render('container/info', pageModel);
-  }).catch(function(error){
-    res.render('error', {content:{message: error.message, error: error}});
-  });
-});
+router.get('/:id', co.wrap(function*(req, res, next) {
+  const container = docker.getContainer(req.params.id);
+  const config = yield container.inspect();
+  const logs = yield prettifyLogs(yield container.logs({stdout:true, stderr:true}));
+
+  const pageModel = yield makePageModel(config.Name.substr(1) + ' - Container', {
+    info: config, 
+    name: config.Name.substr(1), 
+    json: JSON.stringify(config, null, '  '),
+    log: logs,
+    controls: {
+      id: config.Id,
+      name: config.Name.substr(1),
+      image: config.Config.Image,
+      running: config.State.Running
+    }
+  }, req.params.id);
+  return res.render('container/info', pageModel);
+}));
 
 module.exports = router;

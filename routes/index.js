@@ -1,16 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var makePageModel = require('../pageModels/root');
-var Promise = require('promise');
+const router = require('express-promise-router')();
+const makePageModel = require('../pageModels/root');
+const co = require('co');
 
-router.get('/', function(req, res, next) {
-  Promise.resolve(
-    makePageModel('Samsara', {}, null)
-  ).then(function (pageModel) {
-    res.render('index', pageModel);
-  }).catch(function(err){
-    res.render('error', {content:{message: error.message, error: error}});
-  });
-});
+router.get('/', co.wrap(function*(req, res, next) {
+  const pageModel = makePageModel('Samsara', {}, null);
+  res.render('index', pageModel);
+}));
 
 module.exports = router;

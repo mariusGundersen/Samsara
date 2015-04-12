@@ -1,112 +1,86 @@
-var extend = require('extend');
-var spiritContainers = require('../providers/spiritContainers');
-var Promise = require('promise');
+const extend = require('extend');
+const spiritContainers = require('../providers/spiritContainers');
+const co = require('co');
 
-module.exports = function(name, config){
-  return Promise.all([
-    makeLinks(config.links),
-    makeVolumesFrom(config.volumesFrom)
-  ])
-  .then(function(configs){
-    return extend({
-      Image: config.image+':'+config.tag, 
-      name: name,
-      Env: makeEnv(config.env),
-      Volumes: makeVolumes(config.volumes),
-      HostConfig: {
-        Links: configs[0],
-        Binds: makeBinds(config.volumes),
-        PortBindings: makePortBindings(config.ports),
-        VolumesFrom: configs[1]
-      }
-    }, config.raw);
-  });
-};
+module.exports = co.wrap(function*(name, config){
+  const links = yield makeLinks(config.links);
+  const volumes = yield makeVolumesFrom(config.volumesFrom);
+  
+  return extend({
+    Image: config.image+':'+config.tag, 
+    name: name,
+    Env: makeEnv(config.env),
+    Volumes: makeVolumes(config.volumes),
+    HostConfig: {
+      Links: links,
+      Binds: makeBinds(config.volumes),
+      PortBindings: makePortBindings(config.ports),
+      VolumesFrom: volumes
+    }
+  }, config.raw);
+});
 
 function makeEnv(env){
-  var result = [];
-  if(env){
-    for(var name in env){
-      if(env.hasOwnProperty(name)){
-        result.push(name+'='+env[name]);
-      }
-    }
-  }
-  return result;
+  return Object.keys(env || {})
+  .map(function(name){
+    return name+'='+env[name];
+  });
 }
 
 function makeVolumes(volumes){
-  var result = {};
-  if(volumes){
-    for(var containerPath in volumes){
-      if(volumes.hasOwnProperty(containerPath)){
-        result[containerPath] = {};
-      }
-    }
-  }
-  return result;
+  return Object.keys(volumes || {})
+  .reduce(function(result, containerPath){
+    result[containerPath] = {};
+    return result;
+  }, {});
 }
 
 function makeBinds(volumes){
-  var result = [];
-  if(volumes){
-    for(var containerPath in volumes){
-      if(volumes.hasOwnProperty(containerPath)){
-        var volume = volumes[containerPath];
-        if(typeof(volume) == 'string'){
-          result.push(volume+':'+containerPath);
-        }else if(volume.hostPath == ''){
-          result.push(containerPath);
-        }else if(volume.readOnly){
-          result.push(volume.hostPath+':'+containerPath+':ro');
-        }else{
-          result.push(volume.hostPath+':'+containerPath);
-        }
-      }
+  return Object.keys(volumes || {})
+  .map(function(containerPath){
+    const volume = volumes[containerPath];
+    if(typeof(volume) == 'string'){
+      return volume+':'+containerPath;
+    }else if(volume.hostPath == ''){
+      return containerPath;
+    }else if(volume.readOnly){
+      return volume.hostPath+':'+containerPath+':ro';
+    }else{
+      return volume.hostPath+':'+containerPath;
     }
-  }
-  return result;
+  });
 }
 
 function makePortBindings(ports){
-  var result = {};
-  if(ports){
-    for(var hostPort in ports){
-      if(ports.hasOwnProperty(hostPort)){
-        var port = ports[hostPort];
-        if(typeof(port) == 'string'){
-          result[port+'/tcp'] = [{"HostPort": hostPort}];
-        }else{
-          result[port.containerPort+'/'+(port.protocol||'tcp')] = [{"HostPort": hostPort, "HostIp": port.hostIp || ''}];
-        }
-      }
+  return Object.keys(ports || {})
+  .reduce(function(result, hostPort){
+    const port = ports[hostPort];
+    if(typeof(port) == 'string'){
+      result[port+'/tcp'] = [{"HostPort": hostPort}];
+    }else{
+      result[port.containerPort+'/'+(port.protocol||'tcp')] = [{"HostPort": hostPort, "HostIp": port.hostIp || ''}];
     }
-  }
-  return result;
+    return result;
+  }, {});
 }
 
 function makeLinks(links){
-  var result = [];
-  if(links){
-    for(var name in links){
-      if(links.hasOwnProperty(name)){
-        var link = links[name];
-        if(typeof(link) == 'string'){
-          result.push(link+':'+name);
-        }else if('spirit' in link){
-          result.push(getLinkToApp(link.spirit, name));
-        }else if('container' in link){
-          result.push(link.container+':'+name);
-        }
-      }
+  return Promise.all(Object.keys(links || {})
+  .map(function(name){
+    const link = links[name];
+    if(typeof(link) == 'string'){
+      return link+':'+name;
+    }else if('spirit' in link){
+      return getLinkToApp(link.spirit, name);
+    }else if('container' in link){
+      return link.container+':'+name;
     }
-  }
-  
-  return Promise.all(result);
+  }));
 }
 
 function makeVolumesFrom(spirits){
-  return Promise.all((spirits || []).map(function(spirit){
+  return Promise.all((spirits || [])
+  .map(function(spirit){
     return getLinkToApp(spirit.spirit, spirit.readOnly ? 'ro' : 'rw');
   }));
 }

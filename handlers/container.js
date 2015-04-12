@@ -1,5 +1,5 @@
-var qvc = require('qvc');
-var docker = require('../private/docker');
+const qvc = require('qvc');
+const docker = require('../private/docker');
 
 module.exports = [
   qvc.command('stopContainer', function(command){

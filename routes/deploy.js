@@ -1,27 +1,26 @@
-var express = require('express');
-var router = express.Router();
-var Promise = require('promise');
-var deploy = require('../private/deploy');
-var validateDeploy = require('../private/validateDeploy');
-var request = require('request');
+const router = require('express-promise-router')();
+const co = require('co');
+const deploy = require('../private/deploy');
+const validateDeploy = require('../private/validateDeploy');
+const request = require('request-promise');
 
 router.post('/:name/:secret', function(req, res, next){
-  
-  console.log('deploying', req.params.name, req.body);
-  
-  validateDeploy(
-    req.params.name, 
-    req.params.secret, 
-    req.body.repository && req.body.repository.repo_name, 
-    req.headers['x-real-ip'] || req.connection.remoteAddress, 
-    req.body.callback_url
-  ).then(function(config){
-    
+  co(function*(){
+    console.log('deploying', req.params.name, req.body);
+
+    const config = yield validateDeploy(
+      req.params.name, 
+      req.params.secret, 
+      req.body.repository && req.body.repository.repo_name, 
+      req.headers['x-real-ip'] || req.connection.remoteAddress, 
+      req.body.callback_url);
+
     console.log('validated', config);
-    
-    deploy(config)
-    .then(function(state){
-      request.post({
+
+    try{
+      yield deploy(config);
+
+      yield request.post({
         url: req.body.callback_url,
         body: JSON.stringify({
           state: 'success',
@@ -29,12 +28,10 @@ router.post('/:name/:secret', function(req, res, next){
           descrption: 'deployed',
           target_url: config.url
         })
-      }, function(err, resp, body){
-        console.log('response', body);
       });
-    }).catch(function(error){
+    }catch(error){
       console.error(error);
-      request.post({
+      yield request.post({
         url: req.body.callback_url,
         body: JSON.stringify({
           state: 'error',
@@ -42,10 +39,8 @@ router.post('/:name/:secret', function(req, res, next){
           descrption: error,
           target_url: config.url
         })
-      }, function(err, resp, body){
-        console.log('response', body);
       });
-    });
+    }
 
     res.write('success');
     res.end();

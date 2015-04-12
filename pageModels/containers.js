@@ -1,24 +1,21 @@
-var docker = require('../private/docker');
-var Promise = require('promise');
-var makePageModel = require('./root');
-var container = require('../providers/container');
+const docker = require('../private/docker');
+const co = require('co');
+const makePageModel = require('./root');
+const container = require('../providers/container');
 
-module.exports = function(title, content, currentContainerId){
-  return container.list().then(function(list){
-    list.filter(function(container){
-      return container.id == currentContainerId;
-    }).forEach(function(container){
-      container.selected = true;
-    });
-    
-    return list;
-  })
-  .then(function(containers){
-    return makePageModel(title, {
-      menu: {
-        containers: containers
-      },
-      content: content || {}
-    }, 'containers');
+module.exports = co.wrap(function*(title, content, currentContainerId){
+  const containers = yield container.list();
+  
+  containers.filter(function(container){
+    return container.id == currentContainerId;
+  }).forEach(function(container){
+    container.selected = true;
   });
-}
+  
+  return makePageModel(title, {
+    menu: {
+      containers: containers
+    },
+    content: content || {}
+  }, 'containers');
+});
