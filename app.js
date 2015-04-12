@@ -38,7 +38,10 @@ app.use(cookieParser());
 app.use('/deploy', require('./routes/deploy'));
 
 app.use(auth.connect(basic));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'),{
+  etag: false,
+  maxage: 60*60*24
+}));
 
 app.use('/qvc', qvc(
   require('./handlers/container'),
