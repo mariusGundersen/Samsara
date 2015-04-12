@@ -3,9 +3,9 @@ const spiritContainers = require('../providers/spiritContainers');
 const co = require('co');
 
 module.exports = co.wrap(function*(title, content, spirit, version){
-  const containers = spiritContainers(spirit);
+  const containers = yield spiritContainers(spirit);
   
-  var found = containers.filter(function(c){
+  const found = containers.filter(function(c){
     return c.version == version;
   })[0];
 

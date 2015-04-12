@@ -1,6 +1,6 @@
-var co = require('co');
-var fs = require('fs-promise');
-var mkdirp = require('mkdirp');
+const co = require('co');
+const fs = require('fs-promise');
+const mkdirp = require('mkdirp');
 
 module.exports = co.wrap(function *(name, image, tag){
   const path = 'config/spirits/'+name;

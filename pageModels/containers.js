@@ -1,7 +1,7 @@
-var docker = require('../private/docker');
-var co = require('co');
-var makePageModel = require('./root');
-var container = require('../providers/container');
+const docker = require('../private/docker');
+const co = require('co');
+const makePageModel = require('./root');
+const container = require('../providers/container');
 
 module.exports = co.wrap(function*(title, content, currentContainerId){
   const containers = yield container.list();

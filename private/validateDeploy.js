@@ -1,6 +1,6 @@
-var spirit = require('../providers/spirit');
-var Netmask = require('netmask').Netmask;
-var co = require('co');
+const spirit = require('../providers/spirit');
+const Netmask = require('netmask').Netmask;
+const co = require('co');
 
 module.exports = co.wrap(function*(name, secret, image, ip, callback_url){
   console.log('reading file', name);

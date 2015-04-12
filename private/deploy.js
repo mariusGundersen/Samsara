@@ -1,8 +1,8 @@
-var docker = require('./docker');
-var co = require('co');
-var extend = require('extend');
-var createContainerFromConfig = require('./createContainerFromConfig');
-var spiritContainers = require('../providers/spiritContainers');
+const docker = require('./docker');
+const co = require('co');
+const extend = require('extend');
+const createContainerFromConfig = require('./createContainerFromConfig');
+const spiritContainers = require('../providers/spiritContainers');
 
 module.exports = co.wrap(function*(config){
   console.log(config.image);

@@ -7,7 +7,7 @@ module.exports = co.wrap(function*(title, content, currentSpiritName){
   const list = yield spiritList();
   const spirits = yield list.map(co.wrap(function*(name){
     const versions = yield spiritContainers(name)
-    var runningContainer = versions.filter(function(c){ return c.state == 'running'})[0];
+    const runningContainer = versions.filter(function(c){ return c.state == 'running'})[0];
 
     return {
       name: name,

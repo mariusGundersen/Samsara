@@ -1,5 +1,5 @@
-var docker = require('../private/docker');
-var co = require('co');
+const docker = require('../private/docker');
+const co = require('co');
 
 module.exports = co.wrap(function*(){
   const containers = yield docker.listContainers({all:true});

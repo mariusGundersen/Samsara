@@ -1,6 +1,6 @@
-var docker = require('../private/docker');
-var allContainers = require('./allContainers');
-var co = require('co');
+const docker = require('../private/docker');
+const allContainers = require('./allContainers');
+const co = require('co');
 
 const name_version = /^(.*?)(_v(\d+))?$/;
 

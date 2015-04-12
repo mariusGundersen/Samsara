@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var makePageModel = require('../pageModels/root');
+const express = require('express');
+const router = express.Router();
+const makePageModel = require('../pageModels/root');
 
 router.get('/', function(req, res, next) {
   Promise.resolve(

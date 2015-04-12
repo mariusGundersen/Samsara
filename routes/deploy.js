@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var co = require('co');
-var deploy = require('../private/deploy');
-var validateDeploy = require('../private/validateDeploy');
-var request = require('request-promise');
+const express = require('express');
+const router = express.Router();
+const co = require('co');
+const deploy = require('../private/deploy');
+const validateDeploy = require('../private/validateDeploy');
+const request = require('request-promise');
 
 router.post('/:name/:secret', function(req, res, next){
   co(function*(){

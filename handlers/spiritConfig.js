@@ -1,8 +1,8 @@
-var qvc = require('qvc');
-var spirit = require('../providers/spirit');
-var mutateSpiritConfig = require('../mutators/spiritConfig');
-var NotEmpty = require('qvc/constraints/NotEmpty');
-var Pattern = require('qvc/constraints/Pattern');
+const qvc = require('qvc');
+const spirit = require('../providers/spirit');
+const mutateSpiritConfig = require('../mutators/spiritConfig');
+const NotEmpty = require('qvc/constraints/NotEmpty');
+const Pattern = require('qvc/constraints/Pattern');
 
 module.exports = [
   qvc.command('setSpiritImage', function(command){
@@ -211,7 +211,7 @@ module.exports = [
         config.volumesFrom = [];
       }
       
-      var found = config.volumesFrom.filter(function(volumesFrom){
+      const found = config.volumesFrom.filter(function(volumesFrom){
         return volumesFrom.spirit == command.oldFromSpirit;
       })[0];
             
@@ -226,7 +226,7 @@ module.exports = [
       if(!config.volumesFrom){
         config.volumesFrom = [];
       }
-      var found = config.volumesFrom.filter(function(volumesFrom){
+      const found = config.volumesFrom.filter(function(volumesFrom){
         return volumesFrom.spirit == command.fromSpirit;
       })[0];
       

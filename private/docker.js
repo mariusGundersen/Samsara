@@ -1,7 +1,7 @@
-var Docker = require('dockerode');
-var denodeify = require('denodeify');
+const Docker = require('dockerode');
+const denodeify = require('denodeify');
 
-var docker = new Docker();
+const docker = new Docker();
 
 module.exports = {
   listContainers: denodeify(docker.listContainers.bind(docker)),
