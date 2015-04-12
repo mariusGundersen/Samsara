@@ -25,6 +25,11 @@ module.exports = [
       config.url = command.value;
     });
   }),
+  qvc.command('setSpiritDeploymentMethod', function(command){
+    return mutateSpiritConfig(command.name, function(config){
+      config.deploymentMethod = command.value;
+    });
+  }),
   qvc.command('enableWebhook', function(command){
     return mutateSpiritConfig(command.name, function(config){
       config.webhook.enable = true;
