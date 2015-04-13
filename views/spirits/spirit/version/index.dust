@@ -6,7 +6,7 @@
     <div class="button-group">
       {?stopped}
         <button class="pure-button container-state-running" data-bind="click: rollback, disable: rollback.isBusy">
-          <i class="fa fa-play fa-fw"></i>&nbsp;Roll back to version {version}
+          <i class="fa fa-play fa-fw" data-bind="spinIcon: rollback.isBusy"></i>&nbsp;Roll back to version {version}
         </button>
       {/stopped}
     </div>

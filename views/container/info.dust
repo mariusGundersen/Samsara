@@ -7,19 +7,19 @@
       <button class="pure-button container-state-running" 
               data-bind="click: start, disable:running()||isBusy()" 
               {?info.State.Running}disabled{/info.State.Running}>
-        <i class="fa fa-fw fa-play" data-bind="css: {'fa-spin': start.isBusy, 'fa-refresh': start.isBusy, 'fa-play': !start.isBusy()}"></i>&nbsp;
+        <i class="fa fa-fw fa-play" data-bind="spinIcon: start.isBusy"></i>&nbsp;
         Start
       </button>
       <button class="pure-button" 
               data-bind="click: restart, disable: !running()||isBusy()" 
               {^info.State.Running}disabled{/info.State.Running}>
-        <i class="fa fa-fw fa-refresh" data-bind="css: {'fa-spin': restart.isBusy}"></i>&nbsp;
+        <i class="fa fa-fw fa-refresh" data-bind="spinIcon: restart.isBusy"></i>&nbsp;
         Restart
       </button>
       <button class="pure-button container-state-stopped" 
               data-bind="click: stop, disable: !running()||isBusy()" 
               {^info.State.Running}disabled{/info.State.Running}>
-        <i class="fa fa-fw fa-stop" data-bind="css: {'fa-spin': stop.isBusy, 'fa-refresh': stop.isBusy, 'fa-stop': !stop.isBusy()}"></i>&nbsp;
+        <i class="fa fa-fw fa-stop" data-bind="spinIcon: stop.isBusy"></i>&nbsp;
         Stop
       </button>
     </div>
@@ -28,13 +28,13 @@
       <button class="pure-button button-error" 
               data-bind="click: remove, disable: running()||isBusy()" 
               {?info.State.Running}disabled{/info.State.Running}>
-        <i class="fa fa-fw fa-trash-o" data-bind="css: {'fa-spin': remove.isBusy, 'fa-refresh': remove.isBusy, 'fa-trash-o': !remove.isBusy()}"></i>&nbsp;
+        <i class="fa fa-fw fa-trash-o" data-bind="spinIcon: remove.isBusy"></i>&nbsp;
         Remove
       </button>
     </div>
     <button class="pure-button pure-button-primary button-xlarge" 
             data-bind="click: toSpirit, disable: isBusy">
-      <i class="fa fa-fw fa-sun-o" data-bind="css: {'fa-spin': remove.isBusy, 'fa-refresh': remove.isBusy, 'fa-sun-o': !remove.isBusy()}"></i>&nbsp;
+      <i class="fa fa-fw fa-sun-o" data-bind="spinIcon: toSpirit.isBusy"></i>&nbsp;
       Create Spirit
     </button>
   </div>

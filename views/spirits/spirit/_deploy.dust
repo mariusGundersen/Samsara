@@ -10,7 +10,7 @@
   </p>
   <div class="text-center" style="padding-bottom: 20px">
     <button class="pure-button pure-button-primary button-xlarge" data-bind="click: deploy, disable: deploy.isBusy">
-    <i class="fa fa-fw fa-cloud-upload" data-bind="css: {'fa-spin': deploy.isBusy, 'fa-refresh': deploy.isBusy, 'fa-cloud-upload': !deploy.isBusy()}"></i>&nbsp;
+    <i class="fa fa-fw fa-cloud-upload" data-bind="spinIcon: deploy.isBusy"></i>&nbsp;
       Deploy
     </button>
   </div>
