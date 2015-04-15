@@ -1,4 +1,4 @@
-<div data-viewmodel="spirit/MainInfoVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/MainInfoVM" data-model="{config|js}" class="config-section">
   <h3>
     <i class="fa fa-fw fa-info"></i>
     Main info
@@ -92,4 +92,4 @@
       </form>      
     </div>
   </div>
-</div>
+</section>

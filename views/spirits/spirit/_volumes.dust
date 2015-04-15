@@ -1,4 +1,4 @@
-<div data-viewmodel="spirit/VolumesVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/VolumesVM" data-model="{config|js}" class="config-section">
   <h3>
     <i class="fa fa-fw fa-database"></i>
     Volumes
@@ -53,4 +53,4 @@
     </div>
 
   </form>
-</div>
+</section>

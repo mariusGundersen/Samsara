@@ -1,4 +1,4 @@
-<div data-viewmodel="spirit/WebhookVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/WebhookVM" data-model="{config|js}" class="config-section">
   
   <div data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
     <h3>
@@ -44,4 +44,4 @@
     </form>
   </div>
   
-</div>
+</section>

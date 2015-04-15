@@ -168,16 +168,23 @@ h2 i.fa{
   margin-bottom:0;/*fix an issue with pure for small screens*/
 }
 
+.config-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
 .config-section{
-  margin-bottom: 2em;
-  padding-bottom: 11px;
-  background: linear-gradient(to top, #fff, #f0f0f0 10px, #ccc 11px, #fff 11px);
+  flex: 0 1 500px;
+  margin: 1em 0;
+  //background: linear-gradient(to top, #fff, #f0f0f0 10px, #ccc 11px, #fff 11px);
+  box-shadow: 0 0 5px #999;
 }
 .config-section h3{
   margin: 0;
   padding: 0 10px 0 7px;
   background: linear-gradient(to top, #f0f0f0, #fff 11px);
   border-bottom: 1px solid #ccc;
+  line-height: 1.5;
 }
 .config-section p{
   padding-left: 10px;
@@ -189,7 +196,7 @@ h2 i.fa{
 
   .config-list-item{
     border-bottom: 1px solid #eee;
-    padding: 0 10px;
+    padding: 10px;
     
     .config-list-item-edit{
       display: flex;

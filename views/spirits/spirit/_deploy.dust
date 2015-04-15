@@ -1,4 +1,4 @@
-<div class="config-section" data-viewmodel="spirit/DeployVM" data-model="{deploy|js}">
+<section class="config-section" data-viewmodel="spirit/DeployVM" data-model="{deploy|js}">
   <h3>
     <i class="fa fa-fw fa-cloud-upload"></i>
     Deploy
@@ -15,4 +15,4 @@
     </button>
   </div>
   <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
-</div>
+</section>

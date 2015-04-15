@@ -1,4 +1,4 @@
-<div data-viewmodel="spirit/PortsVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/PortsVM" data-model="{config|js}" class="config-section">
   <h3>
     <i class="fa fa-fw fa-plug"></i>
     Ports
@@ -43,4 +43,4 @@
       <button class="pure-button" type="cancel" data-bind="click:cancelCreate"><i class="fa fa-fw fa-close"></i>&nbsp;Cancel</button>
     </div>
   </form>
-</div>
+</section>
