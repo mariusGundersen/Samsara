@@ -1,12 +1,14 @@
-<div data-viewmodel="spirit/WebhookVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/WebhookVM" data-model="{config|js}" class="box">
   
   <div data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
     <h3>
-      <i class="fa fa-fw fa-anchor"></i>
-      Webhook
-      <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit webhook"><i class="fa fa-fw fa-pencil"></i></button>
+      <span>
+        <i class="fa fa-fw fa-anchor"></i>
+        Webhook
+      </span>
+      <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit webhook"><i class="fa fa-fw fa-pencil"></i></button>
     </h3>
-    <form class="config-section-form pure-form">
+    <form class="box-form pure-form">
       <label class="small-label" for="url">Webhook url</label>
       <input id="url" readonly data-bind="value: url" value="http://example.com/deploy/{config.name}/{config.webhook.secret}">
     </form>
@@ -14,11 +16,13 @@
   
   <div data-bind="visible: editing" style="display:none">
     <h3>
-      <i class="fa fa-fw fa-anchor"></i>
-      Webhook
-      <button class="pure-button button-xsmall pull-right button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
+      <span>
+        <i class="fa fa-fw fa-anchor"></i>
+        Webhook
+      </span>
+      <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
     </h3>
-    <form class="pure-form pure-form-stacked config-section-form" data-bind="submit: save">
+    <form class="pure-form pure-form-stacked box-form" data-bind="submit: save">
       <label class="small-label" for="secret">Secret</label>
       <input id="secret" data-bind="value: secret" class="pure-input-1-2">
     
@@ -34,14 +38,16 @@
   
   <div data-bind="visible: disabled" style="{?config.webhook.enable}display:none{/config.webhook.enable}">
     <h3>
-      <i class="fa fa-fw fa-anchor"></i>
-      Webhook
+      <span>
+        <i class="fa fa-fw fa-anchor"></i>
+        Webhook
+      </span>
     </h3>
-    <form class="pure-form config-section-form">
+    <form class="pure-form box-form">
       <p class="text-center">By enabling the webhook the Docker Hub can deploy a new version of this spirit</p>
       <span class="pure-u-1-4"></span>
       <button class="pure-button pure-button-primary button-xlarge pure-input-1-2" data-bind="click:enable"><i class="fa fa-fw fa-anchor"></i>&nbsp;Enable</button>
     </form>
   </div>
   
-</div>
+</section>

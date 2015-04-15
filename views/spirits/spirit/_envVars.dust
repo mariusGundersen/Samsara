@@ -1,17 +1,19 @@
-<div data-viewmodel="spirit/EnvVarsVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/EnvVarsVM" data-model="{config|js}" class="box">
   <h3>
-    <i class="fa fa-fw fa-tag"></i>
-    Environment variables
-    <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add environment variable"><i class="fa fa-fw fa-plus"></i></button>
+    <span>
+      <i class="fa fa-fw fa-tag"></i>
+      Environment variables
+    </span>
+    <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add environment variable"><i class="fa fa-fw fa-plus"></i></button>
   </h3>
-  <div data-bind="foreach: envVars" class="config-list">
-    <div class="config-list-item">
+  <div data-bind="foreach: envVars" class="box-list">
+    <div class="box-list-item">
       <label class="small-label" data-bind="text:key"></label>
-      <div class="config-list-item-show" data-bind="visible:state()=='show'" style="display:none">
+      <div class="box-list-item-show" data-bind="visible:state()=='show'" style="display:none">
         <span class="control-like" data-bind="text:value, click:edit"></span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-      <form class="pure-form config-list-item-edit" data-bind="visible:state()=='editing', submit:save" style="display:none">
+      <form class="pure-form box-list-item-edit" data-bind="visible:state()=='editing', submit:save" style="display:none">
         <input value="" data-bind="value:value, hasFocus:state()=='editing'" placeholder="value">
         <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
         <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>
@@ -19,12 +21,12 @@
       </form>
     </div>
   </div>
-  <div data-bind="ifnot:envVars().length" class="config-list">
-    <div class="config-section-form config-list-item">
+  <div data-bind="ifnot:envVars().length" class="box-list">
+    <div class="box-form box-list-item">
       <p class="text-center text-muted">Click the pluss icon above to add a new environment variable</p>
     </div>
   </div>
-  <form class="config-section-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
+  <form class="box-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <label class="small-label">Key&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:fresh.key"></span></label>
     <input value="" data-bind="value:fresh.key, hasFocus:creating()" placeholder="Variable key">
     
@@ -36,4 +38,4 @@
       <button class="pure-button" type="cancel" data-bind="click:cancelCreate"><i class="fa fa-fw fa-close"></i>&nbsp;Cancel</button>
     </div>
   </form>
-</div>
+</section>

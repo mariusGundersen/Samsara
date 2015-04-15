@@ -2,39 +2,43 @@
 {<spiritsPage}
 <div class="pane content">
   <h2 class="dragger">New spirit</h2>
-  <form class="pure-form pure-form-stacked config-section-form" data-viewmodel="NewSpiritVM" data-bind="submit: create">
-      <label class="small-label">Name&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:name"></span></label>
-      <input data-bind="value: name" placeholder="ex: website" autofocus>
-    
-      <label class="small-label">Image&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:image"></span></label>
-      <input data-bind="textInput: image, hasFocus:imageHasFocus, css:{'autocomplete-input-focus':imageHasFocus}" class="autocomplete-input" placeholder="ex: nginx">
-      <div class="autocomplete-list" data-bind="visible: imageHasFocus" style="display:none">
-        <ul class="pure-menu-list" data-bind="foreach: images">
-          <li class="pure-menu-item">
-            <a href="#" class="pure-menu-link" data-bind="text: name, click: $parent.selectImage, hasFocus: focus"></a>
-          </li>
-        </ul>
-        <div data-bind="visible: search.isBusy" style="display:none; padding: .5em 1em" class="text-muted">
-          <i class="fa fa-fw fa-spin fa-refresh"></i>&nbsp;Searching...
+  <div class="grid-container">
+    <section class="box">
+      <form class="pure-form pure-form-stacked box-form" data-viewmodel="NewSpiritVM" data-bind="submit: create">
+        <label class="small-label">Name&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:name"></span></label>
+        <input data-bind="value: name" placeholder="ex: website" autofocus>
+
+        <label class="small-label">Image&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:image"></span></label>
+        <input data-bind="textInput: image, hasFocus:imageHasFocus, css:{'autocomplete-input-focus':imageHasFocus}" class="autocomplete-input" placeholder="ex: nginx">
+        <div class="autocomplete-list" data-bind="visible: imageHasFocus" style="display:none">
+          <ul class="pure-menu-list" data-bind="foreach: images">
+            <li class="pure-menu-item">
+              <a href="#" class="pure-menu-link" data-bind="text: name, click: $parent.selectImage, hasFocus: focus"></a>
+            </li>
+          </ul>
+          <div data-bind="visible: search.isBusy" style="display:none; padding: .5em 1em" class="text-muted">
+            <i class="fa fa-fw fa-spin fa-refresh"></i>&nbsp;Searching...
+          </div>
         </div>
+
+        <label class="small-label">Tags&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:tag, visible: tags().length"></span></label>
+        <select data-bind="options: tags,
+                           optionsValue: 'name',
+                           optionsText: 'name',
+                           value: tag,
+                           hasFocus: tagHasFocus,
+                           optionsCaption: tags().length ? 'Choose tag...' : 'Unknown image'">
+          <option>Unknown image</option>
+        </select>
+
+      <div class="button-group">
+        <button type="submit" class="pure-button button-success" data-bind="disable: create.isBusy">
+          <i class="fa fa-fw fa-check" data-bind="spinIcon: create.isBusy"></i>&nbsp;
+          Create
+        </button>
       </div>
-    
-      <label class="small-label">Tags&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:tag, visible: tags().length"></span></label>
-      <select data-bind="options: tags,
-                         optionsValue: 'name',
-                         optionsText: 'name',
-                         value: tag,
-                         hasFocus: tagHasFocus,
-                         optionsCaption: tags().length ? 'Choose tag...' : 'Unknown image'">
-        <option>Unknown image</option>
-      </select>
-      
-    <div class="button-group">
-      <button type="submit" class="pure-button button-success" data-bind="disable: create.isBusy">
-        <i class="fa fa-fw fa-check" data-bind="spinIcon: create.isBusy"></i>&nbsp;
-        Create
-      </button>
-    </div>
-  </form>
+    </form>
+    </section>
+  </div>
 </div>
 {/spiritsPage}
