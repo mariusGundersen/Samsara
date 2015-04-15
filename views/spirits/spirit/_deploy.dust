@@ -1,7 +1,9 @@
 <section class="box" data-viewmodel="spirit/DeployVM" data-model="{deploy|js}">
   <h3>
-    <i class="fa fa-fw fa-cloud-upload"></i>
-    Deploy
+    <span>
+      <i class="fa fa-fw fa-cloud-upload"></i>
+      Deploy
+    </span>
   </h3>
   <p class="text-center">
     Pull <code>{deploy.image}:{deploy.tag}</code> from the Docker Hub and

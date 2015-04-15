@@ -1,7 +1,9 @@
 <section data-viewmodel="spirit/ControlsVM" data-model="{controls|js}" class="box" style="margin-bottom: 20px">
   <h3>
-    <i class="fa fa-fw fa-gears"></i>
-    Control
+    <span>
+      <i class="fa fa-fw fa-gears"></i>
+      Control
+    </span>
   </h3>
   <div class="text-center box-form">
     <div class="button-group">

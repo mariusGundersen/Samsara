@@ -2,9 +2,11 @@
   
   <div data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
     <h3>
-      <i class="fa fa-fw fa-anchor"></i>
-      Webhook
-      <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit webhook"><i class="fa fa-fw fa-pencil"></i></button>
+      <span>
+        <i class="fa fa-fw fa-anchor"></i>
+        Webhook
+      </span>
+      <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit webhook"><i class="fa fa-fw fa-pencil"></i></button>
     </h3>
     <form class="box-form pure-form">
       <label class="small-label" for="url">Webhook url</label>
@@ -14,9 +16,11 @@
   
   <div data-bind="visible: editing" style="display:none">
     <h3>
-      <i class="fa fa-fw fa-anchor"></i>
-      Webhook
-      <button class="pure-button button-xsmall pull-right button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
+      <span>
+        <i class="fa fa-fw fa-anchor"></i>
+        Webhook
+      </span>
+      <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
     </h3>
     <form class="pure-form pure-form-stacked box-form" data-bind="submit: save">
       <label class="small-label" for="secret">Secret</label>
@@ -34,8 +38,10 @@
   
   <div data-bind="visible: disabled" style="{?config.webhook.enable}display:none{/config.webhook.enable}">
     <h3>
-      <i class="fa fa-fw fa-anchor"></i>
-      Webhook
+      <span>
+        <i class="fa fa-fw fa-anchor"></i>
+        Webhook
+      </span>
     </h3>
     <form class="pure-form box-form">
       <p class="text-center">By enabling the webhook the Docker Hub can deploy a new version of this spirit</p>

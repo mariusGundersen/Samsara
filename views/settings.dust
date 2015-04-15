@@ -4,13 +4,18 @@
     <h2 class="dragger"><i class="fa fa-fw fa-cog"></i>Settings</h2>
     <div class="grid-container">
       <div class="box" data-viewmodel="UsersVM" data-model="{users|js}">
-        <h3><i class="fa fa-fw fa-users"></i>Users</h3>
+        <h3>
+          <span>
+            <i class="fa fa-fw fa-users"></i>
+            Users
+          </span>
+        </h3>
         <div class="box-list" data-bind="foreach:users">
           <div class="box-list-item">
             <label class="small-label" data-bind="text:username"></label>
             <div class="box-list-item-show" data-bind="visible:state()=='show', click:edit" style="display:none">
               <span class="control-like text-muted">(Click to change password)</span>
-              <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
+              <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
             </div>
             <form class="box-list-item-edit pure-form" data-bind="visible:state()=='editing'" style="display:none">
               <input data-bind="value:password" type="password" placeholder="new password"></input>

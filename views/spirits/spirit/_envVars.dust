@@ -1,15 +1,17 @@
 <section data-viewmodel="spirit/EnvVarsVM" data-model="{config|js}" class="box">
   <h3>
-    <i class="fa fa-fw fa-tag"></i>
-    Environment variables
-    <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add environment variable"><i class="fa fa-fw fa-plus"></i></button>
+    <span>
+      <i class="fa fa-fw fa-tag"></i>
+      Environment variables
+    </span>
+    <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add environment variable"><i class="fa fa-fw fa-plus"></i></button>
   </h3>
   <div data-bind="foreach: envVars" class="box-list">
     <div class="box-list-item">
       <label class="small-label" data-bind="text:key"></label>
       <div class="box-list-item-show" data-bind="visible:state()=='show'" style="display:none">
         <span class="control-like" data-bind="text:value, click:edit"></span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form box-list-item-edit" data-bind="visible:state()=='editing', submit:save" style="display:none">
         <input value="" data-bind="value:value, hasFocus:state()=='editing'" placeholder="value">

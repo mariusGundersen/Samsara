@@ -1,8 +1,9 @@
 <section data-viewmodel="spirit/VolumesFromVM" data-model="{config|js}" class="box">
   <h3>
-    <i class="fa fa-fw fa-tag"></i>
-    Volumes From
-    <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add volumes from another spirit"><i class="fa fa-fw fa-plus"></i></button>
+    <span>
+      <i class="fa fa-fw fa-tag"></i>
+      Volumes From</span>
+    <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add volumes from another spirit"><i class="fa fa-fw fa-plus"></i></button>
   </h3>
   <div data-bind="foreach: volumesFromList" class="box-list">
     <div class="box-list-item">
@@ -13,7 +14,7 @@
           <i class="fa fa-fw fa-pencil-square-o" title="read only" data-bind="visible: !readOnly()"></i>
         </span>
         <span class="control-like text-muted" data-bind="text:volumes, click:edit"></span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change which spirit to use volumes from"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change which spirit to use volumes from"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
       <form class="pure-form box-list-item-edit" data-bind="if:state()=='editing', visible:state()=='editing', submit:save" style="display:none">
         <button class="pure-button" title="read only" data-bind="click: toggleReadOnly">

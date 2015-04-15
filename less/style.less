@@ -79,10 +79,6 @@ dt{
   color: #d00; 
 }
 
-.pull-right{
-  float: right; 
-}
-
 h2{
   margin-top: 3em;
   border-bottom: 1px solid #ccc; 
@@ -210,6 +206,11 @@ h2 i.fa{
       background: linear-gradient(to top, #f0f0f0, #fff 11px);
       border-bottom: 1px solid #ccc;
       line-height: 1.5;
+      display: flex;
+      
+      span{
+        flex: 1 1 auto;
+      }
     }
 
     p{
@@ -231,6 +232,15 @@ h2 i.fa{
       .box-list-item{
         border-bottom: 1px solid #eee;
         padding: 10px;
+        
+        .box-list-item-show{
+          display: flex;
+          .control-like{
+            flex: 1 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
 
         .box-list-item-edit{
           display: flex;
