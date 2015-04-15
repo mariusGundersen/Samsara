@@ -1,9 +1,9 @@
-<section data-viewmodel="spirit/ControlsVM" data-model="{controls|js}" class="config-section" style="margin-bottom: 20px">
+<section data-viewmodel="spirit/ControlsVM" data-model="{controls|js}" class="box" style="margin-bottom: 20px">
   <h3>
     <i class="fa fa-fw fa-gears"></i>
     Control
   </h3>
-  <div class="text-center config-section-form">
+  <div class="text-center box-form">
     <div class="button-group">
       <button class="pure-button container-state-running"
               data-bind="click: start, disable: isBusy()||state()!='stopped'" 

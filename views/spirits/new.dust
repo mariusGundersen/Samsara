@@ -2,9 +2,9 @@
 {<spiritsPage}
 <div class="pane content">
   <h2 class="dragger">New spirit</h2>
-  <div class="config-container">
-    <section class="config-section">
-      <form class="pure-form pure-form-stacked config-section-form" data-viewmodel="NewSpiritVM" data-bind="submit: create">
+  <div class="grid-container">
+    <section class="box">
+      <form class="pure-form pure-form-stacked box-form" data-viewmodel="NewSpiritVM" data-bind="submit: create">
         <label class="small-label">Name&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:name"></span></label>
         <input data-bind="value: name" placeholder="ex: website" autofocus>
 

@@ -168,74 +168,74 @@ h2 i.fa{
   margin-bottom:0;/*fix an issue with pure for small screens*/
 }
 
-.config-container{
+.grid-container{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
-.config-section{
+.box{
   flex: 0 1 500px;
   margin: 1em 0;
   //background: linear-gradient(to top, #fff, #f0f0f0 10px, #ccc 11px, #fff 11px);
   box-shadow: 0 0 5px #999;
-}
-.config-section h3{
-  margin: 0;
-  padding: 0 10px 0 7px;
-  background: linear-gradient(to top, #f0f0f0, #fff 11px);
-  border-bottom: 1px solid #ccc;
-  line-height: 1.5;
-}
-.config-section p{
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
-.config-list{
   
+  h3{
+    margin: 0;
+    padding: 0 10px 0 7px;
+    background: linear-gradient(to top, #f0f0f0, #fff 11px);
+    border-bottom: 1px solid #ccc;
+    line-height: 1.5;
+  }
 
-  .config-list-item{
-    border-bottom: 1px solid #eee;
-    padding: 10px;
-    
-    .config-list-item-edit{
-      display: flex;
-    }
-    .config-list-item-edit>select,
-    .config-list-item-edit>input,
-    .config-list-item-edit>.config-list-item-input{
-      flex: 1 1 auto;
-      width: 1px;
-    }
-    .config-list-item-edit>.config-list-item-input{
-      position: relative;
-      .autocomplete-input{
-        width: 100%;
+  p{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .box-list{
+    .box-list-item{
+      border-bottom: 1px solid #eee;
+      padding: 10px;
+
+      .box-list-item-edit{
+        display: flex;
       }
-      .autocomplete-list{
-        position: absolute;
-        width: 100%;
-        background: white;
+      .box-list-item-edit>select,
+      .box-list-item-edit>input,
+      .box-list-item-edit>.box-list-item-input{
+        flex: 1 1 auto;
+        width: 1px;
       }
-    }
-    .config-list-item-edit>*{
-      flex: 0 0 auto;
-      border-radius: 0;
-    }
-    .config-list-item-edit>*:first-child{
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-    }
-    .config-list-item-edit>*:last-child{
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
+      .box-list-item-edit>.box-list-item-input{
+        position: relative;
+        .autocomplete-input{
+          width: 100%;
+        }
+        .autocomplete-list{
+          position: absolute;
+          width: 100%;
+          background: white;
+        }
+      }
+      .box-list-item-edit>*{
+        flex: 0 0 auto;
+        border-radius: 0;
+      }
+      .box-list-item-edit>*:first-child{
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+      }
+      .box-list-item-edit>*:last-child{
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
     }
   }
-}
-.config-section-form{
-  padding: 10px;
-}
-.config-section-form>input,
-.config-section-form>select{
- width:100%; 
+  .box-form{
+    padding: 10px;
+  }
+  .box-form>input,
+  .box-form>select{
+   width:100%; 
+  }
 }

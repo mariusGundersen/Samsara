@@ -5,7 +5,7 @@
         <p class="text-center">
           {description}
         </p>
-    <div class="config-container">
+    <div class="grid-container">
       {>"spirits/spirit/_controls"/}
       {>"spirits/spirit/_deploy"/}
     </div>

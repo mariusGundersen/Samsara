@@ -1,4 +1,4 @@
-<section class="config-section" data-viewmodel="spirit/DeployVM" data-model="{deploy|js}">
+<section class="box" data-viewmodel="spirit/DeployVM" data-model="{deploy|js}">
   <h3>
     <i class="fa fa-fw fa-cloud-upload"></i>
     Deploy
