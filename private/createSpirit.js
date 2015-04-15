@@ -1,6 +1,6 @@
 const co = require('co');
 const fs = require('fs-promise');
-const mkdirp = require('mkdirp');
+const mkdirp = require('mkdirp-then');
 
 module.exports = co.wrap(function *(name, image, tag){
   const path = 'config/spirits/'+name;
@@ -17,6 +17,6 @@ module.exports = co.wrap(function *(name, image, tag){
     volumes: {},
   };
   
-  yield Promise.denodeify(mkdirp)(path)
+  yield mkdirp(path);
   return fs.writeFile(path+'/config.json', JSON.stringify(config, null, '  '));
 });
