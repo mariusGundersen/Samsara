@@ -4,6 +4,7 @@
       <tr>
         <th>Version</th>
         <th>Status</th>
+        <th>Uptime</th>
       </tr>
     </thead>
     <tbody>
@@ -11,6 +12,7 @@
         <tr>
           <td><a href="/spirit/{spirit}/version/{version}" title="{id}">v{version}</a></td>
           <td>{state}</td>
+          <td>{status}</td>
         </tr>
       {/containers}
     </tbody>
