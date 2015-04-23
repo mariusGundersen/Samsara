@@ -6,13 +6,14 @@ const co = require('co');
 
 router.get('/:name', co.wrap(function*(req, res, next) {
   const containers = yield spiritContainers(req.params.name);
-  const state = containers.length == 0 ? 'fresh' : containers.some(function(c){ return c.state == 'running'}) ? 'running' : 'stopped';
+  const runningContainers = containers.filter(function(c){ return c.state == 'running'});
+  const state = containers.length == 0 ? 'fresh' : runningContainers.length > 0 ? 'running' : 'stopped';
   const config = yield spirit(req.params.name).config();
   const pageModel = yield makePageModel(req.params.name, {
     name: req.params.name,
     url: config.url,
     description: config.description,
-    version: (containers[0] || {version: 0}).version,
+    version: (runningContainers[0] || containers[0] || {version: 0}).version,
     deploy: {
       name: config.name,
       image: config.image,
