@@ -119,6 +119,9 @@ h2 i.fa{
 .text-center{
   text-align:center;
 }
+.text-right{
+  text-align: right;
+}
 
 .button-group{
   margin: 0.5em 0;
@@ -296,7 +299,20 @@ pre.logs{
   color: white;
   padding: 1em;
   margin: 0;
-  overflow: auto;
+  overflow-x: auto;
+  
+  .download-logs-button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    opacity: 0.5;
+    
+    &:hover,
+    &:focus,
+    &:active{
+      opacity: 1;
+    }
+  }
 }
 
 .box-tabs {

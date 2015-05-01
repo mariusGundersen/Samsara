@@ -23,8 +23,13 @@
         <a data-bind="selectable: tab, name:'logs'" selected href="#" class="box-tab">Logs</a>
         <a data-bind="selectable: tab, name:'json'" href="#" class="box-tab">Inspect</a>
       </div>
-      <div data-bind="ifSelected: tab, name: 'logs'">
-        <pre class="logs">{log|s}</pre>
+      <div data-bind="ifSelected: tab, name: 'logs'" style="position:relative">
+        <pre class="logs">
+          {log|s}
+          <a href="{version}/logs/download" class="pure-button download-logs-button">
+            <i class="fa fa-fw fa-download"></i>
+          </a>
+        </pre>
       </div>
       
       <pre class="logs" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
