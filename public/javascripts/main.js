@@ -9,7 +9,8 @@ require.config({
   chain: {
     'knockout': [
       'bower_components/knockout/dist/knockout',
-      'customBindings/spinIcon'
+      'customBindings/spinIcon',
+      'customBindings/selectable'
     ]
   },
 

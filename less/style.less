@@ -119,6 +119,9 @@ h2 i.fa{
 .text-center{
   text-align:center;
 }
+.text-right{
+  text-align: right;
+}
 
 .button-group{
   margin: 0.5em 0;
@@ -199,8 +202,13 @@ h2 i.fa{
     flex: 0 1 500px;
     margin: 1em 0;
     box-shadow: 0 0 5px #999;
+    
+    &.box-large{
+      flex: 0 1 1000px;
+      overflow: auto;
+    }
 
-    h3{
+    h3, .box-header{
       margin: 0;
       padding: 0 10px 0 7px;
       background: linear-gradient(to top, #f0f0f0, #fff 11px);
@@ -282,6 +290,42 @@ h2 i.fa{
           }
         }
       }
+    }
+  }
+}
+
+pre.logs{
+  background: black;
+  color: white;
+  padding: 1em;
+  margin: 0;
+  overflow-x: auto;
+  
+  .download-logs-button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    opacity: 0.5;
+    
+    &:hover,
+    &:focus,
+    &:active{
+      opacity: 1;
+    }
+  }
+}
+
+.box-tabs {
+  
+  .box-tab {
+    text-decoration: none;
+    padding: 0.5em 1em;
+    color: #666;
+    
+    &[selected] {
+      color: black;
+      background: white;
+      font-weight: bold;
     }
   }
 }
