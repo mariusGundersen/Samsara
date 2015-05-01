@@ -17,9 +17,7 @@ module.exports = {
     }).sort(function(a, b){
       return a.state == 'running' && b.state != 'running' ? -1 : 
       a.state != 'running' && b.state == 'running' ? 1 :
-      a.name < b.name ? -1 : 
-      a.name > b.name ? 1 : 
-      0
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase())
     });
   })
 };
