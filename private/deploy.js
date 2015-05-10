@@ -11,9 +11,11 @@ module.exports = co.wrap(function*(config){
   
   const oldContainers = yield spiritContainers(config.name);
   
-  const containerName = yield getNewName(config.name, oldContainers);
+  const nextLife = yield getNextLife(oldContainers);
   
-  const dockerConfig = yield compileConfig(containerName, config);
+  const containerName = yield getNewName(config.name, nextLife);
+  
+  const dockerConfig = yield compileConfig(containerName, nextLife, config);
   
   const container = yield create(dockerConfig);
   
@@ -68,14 +70,18 @@ function *pull(image){
   console.log('image pulled');
 }
 
-function *getNewName(name, containers){
-  const version = (containers[0] || {version:0}).version || 0;
-  return name + '_v' + (version+1);
+function *getNewName(name, life){
+  return name + '_v' + life;
 }
 
-function *compileConfig(name, config){
+function *getNextLife(containers){
+  const version = (containers[0] || {version:0}).version || 0;
+  return version+1;
+}
+
+function *compileConfig(name, life, config){
   console.log('compiling config');
-  const dockerConfig = yield createContainerFromConfig(name, config);
+  const dockerConfig = yield createContainerFromConfig(name, life, config);
   console.log('config compiled');
   return dockerConfig;
 }
