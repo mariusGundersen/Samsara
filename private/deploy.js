@@ -3,6 +3,8 @@ const co = require('co');
 const extend = require('extend');
 const createContainerFromConfig = require('./createContainerFromConfig');
 const spiritContainers = require('../providers/spiritContainers');
+const fs = require('fs-promise');
+const mkdirp = require('mkdirp-then');
 
 module.exports = co.wrap(function*(config){
   console.log('deploying', config.image);
@@ -30,6 +32,8 @@ module.exports = co.wrap(function*(config){
   }else{
     yield startBeforeStop(container, runningContainers);
   }
+  
+  yield writeConfig(config, nextLife);
   
   console.log(config.name, 'deployed');
 });
@@ -106,4 +110,10 @@ function *stop(containers){
     yield container.stop();
     console.log('stopped old container', container.id);
   });
+}
+
+function *writeConfig(config, life){
+  const path = 'config/spirits/'+config.name+'/lives/'+life;
+  yield mkdirp(path);
+  return fs.writeFile(path+'/config.json', JSON.stringify(config, null, '  '));
 }
