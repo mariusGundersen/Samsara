@@ -2,7 +2,7 @@ const extend = require('extend');
 const spiritContainers = require('../providers/spiritContainers');
 const co = require('co');
 
-module.exports = co.wrap(function*(name, config){
+module.exports = co.wrap(function*(name, life, config){
   const links = yield makeLinks(config.links);
   const volumes = yield makeVolumesFrom(config.volumesFrom);
   
@@ -11,6 +11,7 @@ module.exports = co.wrap(function*(name, config){
     name: name,
     Env: makeEnv(config.env),
     Volumes: makeVolumes(config.volumes),
+    Labels: makeLabels(config.name, life),
     HostConfig: {
       Links: links,
       Binds: makeBinds(config.volumes),
@@ -83,6 +84,13 @@ function makeVolumesFrom(spirits){
   .map(function(spirit){
     return getLinkToApp(spirit.spirit, spirit.readOnly ? 'ro' : 'rw');
   }));
+}
+
+function makeLabels(name, life){
+  return {
+    'samsara.spirit.name': name,
+    'samsara.spirit.life': life.toString()
+  };
 }
 
 function getLinkToApp(spirit, name){
