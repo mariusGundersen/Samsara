@@ -2,17 +2,41 @@
 {<spiritVersionPage}
 <div class="pane content">
   <h2 class="dragger">{name} v{version}</h2>
-  <div class="text-center" data-viewmodel="spirit/VersionVM" data-model="{model|js}">
-    <div class="button-group">
-      {?stopped}
-        <button class="pure-button container-state-running" data-bind="click: rollback, disable: rollback.isBusy">
-          <i class="fa fa-play fa-fw"></i>&nbsp;Roll back to version {version}
-        </button>
-      {/stopped}
+  <div class="grid-container" data-viewmodel="spirit/VersionVM" data-model="{model|js}">
+    
+    {?stopped}
+      <div class="box">
+        <h3>Rollback</h3>
+        <div class="text-center" style="padding: 1em">
+          <div class="button-group">
+              <button class="pure-button container-state-running" data-bind="click: rollback, disable: rollback.isBusy">
+                <i class="fa fa-play fa-fw" data-bind="spinIcon: rollback.isBusy"></i>&nbsp;Roll back to version {version}
+              </button>
+          </div>
+          <span class="validation-error-message text-center" data-bind="validationMessageFor: rollback"></span>
+        </div>
+      </div>
+    {/stopped}
+    
+    <div class="box box-large">
+      <div class="box-header box-tabs">
+        <a data-bind="selectable: tab, name:'logs'" href="#" class="box-tab" selected>Logs</a>
+        <a data-bind="selectable: tab, name:'json'" href="#" class="box-tab">Inspect</a>
+        <a data-bind="selectable: tab, name:'config'" href="#" class="box-tab">Configuration</a>
+      </div>
+      <div data-bind="ifSelected: tab, name: 'logs'" style="position:relative">
+        <pre class="logs">
+          {log|s}
+          <a href="{version}/logs/download" class="pure-button download-logs-button">
+            <i class="fa fa-fw fa-download"></i>
+          </a>
+        </pre>
+      </div>
+      
+      <pre class="logs" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
+      
+      <pre class="logs" data-bind="ifSelected: tab, name: 'config'" style="display:none">{config}</pre>
     </div>
-    <span class="validation-error-message text-center" data-bind="validationMessageFor: rollback"></span>
   </div>
-  <pre>{log|s}</pre>
-  <pre>{json}</pre>
 </div>
 {/spiritVersionPage}

@@ -40,7 +40,7 @@ app.use('/deploy', require('./routes/deploy'));
 app.use(auth.connect(basic));
 app.use(express.static(path.join(__dirname, 'public'),{
   etag: false,
-  maxage: 60*60*24
+  maxage: app.get('env') === 'development' ? 0 : 60*60*24
 }));
 
 app.use('/qvc', qvc(

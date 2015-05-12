@@ -24,6 +24,8 @@ spirit.list = co.wrap(function*(){
     return file.isDir;
   }).map(function(dir){
     return dir.name;
+  }).sort(function(a, b){
+    return a.toLowerCase().localeCompare(b.toLowerCase());
   });
 });
 

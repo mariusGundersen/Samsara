@@ -1,22 +1,24 @@
-<div data-viewmodel="spirit/VolumesVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/VolumesVM" data-model="{config|js}" class="box">
   <h3>
-    <i class="fa fa-fw fa-database"></i>
-    Volumes
-    <button class="pure-button pull-right button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add new volume"><i class="fa fa-fw fa-plus"></i></button>
+    <span>
+      <i class="fa fa-fw fa-database"></i>
+      Volumes
+    </span>
+    <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:add" title="Add new volume"><i class="fa fa-fw fa-plus"></i></button>
   </h3>
-  <div data-bind="foreach: volumes" class="config-list">
-    <div class="config-list-item">
+  <div data-bind="foreach: volumes" class="box-list">
+    <div class="box-list-item">
       <label class="small-label" data-bind="text:containerPath"></label>
-      <div class="config-list-item-show" data-bind="visible:state()=='show', click:edit" style="display:none">
+      <div class="box-list-item-show" data-bind="visible:state()=='show', click:edit" style="display:none">
         <span class="button-like">
           <i class="fa fa-fw fa-lock" title="read only" data-bind="visible: readOnly"></i>
           <i class="fa fa-fw fa-pencil-square-o" title="read only" data-bind="visible: !readOnly()"></i>
         </span>
         <span class="control-like" data-bind="text:hostPath"></span>
         <span class="control-like text-muted" data-bind="ifnot:hostPath">(docker)</span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Edit variable"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-      <form class="pure-form config-list-item-edit" data-bind="visible:state()=='editing', submit:save" style="display:none">
+      <form class="pure-form box-list-item-edit" data-bind="visible:state()=='editing', submit:save" style="display:none">
         <button class="pure-button" title="read only" data-bind="click: toggleReadOnly">
           <i class="fa fa-fw" data-bind="css:{'fa-lock':readOnly, 'fa-pencil-square-o':!readOnly()}"></i>
         </button>
@@ -27,12 +29,12 @@
       </form>
     </div>
   </div>
-  <div data-bind="ifnot:volumes().length" class="config-list">
-    <div class="config-section-form config-list-item">
+  <div data-bind="ifnot:volumes().length" class="box-list">
+    <div class="box-form box-list-item">
       <p class="text-center text-muted">Click the pluss icon above to add a new volume</p>
     </div>
   </div>
-  <form class="config-section-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
+  <form class="box-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <label class="small-label">Container path&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:fresh.containerPath"></span></label>
     <input value="" data-bind="value:fresh.containerPath, hasFocus: creating()" placeholder="path inside container">
     
@@ -53,4 +55,4 @@
     </div>
 
   </form>
-</div>
+</section>

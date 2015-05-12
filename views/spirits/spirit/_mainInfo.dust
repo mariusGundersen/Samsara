@@ -1,17 +1,19 @@
-<div data-viewmodel="spirit/MainInfoVM" data-model="{config|js}" class="config-section">
+<section data-viewmodel="spirit/MainInfoVM" data-model="{config|js}" class="box">
   <h3>
-    <i class="fa fa-fw fa-info"></i>
-    Main info
+    <span>
+      <i class="fa fa-fw fa-info"></i>
+      Main info
+    </span>
   </h3>
-  <div class="config-list">
-    <div class="config-list-item" data-bind="with:image">
+  <div class="box-list">
+    <div class="box-list-item" data-bind="with:image">
       <label class="small-label">Image</label>
-      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
         <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:value, attr:{href:'https://registry.hub.docker.com/'+(value().indexOf('/')>0 ? 'u/'+value() : '_/'+value())}, click: function(){return true}, clickBubble:false" target="_blank">{config.image}</a>&nbsp;
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
-        <div class="config-list-item-input">
+      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <div class="box-list-item-input">
           <input data-bind="textInput:value, hasFocus:$parent.imageHasFocus, css:{'autocomplete-input-focus':$parent.imageHasFocus}" class="autocomplete-input">
           <div class="autocomplete-list" data-bind="visible: $parent.imageHasFocus" style="display:none">
             <ul class="pure-menu-list" data-bind="foreach: $parent.images">
@@ -24,72 +26,72 @@
             </div>
           </div>
         </div>
-        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
-        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
       </form>      
     </div>
     
-    <div class="config-list-item" data-bind="with:tag">
+    <div class="box-list-item" data-bind="with:tag">
       <label class="small-label">Tag</label>
-      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
         <span class="control-like" href="https://registry.hub.docker.com/u/{config.tag}" data-bind="text:value">{config.tag}</span>&nbsp;
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change image"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
         <select data-bind="options: $parent.tags,
                            optionsValue: 'name',
                            optionsText: 'name',
                            value: value,
                            optionsCaption: $parent.tags().length ? 'Choose tag...' : 'Unknown image'">          
         </select>
-        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
-        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
       </form>      
     </div>
     
-    <div class="config-list-item" data-bind="with:deploymentMethod">
+    <div class="box-list-item" data-bind="with:deploymentMethod">
       <label class="small-label">Deployment</label>
-      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
         <span class="control-like" data-bind="text:value">{config.deploymentMethod}</span>
         <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.deploymentMethod}display:none{/config.deploymentMethod}">(not set)</span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change deployment method"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change deployment method"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
         <select data-bind="value:value, hasFocus:editing()">
           <option value="start-before-stop">start-before-stop (zero downtime)</option>
           <option value="stop-before-start">stop-before-start (stop during deploy)</option>
         </select>
-        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
-        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
       </form>      
     </div>
     
-    <div class="config-list-item" data-bind="with:description">
+    <div class="box-list-item" data-bind="with:description">
       <label class="small-label">Description</label>
-      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
         <span class="control-like" data-bind="text:value">{config.description}</span>
         <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.description}display:none{/config.description}">(not set)</span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
         <input data-bind="value:value, hasFocus:editing()">
-        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
-        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
       </form>      
     </div>
     
-    <div class="config-list-item" data-bind="with:url">
+    <div class="box-list-item" data-bind="with:url">
       <label class="small-label">Website</label>
-      <div class="config-list-item-show" data-bind="visible:!editing(), click:edit">
+      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
         <a class="control-like" href="{config.url}" data-bind="text:value, attr:{href:value}, click: function(){return true}, clickBubble:false" target="_blank">{config.url}</a>
         <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.url}display:none{/config.url}">(not set)</span>
-        <button class="pure-button pull-right button-minimal button-no-padding" data-bind="click:edit" title="Change website url"><i class="fa fa-fw fa-pencil"></i></button>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change website url"><i class="fa fa-fw fa-pencil"></i></button>
       </div>
-      <form class="pure-form config-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
         <input data-bind="value:value, hasFocus:editing()" placeholder="http://">
-        <button class="pure-button pull-right button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
-        <button class="pure-button pull-right" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>  
       </form>      
     </div>
   </div>
-</div>
+</section>

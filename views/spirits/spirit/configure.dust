@@ -3,12 +3,14 @@
   <div class="pane content">
     <h2 class="dragger"><i class="fa fa-fw fa-wrench"></i>{name}</h2>
     <p class="text-center">Changes made here will take effect in the next version. Use the Deploy button on the status page to put the new configuration into effect.</p>
-    {>"spirits/spirit/_mainInfo"/}
-    {>"spirits/spirit/_webhook"/}    
-    {>"spirits/spirit/_envVars"/}    
-    {>"spirits/spirit/_volumes"/}    
-    {>"spirits/spirit/_ports"/}    
-    {>"spirits/spirit/_links"/}    
-    {>"spirits/spirit/_volumesFrom"/}
+    <div class="grid-container">
+      {>"spirits/spirit/_mainInfo"/}
+      {>"spirits/spirit/_webhook"/}    
+      {>"spirits/spirit/_envVars"/}    
+      {>"spirits/spirit/_volumes"/}    
+      {>"spirits/spirit/_ports"/}    
+      {>"spirits/spirit/_links"/}    
+      {>"spirits/spirit/_volumesFrom"/}
+    </div>
   </div>
 {/spiritPage}

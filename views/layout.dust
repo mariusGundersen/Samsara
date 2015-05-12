@@ -22,5 +22,6 @@
   <script src="/bower_components/cs-handjs/hand.minified.js?cachebust={cachebust}"></script>
   <script src="/javascripts/sidemenu.js?cachebust={cachebust}"></script>
   <script src="/bower_components/requirejs/require.js?cachebust={cachebust}" data-main="/javascripts/main.js?cachebust={cachebust}"></script>
+  <script src="/bower_components/dependency-chain/require.plugin.chain.js?cachebust={cachebust}"></script>
 </body>
 </html>

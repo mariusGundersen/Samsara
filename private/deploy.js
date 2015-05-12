@@ -3,6 +3,8 @@ const co = require('co');
 const extend = require('extend');
 const createContainerFromConfig = require('./createContainerFromConfig');
 const spiritContainers = require('../providers/spiritContainers');
+const fs = require('fs-promise');
+const mkdirp = require('mkdirp-then');
 
 module.exports = co.wrap(function*(config){
   console.log('deploying', config.image);
@@ -11,9 +13,11 @@ module.exports = co.wrap(function*(config){
   
   const oldContainers = yield spiritContainers(config.name);
   
-  const containerName = yield getNewName(config.name, oldContainers);
+  const nextLife = yield getNextLife(oldContainers);
   
-  const dockerConfig = yield compileConfig(containerName, config);
+  const containerName = yield getNewName(config.name, nextLife);
+  
+  const dockerConfig = yield compileConfig(containerName, nextLife, config);
   
   const container = yield create(dockerConfig);
   
@@ -28,6 +32,8 @@ module.exports = co.wrap(function*(config){
   }else{
     yield startBeforeStop(container, runningContainers);
   }
+  
+  yield writeConfig(config, nextLife);
   
   console.log(config.name, 'deployed');
 });
@@ -68,14 +74,18 @@ function *pull(image){
   console.log('image pulled');
 }
 
-function *getNewName(name, containers){
-  const version = (containers[0] || {version:0}).version || 0;
-  return name + '_v' + (version+1);
+function *getNewName(name, life){
+  return name + '_v' + life;
 }
 
-function *compileConfig(name, config){
+function *getNextLife(containers){
+  const version = (containers[0] || {version:0}).version || 0;
+  return version+1;
+}
+
+function *compileConfig(name, life, config){
   console.log('compiling config');
-  const dockerConfig = yield createContainerFromConfig(name, config);
+  const dockerConfig = yield createContainerFromConfig(name, life, config);
   console.log('config compiled');
   return dockerConfig;
 }
@@ -100,4 +110,10 @@ function *stop(containers){
     yield container.stop();
     console.log('stopped old container', container.id);
   });
+}
+
+function *writeConfig(config, life){
+  const path = 'config/spirits/'+config.name+'/lives/'+life;
+  yield mkdirp(path);
+  return fs.writeFile(path+'/config.json', JSON.stringify(config, null, '  '));
 }

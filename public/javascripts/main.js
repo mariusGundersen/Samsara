@@ -3,7 +3,15 @@ require.config({
   urlArgs: 'cachebust=' + document.querySelector('meta[name=cachebust]').getAttribute('content'),
   
   paths: {
-    'knockout': '/bower_components/knockout/dist/knockout'
+    'bower_components': '/bower_components'
+  },
+  
+  chain: {
+    'knockout': [
+      'bower_components/knockout/dist/knockout',
+      'customBindings/spinIcon',
+      'customBindings/selectable'
+    ]
   },
 
   packages: [

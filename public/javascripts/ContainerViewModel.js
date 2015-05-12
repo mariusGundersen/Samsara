@@ -3,6 +3,8 @@ define(['knockout', 'deco/qvc', 'containerEvents'], function(ko, qvc, container)
   return function(model, when){
     var self = this;
     
+    this.tab = ko.observable('logs');
+    
     this.running = ko.observable(model.running);
     
     this.stop = qvc.createCommand('stopContainer', {
