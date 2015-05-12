@@ -1,10 +1,8 @@
-const spirit = require('../providers/spirit');
 const Netmask = require('netmask').Netmask;
 const co = require('co');
+const ipv6 = require('ipv6').v6;
 
-module.exports = co.wrap(function*(name, secret, image, ip, callback_url){
-  console.log('reading file', name);
-  const config = yield spirit(name).config()
+module.exports = co.wrap(function*(config, name, secret, image, ip, callback_url){
     
   console.log('config', config);
   if(config.name !== name){
@@ -27,6 +25,12 @@ module.exports = co.wrap(function*(name, secret, image, ip, callback_url){
   }
 
   console.log('ip', config.webhook['from-ip'], ip);
+  const address = new ipv6.Address(ip);
+  if(address.isValid()){
+    ip = address.teredo().client4;
+    console.log("ipv4 address:", ip);
+  }
+  
   if(ip !== '127.0.0.1' && new Netmask(config.webhook['from-ip']).contains(ip) == false){
     throw 'wrong ip';
   }
@@ -36,5 +40,5 @@ module.exports = co.wrap(function*(name, secret, image, ip, callback_url){
     throw 'missing callback_url';
   }
 
-  return config;
+  return true;
 });
