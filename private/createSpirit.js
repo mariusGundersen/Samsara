@@ -11,10 +11,17 @@ module.exports = co.wrap(function *(name, image, tag){
     deploymentMethod: 'start-before-stop',
     description: '',
     url: '',
-    webhook: {},
+    webhook: {
+      enable: false,
+      secret: '',
+      from-ip: '162.242.195.64/26'
+    },
     raw: {},
     env: {},
+    links: {},
+    ports: {},
     volumes: {},
+    volumesFrom: []
   };
   
   yield mkdirp(path);
