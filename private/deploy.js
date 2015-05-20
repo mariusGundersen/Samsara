@@ -13,29 +13,29 @@ module.exports = co.wrap(function*(config){
     throw new Error(config.name+' is already being deployed!');
   }
   
-  try{
+  try{    
     console.log('deploying', config.image);
     
-    yield pull(config.image);
-
     const oldContainers = yield spiritContainers(config.name);
-
+    
     const nextLife = yield getNextLife(oldContainers);
-
-    const containerName = yield getNewName(config.name, nextLife);
-
-    const dockerConfig = yield compileConfig(containerName, nextLife, config);
-
-    const container = yield create(dockerConfig);
-
+    
     yield writeConfig(config, nextLife);
-
+    
+    const containerName = yield getNewName(config.name, nextLife);
+    
+    const dockerConfig = yield compileConfig(containerName, nextLife, config);
+    
+    yield pull(config.image);
+    
+    const container = yield create(dockerConfig);
+    
     const runningContainers = oldContainers.filter(function(container){
       return container.state === 'running';
     }).map(function(container){
       return docker.getContainer(container.id);
     });
-
+    
     if(config.deploymentMethod === 'stop-before-start'){
       yield stopBeforeStart(runningContainers, container);
     }else{
