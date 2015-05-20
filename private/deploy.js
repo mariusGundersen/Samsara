@@ -7,51 +7,68 @@ const fs = require('fs-promise');
 const mkdirp = require('mkdirp-then');
 
 module.exports = co.wrap(function*(config){
-  console.log('deploying', config.image);
-  
-  yield pull(config.image);
-  
-  const oldContainers = yield spiritContainers(config.name);
-  
-  const nextLife = yield getNextLife(oldContainers);
-  
-  const containerName = yield getNewName(config.name, nextLife);
-  
-  const dockerConfig = yield compileConfig(containerName, nextLife, config);
-  
-  const container = yield create(dockerConfig);
-  
-  const runningContainers = oldContainers.filter(function(container){
-    return container.state === 'running';
-  }).map(function(container){
-    return docker.getContainer(container.id);
-  });
-  
-  if(config.deploymentMethod === 'stop-before-start'){
-    yield stopBeforeStart(runningContainers, container);
-  }else{
-    yield startBeforeStop(container, runningContainers);
+  try{
+    yield lockDeployment(config.name);
+  }catch(e){
+    throw new Error(config.name+' is already being deployed!');
   }
   
-  yield writeConfig(config, nextLife);
-  
-  console.log(config.name, 'deployed');
+  try{    
+    console.log('deploying', config.image);
+    
+    const oldContainers = yield spiritContainers(config.name);
+    
+    const nextLife = yield getNextLife(oldContainers);
+    
+    const logger = yield createLogger(config.name, nextLife);
+    
+    yield writeConfig(config, nextLife);
+    
+    const containerName = yield getNewName(config.name, nextLife);
+    
+    logger.write('compiling config\n');
+    const dockerConfig = yield createContainerFromConfig(containerName, nextLife, config);
+    logger.write('config compiled\n');
+    
+    logger.write('pulling image\n');
+    yield docker.pull(config.image, logger);
+    logger.write('image pulled\n');
+    
+    logger.write('creating container\n');
+    const container = yield docker.createContainer(dockerConfig)
+    logger.write('container created\n');
+    
+    const runningContainers = oldContainers.filter(function(container){
+      return container.state === 'running';
+    }).map(function(container){
+      return docker.getContainer(container.id);
+    });
+    
+    if(config.deploymentMethod === 'stop-before-start'){
+      logger.write('start-before-stop\n');
+      yield stopBeforeStart(runningContainers, container);
+    }else{
+      logger.write('stop-before-start\n');
+      yield startBeforeStop(container, runningContainers);
+    }
+    
+    logger.write(config.name + ' deployed successfully\n');
+  }finally{
+    logger && logger.end('done');
+    yield unlockDeployment(config.name);
+  }
 });
 
 module.exports.startBeforeStop = co.wrap(startBeforeStop);
 module.exports.stopBeforeStart = co.wrap(stopBeforeStart);
 
-function *startBeforeStop(container, runningContainers){
-  console.log('start-before-stop');
-  
+function *startBeforeStop(container, runningContainers){  
   yield start(container);
   
   yield stop(runningContainers);
 }
 
-function *stopBeforeStart(runningContainers, container){
-  console.log('stop-before-start');
-  
+function *stopBeforeStart(runningContainers, container){  
   yield stop(runningContainers);
   
   try{
@@ -68,12 +85,6 @@ function *stopBeforeStart(runningContainers, container){
   }
 }
 
-function *pull(image){
-  console.log('pulling image');
-  yield docker.pull(image);
-  console.log('image pulled');
-}
-
 function *getNewName(name, life){
   return name + '_v' + life;
 }
@@ -83,18 +94,10 @@ function *getNextLife(containers){
   return version+1;
 }
 
-function *compileConfig(name, life, config){
-  console.log('compiling config');
-  const dockerConfig = yield createContainerFromConfig(name, life, config);
-  console.log('config compiled');
-  return dockerConfig;
-}
-
-function *create(config){
-  console.log('creating container');
-  const container = yield docker.createContainer(config)
-  console.log('container created');
-  return container;
+function *createLogger(name, life){
+  const path = 'config/spirits/'+name+'/lives/'+life;
+  yield mkdirp(path);
+  return fs.createWriteStream(path+'/deploy.log');
 }
 
 function *start(container){
@@ -116,4 +119,15 @@ function *writeConfig(config, life){
   const path = 'config/spirits/'+config.name+'/lives/'+life;
   yield mkdirp(path);
   return fs.writeFile(path+'/config.json', JSON.stringify(config, null, '  '));
+}
+
+function *lockDeployment(name){
+  const path = 'config/spirits/'+name;
+  yield mkdirp(path);
+  yield fs.open(path+'/deploy.lock', 'wx');
+}
+
+function *unlockDeployment(name){
+  const path = 'config/spirits/'+name;
+  return fs.unlink(path+'/deploy.lock');
 }

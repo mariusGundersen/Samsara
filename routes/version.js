@@ -18,10 +18,12 @@ router.get('/:name/version/:version', co.wrap(function*(req, res, next){
   const container = yield getContainer(req.params.name, req.params.version);
 
   const inspect = yield container.inspect();
-  const config = yield readConfig(req.params.name, req.params.version);
+  const config = yield readFile(req.params.name, req.params.version, 'config.json');
   
   const logs = yield container.logs({stdout:true, stderr:true, tail: 50});
   const prettyLogs = yield prettifyLogs(logs);
+  
+  const deployLogs = yield readFile(req.params.name, req.params.version, 'deploy.log');
 
   const pageModel = yield makePageModel(req.params.name + ' - ' + req.params.version, {
     name: req.params.name,
@@ -29,6 +31,7 @@ router.get('/:name/version/:version', co.wrap(function*(req, res, next){
     json: JSON.stringify(inspect, null, '  '),
     config: config,
     log: prettyLogs,
+    deploy: deployLogs,
     stopped: !inspect.State.Running,
     model: {
       name: req.params.name,
@@ -58,10 +61,9 @@ function* getContainer(name, version){
   return docker.getContainer(found.id);
 }
 
-function *readConfig(name, life){
+function *readFile(name, life, file){
   try{
-    const result = yield fs.readFile('config/spirits/'+name+'/lives/'+life+'/config.json', 'utf8');
-    return result;
+    return yield fs.readFile('config/spirits/'+name+'/lives/'+life+'/'+file, 'utf8');
   }catch(e){
     return '';
   }
