@@ -20,15 +20,23 @@ module.exports = co.wrap(function*(config){
     
     const nextLife = yield getNextLife(oldContainers);
     
+    const logger = yield createLogger(config.name, nextLife);
+    
     yield writeConfig(config, nextLife);
     
     const containerName = yield getNewName(config.name, nextLife);
     
-    const dockerConfig = yield compileConfig(containerName, nextLife, config);
+    logger.write('compiling config\n');
+    const dockerConfig = yield createContainerFromConfig(containerName, nextLife, config);
+    logger.write('config compiled\n');
     
-    yield pull(config.image);
+    logger.write('pulling image\n');
+    yield docker.pull(config.image, logger);
+    logger.write('image pulled\n');
     
-    const container = yield create(dockerConfig);
+    logger.write('creating container\n');
+    const container = yield docker.createContainer(dockerConfig)
+    logger.write('container created\n');
     
     const runningContainers = oldContainers.filter(function(container){
       return container.state === 'running';
@@ -37,13 +45,16 @@ module.exports = co.wrap(function*(config){
     });
     
     if(config.deploymentMethod === 'stop-before-start'){
+      logger.write('start-before-stop\n');
       yield stopBeforeStart(runningContainers, container);
     }else{
+      logger.write('stop-before-start\n');
       yield startBeforeStop(container, runningContainers);
     }
     
-    console.log(config.name, 'deployed');
+    logger.write(config.name + ' deployed successfully\n');
   }finally{
+    logger && logger.end('done');
     yield unlockDeployment(config.name);
   }
 });
@@ -51,17 +62,13 @@ module.exports = co.wrap(function*(config){
 module.exports.startBeforeStop = co.wrap(startBeforeStop);
 module.exports.stopBeforeStart = co.wrap(stopBeforeStart);
 
-function *startBeforeStop(container, runningContainers){
-  console.log('start-before-stop');
-  
+function *startBeforeStop(container, runningContainers){  
   yield start(container);
   
   yield stop(runningContainers);
 }
 
-function *stopBeforeStart(runningContainers, container){
-  console.log('stop-before-start');
-  
+function *stopBeforeStart(runningContainers, container){  
   yield stop(runningContainers);
   
   try{
@@ -78,12 +85,6 @@ function *stopBeforeStart(runningContainers, container){
   }
 }
 
-function *pull(image){
-  console.log('pulling image');
-  yield docker.pull(image);
-  console.log('image pulled');
-}
-
 function *getNewName(name, life){
   return name + '_v' + life;
 }
@@ -93,18 +94,10 @@ function *getNextLife(containers){
   return version+1;
 }
 
-function *compileConfig(name, life, config){
-  console.log('compiling config');
-  const dockerConfig = yield createContainerFromConfig(name, life, config);
-  console.log('config compiled');
-  return dockerConfig;
-}
-
-function *create(config){
-  console.log('creating container');
-  const container = yield docker.createContainer(config)
-  console.log('container created');
-  return container;
+function *createLogger(name, life){
+  const path = 'config/spirits/'+name+'/lives/'+life;
+  yield mkdirp(path);
+  return fs.createWriteStream(path+'/deploy.log');
 }
 
 function *start(container){
