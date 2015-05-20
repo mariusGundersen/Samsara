@@ -23,6 +23,7 @@
         <a data-bind="selectable: tab, name:'logs'" href="#" class="box-tab" selected>Logs</a>
         <a data-bind="selectable: tab, name:'json'" href="#" class="box-tab">Inspect</a>
         <a data-bind="selectable: tab, name:'config'" href="#" class="box-tab">Configuration</a>
+        <a data-bind="selectable: tab, name:'deploy'" href="#" class="box-tab">Deploy log</a>
       </div>
       <div data-bind="ifSelected: tab, name: 'logs'" style="position:relative">
         <pre class="logs">
@@ -36,6 +37,8 @@
       <pre class="logs" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
       
       <pre class="logs" data-bind="ifSelected: tab, name: 'config'" style="display:none">{config}</pre>
+      
+      <pre class="logs" data-bind="ifSelected: tab, name: 'deploy'" style="display:none">{deploy}</pre>
     </div>
   </div>
 </div>
