@@ -20,6 +20,8 @@ module.exports = co.wrap(function*(config){
   const dockerConfig = yield compileConfig(containerName, nextLife, config);
   
   const container = yield create(dockerConfig);
+    
+  yield writeConfig(config, nextLife);
   
   const runningContainers = oldContainers.filter(function(container){
     return container.state === 'running';
@@ -32,8 +34,6 @@ module.exports = co.wrap(function*(config){
   }else{
     yield startBeforeStop(container, runningContainers);
   }
-  
-  yield writeConfig(config, nextLife);
   
   console.log(config.name, 'deployed');
 });
