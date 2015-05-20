@@ -65,6 +65,8 @@ module.exports.stopBeforeStart = co.wrap(stopBeforeStart);
 function *startBeforeStop(container, runningContainers){  
   yield start(container);
   
+  yield delay(5000);
+  
   yield stop(runningContainers);
 }
 
@@ -130,4 +132,10 @@ function *lockDeployment(name){
 function *unlockDeployment(name){
   const path = 'config/spirits/'+name;
   return fs.unlink(path+'/deploy.lock');
+}
+
+function delay(ms){
+  return new Promise(function(resolve){
+    setTimeout(resolve, ms);
+  });
 }
