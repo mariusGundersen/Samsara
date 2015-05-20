@@ -35,7 +35,7 @@ module.exports = [
   }),
   qvc.query('searchImageTags', co.wrap(function*(query){
     try{
-      return dockerHub.searchImageTags(query.image)
+      return yield dockerHub.searchImageTags(query.image)
     }catch(error){
       return [];
     }
@@ -45,9 +45,8 @@ module.exports = [
   qvc.command('deploySpirit', co.wrap(function*(command){
     try{
       const config = yield spirit(command.name).config();
-      return deploy(config);
+      return yield deploy(config);
     }catch(error){
-      console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
     }
   })),
@@ -83,7 +82,7 @@ module.exports = [
   qvc.command('stopSpirit', co.wrap(function*(command){
     const containers = yield spiritContainers(command.name);
     
-    return Promise.all(containers.filter(function(container){
+    return yield Promise.all(containers.filter(function(container){
       return container.state == 'running';
     }).map(function(container){
       return docker.getContainer(container.id).stop();
