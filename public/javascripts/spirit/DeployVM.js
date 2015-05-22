@@ -7,5 +7,9 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     }).success(function(){
       document.location += '/version/latest';
     });
+    
+    this.isBusy = ko.computed(function(){
+      return model.isDeploying || self.deploy.isBusy();
+    });
   };
 });

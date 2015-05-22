@@ -6,6 +6,9 @@ function spirit(name){
     config: co.wrap(function*(){
       const result = yield fs.readFile('config/spirits/'+name+'/config.json');
       return JSON.parse(result);
+    }),
+    isDeploying: co.wrap(function*(){
+      return yield fs.exists('config/spirits/'+name+'/deploy.lock');
     })
   };
 };
