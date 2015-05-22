@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 
+const socketIO = require('socket.io');
 const app = require('./app');
 const debug = require('debug')('docker-spaceport:server');
 const http = require('http');
@@ -18,6 +19,15 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
+
+/**
+ * Create SocketIo app
+ */
+
+const io = socketIO(server);
+io.on('connection', function(socket){
+  socket.emit('test', 'hello');
+});
 
 /**
  * Listen on provided port, on all network interfaces.
