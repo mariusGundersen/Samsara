@@ -6,6 +6,7 @@ const socketIO = require('socket.io');
 const app = require('./app');
 const debug = require('debug')('docker-spaceport:server');
 const http = require('http');
+const socketServerEventHandler = require('./private/socketServerEventHandler');
 
 /**
  * Get port from environment and store in Express.
@@ -25,9 +26,6 @@ const server = http.createServer(app);
  */
 
 const io = socketIO(server);
-io.on('connection', function(socket){
-  socket.emit('test', 'hello');
-});
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -36,6 +34,12 @@ io.on('connection', function(socket){
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/**
+ * Hook socket server to the eventBus
+ */
+
+socketServerEventHandler(io);
 
 /**
  * Normalize a port into a number, string, or false.

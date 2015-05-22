@@ -5,10 +5,14 @@ const createContainerFromConfig = require('./createContainerFromConfig');
 const spiritContainers = require('../providers/spiritContainers');
 const fs = require('fs-promise');
 const mkdirp = require('mkdirp-then');
+const eventBus = require('./eventBus');
 
 module.exports = co.wrap(function*(config){
   try{
     yield lockDeployment(config.name);
+    eventBus.emit('deployLockGained', {
+      name: config.name
+    });
   }catch(e){
     throw new Error(config.name+' is already being deployed!');
   }
@@ -56,6 +60,9 @@ module.exports = co.wrap(function*(config){
   }finally{
     logger && logger.end('done');
     yield unlockDeployment(config.name);
+    eventBus.emit('deployLockReleased', {
+      name: config.name
+    });
   }
 });
 
