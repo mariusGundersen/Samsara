@@ -11,7 +11,7 @@ module.exports = co.wrap(function*(config){
   try{
     yield lockDeployment(config.name);
     eventBus.emit('deployLockGained', {
-      name: config.name
+      id: config.name
     });
   }catch(e){
     throw new Error(config.name+' is already being deployed!');
@@ -30,13 +30,23 @@ module.exports = co.wrap(function*(config){
     
     const containerName = yield getNewName(config.name, nextLife);
     
-    logger.write('compiling config\n');
-    const dockerConfig = yield createContainerFromConfig(containerName, nextLife, config);
-    logger.write('config compiled\n');
+    eventBus.emit('deployProcessStep', {
+      id: config.name,
+      step: 'pull'
+    });
     
     logger.write('pulling image\n');
     yield docker.pull(config.image, logger);
     logger.write('image pulled\n');
+    
+    eventBus.emit('deployProcessStep', {
+      id: config.name,
+      step: 'create'
+    });
+    
+    logger.write('compiling config\n');
+    const dockerConfig = yield createContainerFromConfig(containerName, nextLife, config);
+    logger.write('config compiled\n');
     
     logger.write('creating container\n');
     const container = yield docker.createContainer(dockerConfig)
@@ -61,7 +71,7 @@ module.exports = co.wrap(function*(config){
     logger && logger.end('done');
     yield unlockDeployment(config.name);
     eventBus.emit('deployLockReleased', {
-      name: config.name
+      id: config.name
     });
   }
 });
@@ -69,7 +79,7 @@ module.exports = co.wrap(function*(config){
 module.exports.startBeforeStop = co.wrap(startBeforeStop);
 module.exports.stopBeforeStart = co.wrap(stopBeforeStart);
 
-function *startBeforeStop(container, runningContainers){  
+function *startBeforeStop(container, runningContainers){
   yield start(container);
   
   yield delay(5000);

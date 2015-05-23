@@ -17,4 +17,34 @@
     </button>
   </div>
   <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
+  <div data-bind="visible: step()!='ready'" style="display: none">
+    <div data-bind="ifSelected: step, name: 'start'">
+      <ol class="step-list">
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Pulling</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Creating</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
+      </ol>
+    </div>
+    <div data-bind="ifSelected: step, name: 'ready'">
+      <ol class="step-list">
+        <li class="active"><i class="fa fa-fw fa-refresh fa-spin"></i> Pulling</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Creating</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
+      </ol>
+    </div>
+    <div data-bind="ifSelected: step, name: 'create'">
+      <ol class="step-list">
+        <li class="done"><i class="fa fa-fw fa-check"></i> Pulling</li>
+        <li class="active"><i class="fa fa-fw fa-refresh fa-spin"></i> Creating</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
+      </ol>
+    </div>
+    <div data-bind="ifSelected: step, name: 'done'">
+      <ol class="step-list">
+        <li class="done"><i class="fa fa-fw fa-check"></i> Pulling</li>
+        <li class="done"><i class="fa fa-fw fa-check"></i> Creating</li>
+        <li class="done"><i class="fa fa-fw fa-check"></i> Done</li>
+      </ol>
+    </div>
+  </div>
 </section>

@@ -3,6 +3,7 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
     var self = this;
     
     this.isDeploying = ko.observable(model.isDeploying);
+    this.step = ko.observable('ready');
     
     this.deploy = qvc.createCommand('deploySpirit', {
       name: model.name
@@ -20,11 +21,13 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
       var socket = io.connect();
     
       socket.on('connect', function(){
-        socket.emit('join', 'spirit/'+model.name+'/deploy');
+        socket.emit('subscribeToDeployStatus', model.name);
       });
     
       socket.on('status', function(data){
+        console.log('status', data);
         self.isDeploying(data.isDeploying);
+        self.step(data.step);
       });
     }
   };

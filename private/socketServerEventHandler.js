@@ -1,21 +1,41 @@
 var eventBus = require('./eventBus');
+var EventSaga = require('event-saga');
 
 module.exports = function(io){
   io.on('connection', function(socket){
-    socket.on('join', function(room){
-      socket.join(room);
+    socket.on('subscribeToDeployStatus', function(name){
+      socket.join('spirit/'+name+'/deploy',);
+      eventBus.emit('deployStatusRequest', {id: name, socket: socket});
     });
   });
   
-  eventBus.on('deployLockGained', function(data){
-    io.to('spirit/'+data.name+'/deploy').emit('status', {
-      isDeploying: true
-    });
+  var deploySaga = new EventSaga(eventBus);
+  
+  deploySaga.createOn('deployLockGained', function(data){
+    this.data = {
+      isDeploying: true,
+      step: 'start'
+    };
+    publish(io, this.id, this.data);
+  });
+  
+  deploySaga.on('deployStatusRequest', function(data){
+    data.socket.emit('status', this.data);
   });
 
-  eventBus.on('deployLockReleased', function(data){
-    io.to('spirit/'+data.name+'/deploy').emit('status', {
-      isDeploying: false
-    });
+  deploySaga.on('deployProcessStep', function(data){
+    this.data.step = data.step;
+    publish(io, this.id, this.data);
+  });
+  
+  deploySaga.on('deployLockReleased', function(data){
+    this.data.step = 'done';
+    this.data.isDeploying = false;
+    publish(io, this.id, this.data);
+    this.done();
   });
 };
+
+function publish(io, name, data){
+  io.to('spirit/'+name+'/deploy').emit('status', data);
+}
