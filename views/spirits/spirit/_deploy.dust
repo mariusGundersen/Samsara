@@ -18,17 +18,27 @@
   </div>
   <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
   <div data-bind="visible: step()!='ready'" style="display: none">
-    <div data-bind="ifSelected: step, name: 'start'">
+    <ol class="step-list" data-bind="foreach: steps">
+      <li data-bind="css:{active:isActive, done:isDone}">
+        <i class="fa fa-fw" data-bind="css:{'fa-circle-thin': !isDone(), 'fa-refresh': isActive, 'fa-spin': isActive, 'fa-check':isDone}"></i>&nbsp;
+        <span data-bind="text: name"></span>
+      </li>
+    </ol>
+    <div data-bind="ifSelected: step, name: 'init'">
       <ol class="step-list">
         <li class=""><i class="fa fa-fw fa-circle-thin"></i> Pulling</li>
         <li class=""><i class="fa fa-fw fa-circle-thin"></i> Creating</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Start</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Stop</li>
         <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
       </ol>
     </div>
-    <div data-bind="ifSelected: step, name: 'ready'">
+    <div data-bind="ifSelected: step, name: 'pull'">
       <ol class="step-list">
         <li class="active"><i class="fa fa-fw fa-refresh fa-spin"></i> Pulling</li>
         <li class=""><i class="fa fa-fw fa-circle-thin"></i> Creating</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Start</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Stop</li>
         <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
       </ol>
     </div>
@@ -36,6 +46,26 @@
       <ol class="step-list">
         <li class="done"><i class="fa fa-fw fa-check"></i> Pulling</li>
         <li class="active"><i class="fa fa-fw fa-refresh fa-spin"></i> Creating</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Start</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Stop</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
+      </ol>
+    </div>
+    <div data-bind="ifSelected: step, name: 'start'">
+      <ol class="step-list">
+        <li class="done"><i class="fa fa-fw fa-check"></i> Pulling</li>
+        <li class="done"><i class="fa fa-fw fa-check"></i> Creating</li>
+        <li class="active"><i class="fa fa-fw fa-refresh fa-spin"></i> Start</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Stop</li>
+        <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
+      </ol>
+    </div>
+    <div data-bind="ifSelected: step, name: 'stop'">
+      <ol class="step-list">
+        <li class="done"><i class="fa fa-fw fa-check"></i> Pulling</li>
+        <li class="done"><i class="fa fa-fw fa-check"></i> Creating</li>
+        <li class="done"><i class="fa fa-fw fa-check"></i> Start</li>
+        <li class="active"><i class="fa fa-fw fa-refresh fa-spin"></i> Stop</li>
         <li class=""><i class="fa fa-fw fa-circle-thin"></i> Done</li>
       </ol>
     </div>
@@ -43,6 +73,8 @@
       <ol class="step-list">
         <li class="done"><i class="fa fa-fw fa-check"></i> Pulling</li>
         <li class="done"><i class="fa fa-fw fa-check"></i> Creating</li>
+        <li class="done"><i class="fa fa-fw fa-check"></i> Start</li>
+        <li class="done"><i class="fa fa-fw fa-check"></i> Stop</li>
         <li class="done"><i class="fa fa-fw fa-check"></i> Done</li>
       </ol>
     </div>

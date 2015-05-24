@@ -60,10 +60,10 @@ module.exports = co.wrap(function*(config){
     
     if(config.deploymentMethod === 'stop-before-start'){
       logger.write('start-before-stop\n');
-      yield stopBeforeStart(runningContainers, container);
+      yield stopBeforeStart(runningContainers, container, config.name);
     }else{
       logger.write('stop-before-start\n');
-      yield startBeforeStop(container, runningContainers);
+      yield startBeforeStop(container, runningContainers, config.name);
     }
     
     logger.write(config.name + ' deployed successfully\n');
@@ -79,16 +79,36 @@ module.exports = co.wrap(function*(config){
 module.exports.startBeforeStop = co.wrap(startBeforeStop);
 module.exports.stopBeforeStart = co.wrap(stopBeforeStart);
 
-function *startBeforeStop(container, runningContainers){
+function *startBeforeStop(container, runningContainers, name){
+  eventBus.emit('deployProcessStep', {
+    id: name,
+    step: 'start'
+  });
+  
   yield start(container);
   
   yield delay(5000);
   
+  eventBus.emit('deployProcessStep', {
+    id: name,
+    step: 'stop'
+  });
+  
   yield stop(runningContainers);
 }
 
-function *stopBeforeStart(runningContainers, container){  
+function *stopBeforeStart(runningContainers, container, name){
+  eventBus.emit('deployProcessStep', {
+    id: name,
+    step: 'stop'
+  });
+  
   yield stop(runningContainers);
+  
+  eventBus.emit('deployProcessStep', {
+    id: name,
+    step: 'start'
+  });
   
   try{
     yield start(container);

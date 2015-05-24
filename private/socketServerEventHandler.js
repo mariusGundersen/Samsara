@@ -4,7 +4,7 @@ var EventSaga = require('event-saga');
 module.exports = function(io){
   io.on('connection', function(socket){
     socket.on('subscribeToDeployStatus', function(name){
-      socket.join('spirit/'+name+'/deploy',);
+      socket.join('spirit/'+name+'/deploy');
       eventBus.emit('deployStatusRequest', {id: name, socket: socket});
     });
   });
@@ -14,7 +14,7 @@ module.exports = function(io){
   deploySaga.createOn('deployLockGained', function(data){
     this.data = {
       isDeploying: true,
-      step: 'start'
+      step: 'init'
     };
     publish(io, this.id, this.data);
   });

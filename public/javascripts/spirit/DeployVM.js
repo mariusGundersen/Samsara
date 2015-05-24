@@ -4,6 +4,7 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
     
     this.isDeploying = ko.observable(model.isDeploying);
     this.step = ko.observable('ready');
+    this.steps = ko.observableArray();
     
     this.deploy = qvc.createCommand('deploySpirit', {
       name: model.name

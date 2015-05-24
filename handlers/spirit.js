@@ -71,9 +71,9 @@ module.exports = [
 
     try{
       if(config.deploymentMethod === 'stop-before-start'){
-        yield deploy.stopBeforeStart(runningContainers, container);
+        yield deploy.stopBeforeStart(runningContainers, container, command.name);
       }else{
-        yield deploy.startBeforeStop(container, runningContainers);
+        yield deploy.startBeforeStop(container, runningContainers, command.name);
       }
     }catch(error){
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
