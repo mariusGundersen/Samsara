@@ -1,7 +1,7 @@
 const spirit = require('../providers/spirit');
 const router = require('express-promise-router')();
 const co = require('co');
-const deploy = require('../private/deploy');
+const deploy = require('../private/deploy').deploy;
 const validateDeploy = require('../private/validateDeploy');
 const request = require('request-promise');
 

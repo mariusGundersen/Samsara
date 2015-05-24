@@ -1,14 +1,14 @@
 define(['knockout'], function(ko){
   
   ko.bindingHandlers['ifSelected'] = {
-    init: function(element, valueAccessor, allBindings){
+    init: function(element, valueAccessor, allBindings, viewModel, context){
       
       var value = valueAccessor();
       var name = allBindings.get('name');
       
       ko.bindingHandlers['if'].init(element, function(){
         return ko.unwrap(value) === ko.unwrap(name);
-      });
+      }, allBindings, viewModel, context);
     },
     update: function(element, valueAccessor, allBindings){
       
