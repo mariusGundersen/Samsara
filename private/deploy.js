@@ -13,7 +13,14 @@ module.exports = {
     try{
       yield lockDeployment(config.name);
       eventBus.emit('deployLockGained', {
-        id: config.name
+        id: config.name,
+        plan: [
+          'pull',
+          'create',
+          config.deploymentMethod === 'start-before-stop' ? 'start' : 'stop',
+          config.deploymentMethod === 'stop-before-start' ? 'start' : 'stop',
+          'done'
+        ]
       });
     }catch(e){
       throw new Error(config.name+' is already being deployed!');
@@ -73,18 +80,23 @@ module.exports = {
       });
     }
   }),
-  rollback: co.wrap(function*(name, version){
+  rollback: co.wrap(function*(config, version){
     try{
-      yield lockDeployment(name);
+      yield lockDeployment(config.name);
       eventBus.emit('deployLockGained', {
-        id: name
+        id: config.name,
+        plan: [
+          config.deploymentMethod === 'start-before-stop' ? 'start' : 'stop',
+          config.deploymentMethod === 'stop-before-start' ? 'start' : 'stop',
+          'done'
+        ]
       });
     }catch(e){
-      throw new Error(name+' is already being deployed!');
+      throw new Error(config.name+' is already being deployed!');
     }
     
     try{
-      const containers = yield spiritContainers(name);
+      const containers = yield spiritContainers(config.name);
 
       const containersToStop = runningContainers(containers);
 
@@ -95,17 +107,16 @@ module.exports = {
       if(!found) throw new Error('no such version '+version);
 
       const containerToStart = docker.getContainer(found.id);
-      const config = yield spirit(name).config();
 
       if(config.deploymentMethod === 'stop-before-start'){
-        yield stopBeforeStart(containersToStop, containerToStart, name);
+        yield stopBeforeStart(containersToStop, containerToStart, config.name);
       }else{
-        yield startBeforeStop(containerToStart, containersToStop, name);
+        yield startBeforeStop(containerToStart, containersToStop, config.name);
       }
     }finally{
-      yield unlockDeployment(name);
+      yield unlockDeployment(config.name);
       eventBus.emit('deployLockReleased', {
-        id: name
+        id: config.name
       });
     }
   })

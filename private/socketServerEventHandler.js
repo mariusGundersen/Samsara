@@ -14,7 +14,8 @@ module.exports = function(io){
   deploySaga.createOn('deployLockGained', function(data){
     this.data = {
       isDeploying: true,
-      step: 'init'
+      step: 'init',
+      plan: data.plan
     };
     publish(io, this.id, this.data);
   });

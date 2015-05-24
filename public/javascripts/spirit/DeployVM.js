@@ -4,8 +4,8 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
     
     this.isDeploying = ko.observable(model.isDeploying);
     this.step = ko.observable('ready');
-    this.steps = ko.observableArray();
-    
+    this.steps = ko.observableArray([]);
+        
     this.deploy = qvc.createCommand('deploySpirit', {
       name: model.name
     }).canExecute(function(){
@@ -29,6 +29,27 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
         console.log('status', data);
         self.isDeploying(data.isDeploying);
         self.step(data.step);
+        self.steps(data.plan.map(function(name){
+          return {
+            name: name,
+            label: {
+              'pull': 'Pulling',
+              'create': 'Creating',
+              'start': 'Starting',
+              'stop': 'Stopping',
+              'done': 'Done'
+            }[name],
+            isActive: ko.computed(function(){
+              return name != 'done' && self.step() == name;
+            }),
+            isDone: ko.computed(function(){
+              return self.step() == 'done' || data.plan.indexOf(name) < data.plan.indexOf(self.step());
+            }),
+            isPending: ko.computed(function(){
+              return data.plan.indexOf(name) > data.plan.indexOf(self.step());
+            })
+          };
+        }));
       });
     }
   };

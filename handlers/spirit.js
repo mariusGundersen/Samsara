@@ -53,7 +53,8 @@ module.exports = [
   qvc.command('rollbackSpirit', co.wrap(function*(command){
     try{
       console.log('rolling back container');
-      return yield deploy.rollback(command.name, command.version);
+      const config = yield spirit(command.name).config();
+      return yield deploy.rollback(config, command.version);
     }catch(e){
       return {success:false, valid:false, violations: [{fieldName:'', message:e.message}]};
     }
