@@ -28,7 +28,12 @@
       
     </div>
     <div data-bind="ifSelected: step, name: 'pull'">
-      
+      <ul data-bind="foreach: pullStatus">
+        <li>
+          <span data-bind="text: status"></span>&nbsp;
+          <span data-bind="if: progress">(<span data-bind="text: progress"></span>)</span>
+        </li>
+      </ul>
     </div>
     <div data-bind="ifSelected: step, name: 'create'">
       

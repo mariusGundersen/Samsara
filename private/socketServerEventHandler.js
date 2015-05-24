@@ -17,26 +17,28 @@ module.exports = function(io){
       step: 'init',
       plan: data.plan
     };
-    publish(io, this.id, this.data);
+    io.to('spirit/'+this.id+'/deploy').emit('spiritDeployStatus', this.data);
   });
   
   deploySaga.on('deployStatusRequest', function(data){
-    data.socket.emit('status', this.data);
+    data.socket.emit('spiritDeployStatus', this.data);
   });
 
   deploySaga.on('deployProcessStep', function(data){
     this.data.step = data.step;
-    publish(io, this.id, this.data);
+    io.to('spirit/'+this.id+'/deploy').emit('spiritDeployStatus', this.data);
+  });
+  
+  deploySaga.on('deployProcessPullStepProgress', function(data){
+    if(data && 'progress' in data && 'id' in data.progress){
+      io.to('spirit/'+this.id+'/deploy').emit('spiritDeployPullStatus', data.progress);
+    }
   });
   
   deploySaga.on('deployLockReleased', function(data){
     this.data.step = 'done';
     this.data.isDeploying = false;
-    publish(io, this.id, this.data);
+    io.to('spirit/'+this.id+'/deploy').emit('spiritDeployStatus', this.data);
     this.done();
   });
 };
-
-function publish(io, name, data){
-  io.to('spirit/'+name+'/deploy').emit('status', data);
-}

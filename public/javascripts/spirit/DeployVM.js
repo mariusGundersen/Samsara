@@ -12,6 +12,8 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
       return !self.isDeploying();
     });
     
+    this.pullStatus = ko.observableArray([]);
+    
     this.isBusy = ko.pureComputed(function(){
       return self.isDeploying() || self.deploy.isBusy();
     });
@@ -23,13 +25,29 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
         socket.emit('subscribeToDeployStatus', model.name);
       });
     
-      socket.on('status', function(data){
-        console.log('status', data);
+      socket.on('spiritDeployStatus', function(data){
         self.isDeploying(data.isDeploying);
         self.step(data.step);
+        self.pullStatus([]);
         self.steps(data.plan.map(function(step){
           return new Step(step, data.plan, self.step);
         }));
+      });
+    
+      socket.on('spiritDeployPullStatus', function(data){
+        var found = self.pullStatus().filter(function(image){
+          return image.id == data.id
+        })[0];
+        if(found){
+          found.status(data.status);
+          found.progress(data.progress);
+        }else{
+          self.pullStatus.push({
+            id: data.id,
+            status: ko.observable(data.status),
+            progress: ko.observable(data.progress)
+          });
+        }
       });
     }
   };

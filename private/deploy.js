@@ -17,7 +17,7 @@ module.exports = {
         plan: [
           'pull',
           'create',
-          config.deploymentMethod === 'start-before-stop' ? 'start' : 'stop',
+          config.deploymentMethod === 'stop-before-start' ? 'stop' : 'start',
           config.deploymentMethod === 'stop-before-start' ? 'start' : 'stop',
           'done'
         ]
@@ -45,7 +45,13 @@ module.exports = {
       });
 
       logger.write('pulling image\n');
-      yield docker.pull(config.image, logger);
+      yield docker.pull(config.image, function(event){
+        eventBus.emit('deployProcessPullStepProgress', {
+          id: config.name,
+          progress: event
+        });
+        logger.write(JSON.stringify(event)+'\n');
+      });
       logger.write('image pulled\n');
 
       eventBus.emit('deployProcessStep', {
@@ -64,10 +70,10 @@ module.exports = {
       const containersToStop = runningContainers(oldContainers);
 
       if(config.deploymentMethod === 'stop-before-start'){
-        logger.write('start-before-stop\n');
+        logger.write('stop-before-start\n');
         yield stopBeforeStart(containersToStop, containerToStart, config.name);
       }else{
-        logger.write('stop-before-start\n');
+        logger.write('start-before-stop\n');
         yield startBeforeStop(containerToStart, containersToStop, config.name);
       }
 
@@ -86,7 +92,7 @@ module.exports = {
       eventBus.emit('deployLockGained', {
         id: config.name,
         plan: [
-          config.deploymentMethod === 'start-before-stop' ? 'start' : 'stop',
+          config.deploymentMethod === 'stop-before-start' ? 'stop' : 'start',
           config.deploymentMethod === 'stop-before-start' ? 'start' : 'stop',
           'done'
         ]
