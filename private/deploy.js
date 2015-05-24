@@ -25,7 +25,8 @@ module.exports = {
     }catch(e){
       throw new Error(config.name+' is already being deployed!');
     }
-
+    var success = false;
+    
     try{
       console.log('deploying', config.image);
 
@@ -78,11 +79,13 @@ module.exports = {
       }
 
       logger.write(config.name + ' deployed successfully\n');
+      success = true;
     }finally{
       logger && logger.end('done');
       yield unlockDeployment(config.name);
       eventBus.emit('deployLockReleased', {
-        id: config.name
+        id: config.name,
+        success: success
       });
     }
   }),

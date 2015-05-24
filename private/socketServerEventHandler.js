@@ -38,6 +38,7 @@ module.exports = function(io){
   deploySaga.on('deployLockReleased', function(data){
     this.data.step = 'done';
     this.data.isDeploying = false;
+    this.data.success = data.success;
     io.to('spirit/'+this.id+'/deploy').emit('spiritDeployStatus', this.data);
     this.done();
   });

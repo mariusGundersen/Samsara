@@ -5,6 +5,8 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
     this.isDeploying = ko.observable(model.isDeploying);
     this.step = ko.observable('idle');
     this.steps = ko.observableArray([]);
+    this.success = ko.observable(true);
+    this.done = ko.observable(false);
         
     this.deploy = qvc.createCommand('deploySpirit', {
       name: model.name
@@ -29,6 +31,8 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
         self.isDeploying(data.isDeploying);
         self.step(data.step);
         self.pullStatus([]);
+        self.success(data.success);
+        self.done(data.step === 'done');
         self.steps(data.plan.map(function(step){
           return new Step(step, data.plan, self.step);
         }));
