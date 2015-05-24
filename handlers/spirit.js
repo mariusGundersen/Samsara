@@ -45,39 +45,21 @@ module.exports = [
   qvc.command('deploySpirit', co.wrap(function*(command){
     try{
       const config = yield spirit(command.name).config();
-      return yield deploy(config);
+      return yield deploy.deploy(config);
     }catch(error){
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
     }
   })),
   qvc.command('rollbackSpirit', co.wrap(function*(command){
-    console.log('rolling back container');
-    const containers = yield spiritContainers(command.name);
-    
-    const runningContainers = containers.filter(function(container){
-      return container.state === 'running';
-    }).map(function(container){
-      return docker.getContainer(container.id);
-    });
-    
-    const found = containers.filter(function(container){
-      return container.version == command.version;
-    })[0];
-    
-    if(!found) return {success:false, valid:false, violations: [{fieldName:'', message:'no such version '+command.version}]};
-    
-    const container = docker.getContainer(found.id);
-    const config = yield spirit(command.name).config();
-
     try{
-      if(config.deploymentMethod === 'stop-before-start'){
-        yield deploy.stopBeforeStart(runningContainers, container, command.name);
-      }else{
-        yield deploy.startBeforeStop(container, runningContainers, command.name);
-      }
-    }catch(error){
-      return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
+      console.log('rolling back container');
+      return yield deploy.rollback(command.name, command.version);
+    }catch(e){
+      return {success:false, valid:false, violations: [{fieldName:'', message:e.message}]};
     }
+  },{
+    'name': NotEmpty(''),
+    'version': NotEmpty('')
   })),
   qvc.command('stopSpirit', co.wrap(function*(command){
     const containers = yield spiritContainers(command.name);
