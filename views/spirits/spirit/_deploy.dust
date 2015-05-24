@@ -17,7 +17,7 @@
     </button>
   </div>
   <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
-  <div data-bind="visible: step()!='ready'" style="display: none">
+  <div data-bind="visible: step()!='idle'" style="display: none">
     <ol class="step-list" data-bind="foreach: steps">
       <li data-bind="css:{active:isActive, done:isDone}">
         <i class="fa fa-fw" data-bind="css:{'fa-circle-thin': isPending, 'fa-refresh': isActive, 'fa-spin': isActive, 'fa-check':isDone}"></i>&nbsp;
@@ -40,7 +40,9 @@
       
     </div>
     <div data-bind="ifSelected: step, name: 'done'">
-      
+      <p>
+        <a href="{deploy.name}/version/latest">Latest version</a> deployed successfully
+      </p>
     </div>
   </div>
 </section>

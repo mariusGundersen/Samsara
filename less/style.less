@@ -316,7 +316,6 @@ pre.logs{
 }
 
 .box-tabs {
-  
   .box-tab {
     text-decoration: none;
     padding: 0.5em 1em;
@@ -326,6 +325,67 @@ pre.logs{
       color: black;
       background: white;
       font-weight: bold;
+    }
+  }
+}
+
+.step-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  
+  li {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    position: relative;
+    height: 30px;
+    background: #E6E6E6;
+    padding: 5px 0 5px 20px;
+    
+    &:first-child {
+      padding-left: 10px;
+    }
+    &:last-child {
+      padding-right: 10px;
+    }
+    
+    &:not(:last-child):after, &:not(:first-child):before {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-top: 15px inset transparent;
+      border-bottom: 15px inset transparent;
+      border-left-width: 15px;
+      border-left-style: solid;
+    }
+    
+    &:before{
+      left: 2px;
+      border-left-color: white;
+    }
+    &:after{
+      right: -15px;
+      z-index: 1;
+      border-left-color: #E6E6E6;
+    }
+    
+    &.done {
+      background: #9c9;
+      
+      &:after{
+        border-left-color: #9c9;
+      }
+    }
+    
+    &.active {
+      background: #90C0F9;
+      
+      &:after{
+        border-left-color: #90C0F9;
+      }
     }
   }
 }

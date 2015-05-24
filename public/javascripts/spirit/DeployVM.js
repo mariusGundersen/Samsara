@@ -3,18 +3,16 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
     var self = this;
     
     this.isDeploying = ko.observable(model.isDeploying);
-    this.step = ko.observable('ready');
+    this.step = ko.observable('idle');
     this.steps = ko.observableArray([]);
         
     this.deploy = qvc.createCommand('deploySpirit', {
       name: model.name
     }).canExecute(function(){
       return !self.isDeploying();
-    }).success(function(){
-      document.location += '/version/latest';
     });
     
-    this.isBusy = ko.computed(function(){
+    this.isBusy = ko.pureComputed(function(){
       return self.isDeploying() || self.deploy.isBusy();
     });
     
@@ -29,28 +27,50 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
         console.log('status', data);
         self.isDeploying(data.isDeploying);
         self.step(data.step);
-        self.steps(data.plan.map(function(name){
-          return {
-            name: name,
-            label: {
-              'pull': 'Pulling',
-              'create': 'Creating',
-              'start': 'Starting',
-              'stop': 'Stopping',
-              'done': 'Done'
-            }[name],
-            isActive: ko.computed(function(){
-              return name != 'done' && self.step() == name;
-            }),
-            isDone: ko.computed(function(){
-              return self.step() == 'done' || data.plan.indexOf(name) < data.plan.indexOf(self.step());
-            }),
-            isPending: ko.computed(function(){
-              return data.plan.indexOf(name) > data.plan.indexOf(self.step());
-            })
-          };
+        self.steps(data.plan.map(function(step){
+          return new Step(step, data.plan, self.step);
         }));
       });
     }
   };
+  
+  function Step(name, plan, step){
+    var self = this;
+    this.isActive = ko.pureComputed(function(){
+      return name != 'done' && step() == name;
+    });
+    this.isDone = ko.pureComputed(function(){
+      return step() == 'done' || plan.indexOf(name) < plan.indexOf(step());
+    }),
+    this.isPending = ko.pureComputed(function(){
+      return plan.indexOf(name) > plan.indexOf(step());
+    })
+    this.label = ko.pureComputed(function(){
+      if(self.isPending()){
+        return {
+          'pull': 'Pull',
+          'create': 'Create',
+          'start': 'Start',
+          'stop': 'Stopp',
+          'done': 'Done'
+        }[name];
+      }else if(self.isActive()){
+        return {
+          'pull': 'Pulling',
+          'create': 'Creating',
+          'start': 'Starting',
+          'stop': 'Stopping',
+          'done': 'Done'
+        }[name];
+      }else if(self.isDone()){
+        return {
+          'pull': 'Pulled',
+          'create': 'Created',
+          'start': 'Started',
+          'stop': 'Stopped',
+          'done': 'Done'
+        }[name];
+      }
+    });
+  }
 });
