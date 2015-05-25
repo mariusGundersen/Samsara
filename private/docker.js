@@ -5,7 +5,7 @@ const docker = new Docker();
 
 module.exports = {
   listContainers: denodeify(docker.listContainers.bind(docker)),
-  pull: function(repoTag){
+  pull: function(repoTag, progress){
     return new Promise(function(resolve, reject){
       docker.pull(repoTag, function(err, stream){
         if(err) return reject(err);
@@ -14,7 +14,7 @@ module.exports = {
           if(err) return reject(err);
           
           resolve(output);
-        });
+        }, progress);
       });
     });
   },

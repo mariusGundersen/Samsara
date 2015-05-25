@@ -2,9 +2,11 @@
  * Module dependencies.
  */
 
+const socketIO = require('socket.io');
 const app = require('./app');
 const debug = require('debug')('docker-spaceport:server');
 const http = require('http');
+const socketServerEventHandler = require('./private/socketServerEventHandler');
 
 /**
  * Get port from environment and store in Express.
@@ -20,12 +22,24 @@ app.set('port', port);
 const server = http.createServer(app);
 
 /**
+ * Create SocketIo app
+ */
+
+const io = socketIO(server);
+
+/**
  * Listen on provided port, on all network interfaces.
  */
 
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+/**
+ * Hook socket server to the eventBus
+ */
+
+socketServerEventHandler(io);
 
 /**
  * Normalize a port into a number, string, or false.

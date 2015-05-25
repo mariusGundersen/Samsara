@@ -11,10 +11,43 @@
     {^deploy.stopBeforeStart} start a new container before stopping the currently running version {/deploy.stopBeforeStart}
   </p>
   <div class="text-center" style="padding-bottom: 20px">
-    <button class="pure-button pure-button-primary button-xlarge" data-bind="click: deploy, disable: deploy.isBusy">
-    <i class="fa fa-fw fa-cloud-upload" data-bind="spinIcon: deploy.isBusy"></i>&nbsp;
+    <button class="pure-button pure-button-primary button-xlarge" data-bind="click: deploy, disable: isBusy" {?deploy.isDeploying}disabled{/deploy.isDeploying}>
+      <i class="fa fa-fw fa-cloud-upload" data-bind="spinIcon: isBusy"></i>&nbsp;
       Deploy
     </button>
   </div>
   <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
+  <div data-bind="visible: step()!='idle'" style="display: none">
+    <ol class="step-list" data-bind="foreach: steps, css: {'failed': done() && !success()}">
+      <li data-bind="css:{active:isActive, done:isDone}">
+        <i class="fa fa-fw" data-bind="css:{'fa-circle-thin': isPending, 'fa-refresh': isActive, 'fa-spin': isActive, 'fa-check':isDone}"></i>&nbsp;
+        <span data-bind="text: label"></span>
+      </li>
+    </ol>
+    <div data-bind="ifSelected: step, name: 'init'">
+      
+    </div>
+    <div data-bind="ifSelected: step, name: 'pull'">
+      <ul data-bind="foreach: pullStatus">
+        <li>
+          <span data-bind="text: status"></span>&nbsp;
+          <span data-bind="if: progress">(<span data-bind="text: progress"></span>)</span>
+        </li>
+      </ul>
+    </div>
+    <div data-bind="ifSelected: step, name: 'create'">
+      
+    </div>
+    <div data-bind="ifSelected: step, name: 'start'">
+      
+    </div>
+    <div data-bind="ifSelected: step, name: 'stop'">
+      
+    </div>
+    <div data-bind="ifSelected: step, name: 'done'">
+      <p data-bind="if: success">
+        <a href="{deploy.name}/version/latest">Latest version</a> deployed successfully
+      </p>
+    </div>
+  </div>
 </section>
