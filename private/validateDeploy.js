@@ -1,6 +1,5 @@
 const Netmask = require('netmask').Netmask;
 const co = require('co');
-const ipv6 = require('ipv6').v6;
 
 module.exports = co.wrap(function*(config, name, secret, image, ip, callback_url){
     
@@ -25,9 +24,9 @@ module.exports = co.wrap(function*(config, name, secret, image, ip, callback_url
   }
 
   console.log('ip', config.webhook['from-ip'], ip);
-  const address = new ipv6.Address(ip);
-  if(address.isValid()){
-    ip = address.teredo().client4;
+  var ipv6 = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(ip);
+  if(ipv6 && ipv6[1]){
+    ip = ipv6[1];
     console.log("ipv4 address:", ip);
   }
   
