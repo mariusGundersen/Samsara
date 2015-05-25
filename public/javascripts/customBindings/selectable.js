@@ -6,7 +6,7 @@ define(['knockout'], function(ko){
       var value = valueAccessor();
       var name = allBindings.get('name');
       
-      ko.bindingHandlers['if'].init(element, function(){
+      return ko.bindingHandlers['if'].init(element, function(){
         return ko.unwrap(value) === ko.unwrap(name);
       }, allBindings, viewModel, context);
     },
