@@ -2,7 +2,6 @@ const docker = require('./docker');
 const co = require('co');
 const extend = require('extend');
 const samsara = require('samsara-lib');
-const createContainerFromConfig = require('./createContainerFromConfig');
 const fs = require('fs-promise');
 const mkdirp = require('mkdirp-then');
 const eventBus = require('./eventBus');
@@ -38,13 +37,13 @@ module.exports = {
       const latestLife = yield spirit.latestLife;
       const currentLife = yield spirit.currentLife;
 
-      const nextLife = yield getNextLife(latestLife);
+      const nextLife = getNextLife(latestLife);
 
       const logger = yield createLogger(config.name, nextLife);
 
       yield writeConfig(config, nextLife);
 
-      const containerName = yield getNewName(config.name, nextLife);
+      const containerName = getNewName(config.name, nextLife);
 
       eventBus.emit('deployProcessStep', {
         id: config.name,
@@ -67,7 +66,7 @@ module.exports = {
       });
 
       logger.writeln('compiling config');
-      const dockerConfig = yield createContainerFromConfig(containerName, nextLife, config);
+      const dockerConfig = yield samsara().createContainerConfig(containerName, nextLife, config);
       logger.writeln('config compiled');
 
       logger.writeln('creating container');
@@ -213,11 +212,11 @@ function *stopBeforeStart(containerToStop, containerToStart, name){
   }
 }
 
-function *getNewName(name, life){
+function getNewName(name, life){
   return name + '_v' + life;
 }
 
-function *getNextLife(latestLife){
+function getNextLife(latestLife){
   const life = (latestLife || {life:0}).life || 0;
   return life*1 + 1;
 }
