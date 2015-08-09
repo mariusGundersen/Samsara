@@ -6,12 +6,11 @@ const samsara = require('samsara-lib');
 const deploy = require('../private/deploy');
 const docker = require('../private/docker');
 const dockerHub = require('../private/dockerHub');
-const createSpirit = require('../private/createSpirit');
 
 module.exports = [
   qvc.command('newSpirit', function(command){
     console.log("newSpirit", command.name);
-    return createSpirit(command.name, command.image, command.tag);
+    return samsara().createSpirit(command.name, command.image, command.tag);
   }, {
     'name': [
       new NotEmpty('Please specify a name for the new spirit'),
