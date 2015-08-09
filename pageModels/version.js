@@ -1,18 +1,25 @@
 const makePageModel = require('./spirit');
-const spiritContainers = require('../providers/spiritContainers');
+const samsara = require('samsara-lib');
 const co = require('co');
 
 module.exports = co.wrap(function*(title, content, spirit, version){
-  const containers = yield spiritContainers(spirit);
+  const lives = yield samsara().spirit(spirit).lives;
   
-  const found = containers.filter(function(c){
-    return c.version == version;
-  })[0];
-
-  found.selected = true;
+  const menu = yield Promise.all(lives.map(co.wrap(function *(life){
+    //const container = yield life.container;
+    const status = yield life.status;
+    const uptime = '';
+    return {
+      spirit: spirit,
+      version: life.life,
+      selected: life.life == version,
+      uptime: uptime,
+      status: status
+    };
+  })));
 
   return makePageModel(title, {
-    menu: containers,
+    menu: menu,
     content:content
   }, spirit, 'versions');
 });

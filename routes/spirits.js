@@ -1,12 +1,12 @@
 const router = require('express-promise-router')();
-const spirit = require('../providers/spirit');
+const samsara = require('samsara-lib');
 const makePageModel = require('../pageModels/spirits');
 const co = require('co');
 
 router.get('/', co.wrap(function*(req, res, next) {
-  const spirits = yield spirit.list();
-  const configs = yield spirits.map(function(name){
-    return spirit(name).config();
+  const spirits = yield samsara().spirits();
+  const configs = yield spirits.map(function(spirit){
+    return spirit.config;
   });
   const pageModel = yield makePageModel('Spirits', {spirits: configs});
   res.render('spirits/index', pageModel);

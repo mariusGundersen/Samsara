@@ -2,9 +2,8 @@ const qvc = require('qvc');
 const NotEmpty = require('qvc/constraints/NotEmpty');
 const Pattern = require('qvc/constraints/Pattern');
 const co = require('co');
-const spirit = require('../providers/spirit');
+const samsara = require('samsara-lib');
 const deploy = require('../private/deploy');
-const spiritContainers = require('../providers/spiritContainers');
 const docker = require('../private/docker');
 const dockerHub = require('../private/dockerHub');
 const createSpirit = require('../private/createSpirit');
@@ -44,16 +43,17 @@ module.exports = [
   }),
   qvc.command('deploySpirit', co.wrap(function*(command){
     try{
-      const config = yield spirit(command.name).config();
+      const config = yield samsara().spirit(command.name).config;
       return yield deploy.deploy(config);
     }catch(error){
+      console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
     }
   })),
   qvc.command('rollbackSpirit', co.wrap(function*(command){
     try{
       console.log('rolling back container');
-      const config = yield spirit(command.name).config();
+      const config = yield samsara().spirit(command.name).config;
       return yield deploy.rollback(config, command.version);
     }catch(e){
       return {success:false, valid:false, violations: [{fieldName:'', message:e.message}]};
@@ -63,41 +63,43 @@ module.exports = [
     'version': NotEmpty('')
   })),
   qvc.command('stopSpirit', co.wrap(function*(command){
-    const containers = yield spiritContainers(command.name);
+    const currentLife = yield samsara().spirit(command.name).currentLife;
     
-    return yield Promise.all(containers.filter(function(container){
-      return container.state == 'running';
-    }).map(function(container){
-      return docker.getContainer(container.id).stop();
-    }));
+    if(currentLife && (yield currentLife.status) == 'running'){
+      const container = yield currentLife.container;
+      return yield container.stop();
+    }
   })),
   qvc.command('startSpirit', co.wrap(function*(command){
-    const containers = yield spiritContainers(command.name);
-    const container = containers.filter(function(container){
-      return container.state == 'stopped';
-    })[0];
+    const latestLife = yield samsara().spirit(command.name).latestLife;
     
-    return docker.getContainer(container.id).start();
+    if(latestLife && (yield latestLife.status) == 'stopped'){
+      const container = yield latestLife.container;
+      return yield container.start();
+    }
   })),
   qvc.command('restartSpirit', co.wrap(function*(command){
-    const containers = yield spiritContainers(command.name);
-    const container = containers.filter(function(container){
-      return container.state == 'running';
-    })[0];
+    const currentLife = yield samsara().spirit(command.name).currentLife;
     
-    return docker.getContainer(container.id).restart();
+    if(currentLife && (yield currentLife.status) == 'running'){
+      const container = yield currentLife.container;
+      return yield container.restart();
+    }
   })),
-  qvc.query('getListOfSpirits', function(query){
-    return spirit.list();
-  }),
+  qvc.query('getListOfSpirits', co.wrap(function*(query){
+    const spirits = yield samsara().spirits();
+    return spirits.map(spirit => spirit.name);
+  })),
   qvc.query('getVolumes', co.wrap(function*(query){
     try{
-      const containers = yield spiritContainers(query.name);
-      const container = docker.getContainer(containers[0].id);
-      const config = yield container.inspect();
+      console.log(query.name);
+      const currentLife = yield samsara().spirit(query.name).currentLife;
+      const container = yield currentLife.container;
+      const inspect = yield container.inspect();
 
-      return Object.keys(config.Config.Volumes);
+      return Object.keys(inspect.Config.Volumes);
     }catch(e){
+      console.log(e.stack);
       return []
     }
   }))

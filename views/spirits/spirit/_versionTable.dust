@@ -8,13 +8,13 @@
       </tr>
     </thead>
     <tbody>
-      {#containers}
+      {#lives}
         <tr>
-          <td><a href="/spirit/{spirit}/version/{version}" title="{id}">v{version}</a></td>
-          <td>{state}</td>
+          <td><a href="/spirit/{name}/version/{life}">v{life}</a></td>
           <td>{status}</td>
+          <td>{uptime}</td>
         </tr>
-      {/containers}
+      {/lives}
     </tbody>
   </table>
 </div>

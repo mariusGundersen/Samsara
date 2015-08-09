@@ -4,12 +4,12 @@
     <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/spirit/{content.name}/versions">Versions</a></h2>
     <ul>
       {#menu}
-        <li class="container-state-{state} {?selected}selected{/selected}">
+        <li class="container-state-{status} {?selected}selected{/selected}">
           <a href="/spirit/{spirit}/version/{version}">
             <span class="version">
               {version}
             </span>- 
-            {status}
+            {uptime}
           </a>
         </li>
       {/menu}

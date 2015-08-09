@@ -1,9 +1,8 @@
 const docker = require('./docker');
 const co = require('co');
 const extend = require('extend');
+const samsara = require('samsara-lib');
 const createContainerFromConfig = require('./createContainerFromConfig');
-const spirit = require('../providers/spirit');
-const spiritContainers = require('../providers/spiritContainers');
 const fs = require('fs-promise');
 const mkdirp = require('mkdirp-then');
 const eventBus = require('./eventBus');
@@ -34,9 +33,12 @@ module.exports = {
     try{
       console.log('deploying', config.image);
 
-      const oldContainers = yield spiritContainers(config.name);
+      const spirit = samsara().spirit(config.name);
+      
+      const latestLife = yield spirit.latestLife;
+      const currentLife = yield spirit.currentLife;
 
-      const nextLife = yield getNextLife(oldContainers);
+      const nextLife = yield getNextLife(latestLife);
 
       const logger = yield createLogger(config.name, nextLife);
 
@@ -72,14 +74,14 @@ module.exports = {
       const containerToStart = yield docker.createContainer(dockerConfig)
       logger.writeln('container created');
 
-      const containersToStop = runningContainers(oldContainers);
+      const containerToStop = yield getContainerToStop(currentLife);
 
       if(config.deploymentMethod === 'stop-before-start'){
         logger.writeln('stop-before-start');
-        yield stopBeforeStart(containersToStop, containerToStart, config.name);
+        yield stopBeforeStart(containerToStop, containerToStart, config.name);
       }else{
         logger.writeln('start-before-stop');
-        yield startBeforeStop(containerToStart, containersToStop, config.name);
+        yield startBeforeStop(containerToStart, containerToStop, config.name);
       }
 
       if(config.cleanupLimit > 0){
@@ -135,22 +137,22 @@ module.exports = {
     }
     
     try{
-      const containers = yield spiritContainers(config.name);
+      const spirit = samsara().spirit(config.name);
+      
+      const currentLife = yield spirit.currentLife;
+      
+      const containerToStop = yield getContainerToStop(currentLife);
 
-      const containersToStop = runningContainers(containers);
+      const lifeToStart = spirit.life(version);
 
-      const found = containers.filter(function(container){
-        return container.version == version;
-      })[0];
+      if(!lifeToStart) throw new Error('no such version '+version);
 
-      if(!found) throw new Error('no such version '+version);
-
-      const containerToStart = docker.getContainer(found.id);
+      const containerToStart = yield lifeToStart.container;
 
       if(config.deploymentMethod === 'stop-before-start'){
-        yield stopBeforeStart(containersToStop, containerToStart, config.name);
+        yield stopBeforeStart(containerToStop, containerToStart, config.name);
       }else{
-        yield startBeforeStop(containerToStart, containersToStop, config.name);
+        yield startBeforeStop(containerToStart, containerToStop, config.name);
       }
       
       eventBus.emit('deployProcessStep', {
@@ -166,13 +168,13 @@ module.exports = {
   })
 };
 
-function *startBeforeStop(container, runningContainers, name){
+function *startBeforeStop(containerToStart, containerToStop, name){
   eventBus.emit('deployProcessStep', {
     id: name,
     step: 'start'
   });
   
-  yield start(container);
+  yield start(containerToStart);
   
   yield delay(5000);
   
@@ -181,16 +183,16 @@ function *startBeforeStop(container, runningContainers, name){
     step: 'stop'
   });
   
-  yield stop(runningContainers);
+  yield stop(containerToStop);
 }
 
-function *stopBeforeStart(runningContainers, container, name){
+function *stopBeforeStart(containerToStop, containerToStart, name){
   eventBus.emit('deployProcessStep', {
     id: name,
     step: 'stop'
   });
   
-  yield stop(runningContainers);
+  yield stop(containerToStop);
   
   eventBus.emit('deployProcessStep', {
     id: name,
@@ -198,11 +200,11 @@ function *stopBeforeStart(runningContainers, container, name){
   });
   
   try{
-    yield start(container);
+    yield start(containerToStart);
   }catch(e){
-    if(runningContainers && runningContainers.length){
+    if(containerToStop){
       try{
-        yield start(runningContainers[0]);
+        yield start(containerToStop);
       }catch(innerException){
         e.innerException = innerException;
       }
@@ -215,9 +217,9 @@ function *getNewName(name, life){
   return name + '_v' + life;
 }
 
-function *getNextLife(containers){
-  const version = (containers[0] || {version:0}).version || 0;
-  return version+1;
+function *getNextLife(latestLife){
+  const life = (latestLife || {life:0}).life || 0;
+  return life*1 + 1;
 }
 
 function *createLogger(name, life){
@@ -228,12 +230,8 @@ function *createLogger(name, life){
   return stream;
 }
 
-function runningContainers(oldContainers){
-  return oldContainers.filter(function(container){
-    return container.state === 'running';
-  }).map(function(container){
-    return docker.getContainer(container.id);
-  })
+function getContainerToStop(life){
+  return life ? life.container : Promise.resolve(null);
 }
 
 function *cleanupOldContainers(containers, newestLife, logger){
@@ -277,13 +275,12 @@ function *start(container){
   console.log('container started');
 }
 
-function *stop(containers){
-  console.log('stopping old containers', containers.length);
-  yield containers.map(function*(container){
-    console.log('old container found, will be stopped', container.id);
+function *stop(container){
+  if(container){
+    console.log('stopping old container', container.Id);
     yield container.stop();
-    console.log('stopped old container', container.id);
-  });
+    console.log('stopped old container', container.Id);
+  }
 }
 
 function *writeConfig(config, life){

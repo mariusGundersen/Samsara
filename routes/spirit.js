@@ -1,21 +1,20 @@
 const router = require('express-promise-router')();
-const getSpirit = require('../providers/spirit');
-const spiritContainers = require('../providers/spiritContainers');
+const samsara = require('samsara-lib');
 const makePageModel = require('../pageModels/spirit');
 const co = require('co');
 
 router.get('/:name', co.wrap(function*(req, res, next) {
-  const containers = yield spiritContainers(req.params.name);
-  const runningContainers = containers.filter(function(c){ return c.state == 'running'});
-  const state = containers.length == 0 ? 'fresh' : runningContainers.length > 0 ? 'running' : 'stopped';
-  const spirit = getSpirit(req.params.name);
-  const config = yield spirit.config();
-  const isDeploying = yield spirit.isDeploying();
+  const spirit = samsara().spirit(req.params.name);
+  const state = yield spirit.status;
+  const config = yield spirit.config;
+  const isDeploying = yield spirit.isDeploying;
+  const life = ((yield spirit.currentLife) || (yield spirit.latestLife) || {life: '?'}).life;
+  
   const pageModel = yield makePageModel(req.params.name, {
     name: req.params.name,
     url: config.url,
     description: config.description,
-    version: (runningContainers[0] || containers[0] || {version: 0}).version,
+    version: life,
     deploy: {
       name: config.name,
       image: config.image,
@@ -34,7 +33,8 @@ router.get('/:name', co.wrap(function*(req, res, next) {
 }));
 
 router.get('/:name/configure', co.wrap(function*(req, res, next) {
-  const config = yield getSpirit(req.params.name).config();
+  const spirit = samsara().spirit(req.params.name);
+  const config = yield spirit.config;
   const pageModel = yield makePageModel(req.params.name, {
     name: req.params.name,
     config: config
@@ -43,10 +43,19 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
 }));
 
 router.get('/:name/versions', co.wrap(function*(req, res, next) {
-  const containers = yield spiritContainers(req.params.name);
+  const spirit = samsara().spirit(req.params.name);
+  const lives = yield spirit.lives;
+  const list = yield lives.map(co.wrap(function *(life){
+    return {
+      name: life.name,
+      life: life.life,
+      status: yield life.status,
+      uptime: ''
+    };
+  }));
   const pageModel = yield makePageModel(req.params.name, {
     name: req.params.name,
-    containers: containers
+    lives: list
   }, req.params.name, 'versions');
   res.render('spirits/spirit/versions', pageModel);
 }));

@@ -1,5 +1,5 @@
 const co = require('co');
-const spirit = require('./spirit');
+const samsara = require('samsara-lib');
 const allContainers = require('./allContainers');
 
 const name_version = /^(.*?)(_v\d+)?$/;
@@ -7,7 +7,7 @@ const name_version = /^(.*?)(_v\d+)?$/;
 module.exports = {
   list: co.wrap(function*(){
     const containers = yield allContainers();
-    const spirits = yield spirit.list();
+    const spirits = (yield samsara().spirits).map(spirit => spirit.name);
     
     return containers.filter(function(container){
       return !spirits.some(function(spirit){

@@ -1,6 +1,6 @@
 const extend = require('extend');
-const spiritContainers = require('../providers/spiritContainers');
 const co = require('co');
+const samsara = require('samsara-lib');
 
 module.exports = co.wrap(function*(name, life, config){
   const links = yield makeLinks(config.links);
@@ -72,7 +72,9 @@ function makeLinks(links){
     if(typeof(link) == 'string'){
       return link+':'+name;
     }else if('spirit' in link){
-      return getLinkToApp(link.spirit, name);
+      return getCurrentLifeContainerId(link.spirit)
+        .then(id => id +':'+ name)
+        .catch(e => {throw new Error(`Could not link to ${link.spirit}. Theres no running versions of that spirit`)});
     }else if('container' in link){
       return link.container+':'+name;
     }
@@ -82,20 +84,21 @@ function makeLinks(links){
 function makeVolumesFrom(spirits){
   return Promise.all((spirits || [])
   .map(function(spirit){
-    return getLinkToApp(spirit.spirit, spirit.readOnly ? 'ro' : 'rw');
+    return getCurrentLifeContainerId(spirit.spirit)
+      .then(id => id+':'+(spirit.readOnly ? 'ro' : 'rw'))
+      .catch(e => {throw new Error(`Could not get volumes from ${spirit.spirit}. Theres no running versions of that spirit`)});
   }));
 }
 
 function makeLabels(name, life){
-  return {
+  return {  
     'samsara.spirit.name': name,
     'samsara.spirit.life': life.toString()
   };
 }
 
-function getLinkToApp(spirit, name){
-  return spiritContainers(spirit)
-  .then(function(containers){
-    return containers[0].name+':'+name;
-  });
+function getCurrentLifeContainerId(name){
+  return samsara().spirit(name).currentLife
+  .then(life => life.container)
+  .then(container => container.id);
 }
