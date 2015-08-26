@@ -1,7 +1,6 @@
-const Netmask = require('netmask').Netmask;
 const co = require('co');
 
-module.exports = co.wrap(function*(config, name, secret, image, ip, callback_url){
+module.exports = co.wrap(function*(config, name, secret, image, callback_url){
     
   console.log('config', config);
   if(config.name !== name){
@@ -21,17 +20,6 @@ module.exports = co.wrap(function*(config, name, secret, image, ip, callback_url
   console.log('image', config.image, image);
   if(config.image !== image){
     throw 'wrong image';
-  }
-
-  console.log('ip', config.webhook['from-ip'], ip);
-  var ipv6 = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/.exec(ip);
-  if(ipv6 && ipv6[1]){
-    ip = ipv6[1];
-    console.log("ipv4 address:", ip);
-  }
-  
-  if(ip !== '127.0.0.1' && new Netmask(config.webhook['from-ip']).contains(ip) == false){
-    throw 'wrong ip';
   }
 
   console.log('callback_url', callback_url);

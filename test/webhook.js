@@ -1,7 +1,7 @@
-const request = require('request');
-const http = require('http');
+var request = require('request');
+var http = require('http');
 
-const server = http.createServer(function(req, res){
+var server = http.createServer(function(req, res){
   console.log('callback');
   res.end();
   server.close();

@@ -13,8 +13,7 @@ module.exports = co.wrap(function *(name, image, tag){
     url: '',
     webhook: {
       enable: false,
-      secret: '',
-      'from-ip': '162.242.195.64/26'
+      secret: ''
     },
     raw: {},
     env: {},

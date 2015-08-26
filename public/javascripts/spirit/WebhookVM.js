@@ -2,7 +2,6 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
   return function WebhookVM(model, when){
     var self = this;
     
-    this.fromIp = ko.observable(model.webhook['from-ip']);
     this.secret = ko.observable(model.webhook['secret']);
     
     this.state = ko.observable(model.webhook['enable'] ? 'enabled' : 'disabled');
@@ -38,16 +37,13 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     
     this.cancel = function(){
       self.state('enabled');
-      self.fromIp(model.webhook['from-ip']);
       self.secret(model.webhook['secret']);
     };
     
     this.save = qvc.createCommand('saveWebhook', {
       name: model.name,
-      fromIp: this.fromIp,
       secret: this.secret,
     }).success(function(){
-      model.webhook['from-ip'] = self.fromIp();
       model.webhook['secret'] = self.secret();
       self.state('enabled');
     });

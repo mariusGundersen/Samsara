@@ -43,7 +43,6 @@ module.exports = [
   qvc.command('saveWebhook', function(command){
     return mutateSpiritConfig(command.name, function(config){
       config.webhook['secret'] = command.secret;
-      config.webhook['from-ip'] = command.fromIp;
     });
   }),
   qvc.command('addEnvVar', function(command){

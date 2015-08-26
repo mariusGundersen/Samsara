@@ -13,10 +13,9 @@ router.post('/:name/:secret', co.wrap(function*(req, res, next){
   try{
     yield validateDeploy(
       config,
-      req.params.name, 
-      req.params.secret, 
-      req.body.repository && req.body.repository.repo_name, 
-      req.headers['x-real-ip'] || req.connection.remoteAddress, 
+      req.params.name,
+      req.params.secret,
+      req.body.repository && req.body.repository.repo_name,
       req.body.callback_url);
   }catch(error){
     console.log('validation failed for', req.params.name, error);
