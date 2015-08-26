@@ -80,8 +80,14 @@ module.exports = {
 
       logger.write(config.name + ' deployed successfully\n');
       success = true;
+    }catch(e){
+      if(logger){
+        logger.write('Failed to deploy!\n');
+        logger.write(e && e.message || e);
+      }
+      throw e;
     }finally{
-      logger && logger.end('done');
+      logger && logger.end('Done');
       yield unlockDeployment(config.name);
       eventBus.emit('deployLockReleased', {
         id: config.name,
