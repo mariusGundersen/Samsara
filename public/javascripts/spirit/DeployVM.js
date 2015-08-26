@@ -44,17 +44,25 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
         })[0];
         if(found){
           found.status(data.status);
-          found.progress(data.progress);
+          found.progress(prettyProgress(data.progressDetail));
         }else{
           self.pullStatus.push({
             id: data.id,
             status: ko.observable(data.status),
-            progress: ko.observable(data.progress)
+            progress: ko.observable(prettyProgress(data.progressDetail))
           });
         }
       });
     }
   };
+  
+  function prettyProgress(progress){
+    if(progress != null && typeof(progress) == 'object' && 'current' in progress && 'total' in progress){
+      return (progress.current/progress.total*100).toFixed(0)+'% of '+(progress.total/1024/1024).toFixed(2) + 'MiB'
+    }
+    
+    return null;
+  }
   
   function Step(name, plan, step){
     var self = this;
