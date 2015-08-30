@@ -17,7 +17,6 @@ define(function(){
       var notification = new Notification(title, {
       
       });
-      setTimeout(notification.close.bind(notification), 5000);
     }
   };
 });

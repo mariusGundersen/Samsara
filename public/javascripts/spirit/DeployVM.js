@@ -31,8 +31,8 @@ define([
       return self.isDeploying() || self.deploy.isBusy();
     });
     
-    this.done.subscribe(function(done){
-      if(done){
+    this.isDeploying.subscribe(function(deploying){
+      if(!deploying){
         var message = self.success() ? "Deployed "+model.name : "Failed to deploy "+model.name; 
         notifications.notify(message);
       }
@@ -46,10 +46,10 @@ define([
       });
     
       socket.on('spiritDeployStatus', function(data){
+        self.success(data.success);
         self.isDeploying(data.isDeploying);
         self.step(data.step);
         self.pullStatus([]);
-        self.success(data.success);
         self.done(data.step === 'done');
         self.steps(data.plan.map(function(step){
           return new Step(step);
