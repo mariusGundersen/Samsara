@@ -1,4 +1,13 @@
-define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
+define([
+  'services/notifications',
+  'knockout', 
+  'deco/qvc', 
+  'io'
+], function(
+  notifications,
+  ko, 
+  qvc, 
+  io){
   return function DeployVM(model, when){
     var self = this;
     
@@ -19,6 +28,13 @@ define(['knockout', 'deco/qvc', 'io'], function(ko, qvc, io){
     this.isBusy = ko.pureComputed(function(){
       return self.isDeploying() || self.deploy.isBusy();
     });
+    
+    this.done.subscribe(function(done){
+      if(done){
+        var message = self.success() ? "Deployed "+model.name : "Failed to deploy "+model.name; 
+        notifications.notify(message);
+      }
+    })
     
     init:{
       var socket = io.connect();
