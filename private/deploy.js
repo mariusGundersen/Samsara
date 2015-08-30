@@ -78,6 +78,10 @@ module.exports = {
         yield startBeforeStop(containerToStart, containersToStop, config.name);
       }
 
+      eventBus.emit('deployProcessStep', {
+        id: config.name,
+        step: 'done'
+      });
       logger.write(config.name + ' deployed successfully\n');
       success = true;
     }catch(e){
@@ -85,6 +89,10 @@ module.exports = {
         logger.write('Failed to deploy!\n');
         logger.write(e && e.message || e);
       }
+      eventBus.emit('deployFailed', {
+        id: config.name,
+        error: e && e.message || e
+      });
       throw e;
     }finally{
       logger && logger.end('Done');
@@ -128,6 +136,11 @@ module.exports = {
       }else{
         yield startBeforeStop(containerToStart, containersToStop, config.name);
       }
+      
+      eventBus.emit('deployProcessStep', {
+        id: config.name,
+        step: 'done'
+      });
     }finally{
       yield unlockDeployment(config.name);
       eventBus.emit('deployLockReleased', {

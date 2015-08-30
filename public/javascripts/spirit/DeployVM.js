@@ -7,7 +7,9 @@ define([
   notifications,
   ko, 
   qvc, 
-  io){
+  io
+){
+  
   return function DeployVM(model, when){
     var self = this;
     
@@ -36,7 +38,7 @@ define([
       }
     })
     
-    init:{
+    init: {
       var socket = io.connect();
     
       socket.on('connect', function(){
@@ -50,7 +52,7 @@ define([
         self.success(data.success);
         self.done(data.step === 'done');
         self.steps(data.plan.map(function(step){
-          return new Step(step, data.plan, self.step);
+          return new Step(step);
         }));
       });
     
@@ -80,43 +82,11 @@ define([
     return null;
   }
   
-  function Step(name, plan, step){
-    var self = this;
-    this.isActive = ko.pureComputed(function(){
-      return name != 'done' && step() == name;
-    });
-    this.isDone = ko.pureComputed(function(){
-      return step() == 'done' || plan.indexOf(name) < plan.indexOf(step());
-    }),
-    this.isPending = ko.pureComputed(function(){
-      return plan.indexOf(name) > plan.indexOf(step());
-    })
-    this.label = ko.pureComputed(function(){
-      if(self.isPending()){
-        return {
-          'pull': 'Pull',
-          'create': 'Create',
-          'start': 'Start',
-          'stop': 'Stopp',
-          'done': 'Done'
-        }[name];
-      }else if(self.isActive()){
-        return {
-          'pull': 'Pulling',
-          'create': 'Creating',
-          'start': 'Starting',
-          'stop': 'Stopping',
-          'done': 'Done'
-        }[name];
-      }else if(self.isDone()){
-        return {
-          'pull': 'Pulled',
-          'create': 'Created',
-          'start': 'Started',
-          'stop': 'Stopped',
-          'done': 'Done'
-        }[name];
-      }
-    });
+  function Step(step){
+    this.isActive = step.state == 'active';
+    this.isDone = step.state == 'done';
+    this.isPending = step.state == 'pending';
+    this.isFail = step.state == 'failed';
+    this.label = step.label;
   }
 });
