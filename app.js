@@ -4,7 +4,6 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const qvc = require('qvc');
 
 const dust = require('dustjs-linkedin');
 const cons = require('consolidate');
@@ -35,30 +34,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/deploy', require('./routes/deploy'));
 
+app.use(require('./routeAnonymous'));
 app.use(auth.connect(basic));
-app.use(express.static(path.join(__dirname, 'public'),{
-  etag: false,
-  maxage: app.get('env') === 'development' ? 0 : 60*60*24
-}));
+app.use(require('./routeAuthenticated'));
 
-app.use('/qvc', qvc(
-  require('./handlers/container'),
-  require('./handlers/spirit'),
-  require('./handlers/spiritConfig'),
-  require('./handlers/settings'),
-  {
-    debug: true
-  }
-));
 
-app.use('/container(s?)/', require('./routes/container'));
-app.use('/spirit(s?)/', require('./routes/spirits'));
-app.use('/spirit(s?)/', require('./routes/spirit'));
-app.use('/spirit(s?)/', require('./routes/version'));
-app.use('/setting(s?)/', require('./routes/settings'));
-app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
