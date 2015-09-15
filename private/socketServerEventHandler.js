@@ -87,6 +87,7 @@ function stepLabel(step, state){
     'create': ['Create', 'Creating', 'Created'],
     'start': ['Start', 'Starting', 'Started'],
     'stop': ['Stopp', 'Stopping', 'Stopped'],
+    'cleanup': ['Cleanup', 'Cleaning', 'Cleaned'],
     'done': ['Done', 'Done', 'Done'],
   }[step][['pending', 'active', 'done'].indexOf(state)];
 }

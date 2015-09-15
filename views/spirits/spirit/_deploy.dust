@@ -19,9 +19,11 @@
   <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
   <div data-bind="visible: step()!='idle'" style="display: none">
     <ol class="step-list" data-bind="foreach: steps, css: {'failed': done() && !success()}">
-      <li data-bind="css:{active:isActive, done:isDone, fail:isFail}">
-        <i class="fa fa-fw" data-bind="css:{'fa-circle-thin': isPending, 'fa-refresh': isActive, 'fa-spin': isActive, 'fa-check': isDone, 'fa-close': isFail}"></i>&nbsp;
-        <span data-bind="text: label"></span>
+      <li class="step-list-item" data-bind="css:{active:isActive, done:isDone, fail:isFail}">
+        <span>
+          <i class="fa fa-fw" data-bind="css:{'fa-circle-thin': isPending, 'fa-refresh': isActive, 'fa-spin': isActive, 'fa-check': isDone, 'fa-close': isFail}"></i>&nbsp;
+          <span data-bind="text: label"></span>
+        </span>
       </li>
     </ol>
     <div data-bind="ifSelected: step, name: 'init'">
