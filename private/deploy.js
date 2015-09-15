@@ -10,17 +10,21 @@ const eventBus = require('./eventBus');
 
 module.exports = {
   deploy: co.wrap(function*(config){
+    const plan = [
+      'pull',
+      'create',
+      config.deploymentMethod === 'stop-before-start' ? 'stop' : 'start',
+      config.deploymentMethod === 'stop-before-start' ? 'start' : 'stop',
+      'cleanup',
+      'done'
+    ].filter(step => config.cleanupLimit > 0 || step != 'cleanup');
+    
+    
     try{
       yield lockDeployment(config.name);
       eventBus.emit('deployLockGained', {
         id: config.name,
-        plan: [
-          'pull',
-          'create',
-          config.deploymentMethod === 'stop-before-start' ? 'stop' : 'start',
-          config.deploymentMethod === 'stop-before-start' ? 'start' : 'stop',
-          'done'
-        ]
+        plan: plan
       });
     }catch(e){
       throw new Error(config.name+' is already being deployed!');
@@ -45,49 +49,61 @@ module.exports = {
         step: 'pull'
       });
 
-      logger.write('pulling image\n');
+      logger.writeln('pulling image');
       yield docker.pull(config.image, function(event){
         eventBus.emit('deployProcessPullStepProgress', {
           id: config.name,
           progress: event
         });
-        logger.write(JSON.stringify(event)+'\n');
+        logger.writeln(JSON.stringify(event)+'');
       });
-      logger.write('image pulled\n');
+      logger.writeln('image pulled');
 
       eventBus.emit('deployProcessStep', {
         id: config.name,
         step: 'create'
       });
 
-      logger.write('compiling config\n');
+      logger.writeln('compiling config');
       const dockerConfig = yield createContainerFromConfig(containerName, nextLife, config);
-      logger.write('config compiled\n');
+      logger.writeln('config compiled');
 
-      logger.write('creating container\n');
+      logger.writeln('creating container');
       const containerToStart = yield docker.createContainer(dockerConfig)
-      logger.write('container created\n');
+      logger.writeln('container created');
 
       const containersToStop = runningContainers(oldContainers);
 
       if(config.deploymentMethod === 'stop-before-start'){
-        logger.write('stop-before-start\n');
+        logger.writeln('stop-before-start');
         yield stopBeforeStart(containersToStop, containerToStart, config.name);
       }else{
-        logger.write('start-before-stop\n');
+        logger.writeln('start-before-stop');
         yield startBeforeStop(containerToStart, containersToStop, config.name);
+      }
+
+      if(config.cleanupLimit != null){
+        eventBus.emit('deployProcessStep', {
+          id: config.name,
+          step: 'cleanup'
+        });
+
+        logger.writeln('cleaning up old containers and images');
+        yield cleanupOldContainers(oldContainers, nextLife - config.cleanupLimit, logger);
+        logger.writeln('cleanup completed');
       }
 
       eventBus.emit('deployProcessStep', {
         id: config.name,
         step: 'done'
       });
-      logger.write(config.name + ' deployed successfully\n');
+      
+      logger.writeln(config.name + ' deployed successfully');
       success = true;
     }catch(e){
       if(logger){
-        logger.write('Failed to deploy!\n');
-        logger.write(e && e.message || e);
+        logger.writeln('Failed to deploy!');
+        logger.writeln(e && e.message || e);
       }
       eventBus.emit('deployFailed', {
         id: config.name,
@@ -207,7 +223,9 @@ function *getNextLife(containers){
 function *createLogger(name, life){
   const path = 'config/spirits/'+name+'/lives/'+life;
   yield mkdirp(path);
-  return fs.createWriteStream(path+'/deploy.log');
+  const stream = fs.createWriteStream(path+'/deploy.log');
+  stream.writeln = ln => stream.write(ln+'\n');
+  return stream;
 }
 
 function runningContainers(oldContainers){
@@ -216,6 +234,25 @@ function runningContainers(oldContainers){
   }).map(function(container){
     return docker.getContainer(container.id);
   })
+}
+
+function cleanupOldContainers(containers, newestLife, logger){
+  return Promise.all(containers
+  .filter(container => container.version < newestLife)
+  .map(container => container.id)
+  .map(co.wrap(function*(containerId){
+    try{
+      const container = docker.getContainer(containerId);
+      const imageId = (yield container.inspect()).Image;
+      const image = docker.getImage(imageId);
+      logger.writeln('removing container '+containerId);
+      yield container.remove({v: true});
+      logger.writeln('removing image '+imageId);
+      yield image.remove();
+    }catch(e){
+      logger.writeln(e && e.message || e);
+    }
+  })));
 }
 
 function *start(container){

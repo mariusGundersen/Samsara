@@ -100,3 +100,12 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+process.on('SIGTERM', function(){
+  console.log("ctrl c");
+  process.exit(1);
+});
+process.on('SIGINT', function(){
+  console.log("ctrl c");
+  process.exit(1);
+});
