@@ -4,6 +4,7 @@ MAINTAINER Marius Gundersen <me@mariusgundersen.net>
 # Install Bower & Gulp 
 RUN npm install -g bower gulp
 
+RUN mkdir -p /app
 # Set instructions on build. 
 ONBUILD COPY package.json /app/
 ONBUILD RUN npm install
