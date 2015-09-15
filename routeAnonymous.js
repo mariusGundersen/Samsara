@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 
 router.use('/deploy', require('./routes/deploy'));
+router.use('/login', require('./routes/login'));
 router.use(express.static(path.join(__dirname, 'public'), {
   etag: false,
   maxage: process.env.NODE_ENV === 'development' ? 0 : 60*60*24
