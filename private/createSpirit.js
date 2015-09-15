@@ -9,6 +9,7 @@ module.exports = co.wrap(function *(name, image, tag){
     image: image,
     tag: tag,
     deploymentMethod: 'start-before-stop',
+    cleanupLimit: 10,
     description: '',
     url: '',
     webhook: {

@@ -82,7 +82,7 @@ module.exports = {
         yield startBeforeStop(containerToStart, containersToStop, config.name);
       }
 
-      if(config.cleanupLimit != null){
+      if(config.cleanupLimit > 0){
         eventBus.emit('deployProcessStep', {
           id: config.name,
           step: 'cleanup'
@@ -236,23 +236,39 @@ function runningContainers(oldContainers){
   })
 }
 
-function cleanupOldContainers(containers, newestLife, logger){
-  return Promise.all(containers
+function *cleanupOldContainers(containers, newestLife, logger){
+  const containerIds = containers
   .filter(container => container.version < newestLife)
-  .map(container => container.id)
+  .map(container => container.id);
+  
+  logger.writeln(`removing ${containerIds.length} old containers`);
+  
+  const imageIds = yield Promise.all(containerIds
   .map(co.wrap(function*(containerId){
     try{
       const container = docker.getContainer(containerId);
       const imageId = (yield container.inspect()).Image;
-      const image = docker.getImage(imageId);
       logger.writeln('removing container '+containerId);
       yield container.remove({v: true});
+      return imageId;
+    }catch(e){
+      logger.writeln(e && e.message || e);
+    }
+  })));
+  
+  const distinctImageIds = imageIds.filter(distinct);
+  
+  logger.writeln(`removing ${distinctImageIds.length} old images`);
+  
+  return distinctImageIds.map(co.wrap(function *(imageId){
+    try{
+      const image = docker.getImage(imageId);
       logger.writeln('removing image '+imageId);
       yield image.remove();
     }catch(e){
       logger.writeln(e && e.message || e);
     }
-  })));
+  }));
 }
 
 function *start(container){
@@ -291,4 +307,8 @@ function delay(ms){
   return new Promise(function(resolve){
     setTimeout(resolve, ms);
   });
+}
+
+function distinct(value, index, collection){
+  return collection.indexOf(value) === index;
 }

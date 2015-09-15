@@ -30,6 +30,15 @@ module.exports = [
       config.deploymentMethod = command.value;
     });
   }),
+  qvc.command('setSpiritCleanupLimit', function(command){
+    if(command.value >= 0){
+      return mutateSpiritConfig(command.name, function(config){
+        config.cleanupLimit = command.value|0;
+      });
+    }else{
+      return {success:false, valid:false, violations: [{fieldName:'value', message:'Value must be positive'}]};
+    }
+  }),
   qvc.command('enableWebhook', function(command){
     return mutateSpiritConfig(command.name, function(config){
       config.webhook.enable = true;
