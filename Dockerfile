@@ -5,6 +5,8 @@ MAINTAINER Marius Gundersen <me@mariusgundersen.net>
 RUN npm install -g bower gulp
 
 RUN mkdir -p /app
+# Define working directory. 
+WORKDIR /app
 # Set instructions on build. 
 COPY package.json /app/
 RUN npm install
@@ -12,9 +14,6 @@ COPY bower.json .bowerrc /app/
 RUN bower install --allow-root
 COPY . /app
 RUN gulp build
-
-# Define working directory. 
-WORKDIR /app
 
 # Set environment 
 ENV PORT 8080 
