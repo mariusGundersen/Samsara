@@ -6,12 +6,12 @@ RUN npm install -g bower gulp
 
 RUN mkdir -p /app
 # Set instructions on build. 
-ONBUILD COPY package.json /app/
-ONBUILD RUN npm install
-ONBUILD COPY bower.json .bowerrc /app/
-ONBUILD RUN bower install --allow-root
-ONBUILD COPY . /app
-ONBUILD RUN gulp build
+COPY package.json /app/
+RUN npm install
+COPY bower.json .bowerrc /app/
+RUN bower install --allow-root
+COPY . /app
+RUN gulp build
 
 # Define working directory. 
 WORKDIR /app
