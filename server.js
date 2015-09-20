@@ -102,10 +102,12 @@ function onListening() {
 }
 
 process.on('SIGTERM', function(){
-  console.log("ctrl c");
+  console.log("SIGTERM");
+  server.close();
   process.exit(1);
 });
 process.on('SIGINT', function(){
-  console.log("ctrl c");
+  console.log("SIGINT");
+  server.close();
   process.exit(1);
 });
