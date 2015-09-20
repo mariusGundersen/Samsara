@@ -1,0 +1,26 @@
+{>layout/}
+{<content}
+  <div class="pane content">
+    <h2 class="dragger">Samsara</h2>
+    
+  <div class="grid-container">
+    <section class="box">
+      <form class="pure-form pure-form-stacked box-form" action="/login" method="post">
+      <span class="validation-error-message">{message}</span>
+        <label class="small-label">Username</label>
+        <input type="text" name="username" id="username" autofocus/>
+
+        <label class="small-label">Password</label>
+        <input type="password" name="password" id="password">
+
+        <div class="button-group">
+          <button type="submit" class="pure-button button-success">
+            <i class="fa fa-fw fa-check"></i>&nbsp;
+            Log in
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+  </div>
+{/content}

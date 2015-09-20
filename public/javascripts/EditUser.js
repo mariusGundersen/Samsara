@@ -17,7 +17,6 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     }).success(function(){
       self.password('');
       self.state('show');
-      alert("Remember to restart Samsara for the password change to take place!");
     });
     
     this.cancel = function(){
