@@ -29,7 +29,7 @@ router.get('/:name/version/:version', co.wrap(function*(req, res, next){
     config: JSON.stringify(config, null, '  '),
     log: container.logs,
     deploy: deployLogs,
-    stopped: status == 'stopped',
+    canReincarnate: status == 'stopped' && container.exists,
     model: {
       name: req.params.name,
       version: req.params.version
@@ -58,11 +58,13 @@ function *tryGetContainer(life){
     return {
       inspect: JSON.stringify(inspect, null, '  '),
       logs: prettyLogs,
+      exists: true
     };
   }catch(e){
     return {
       inspect: '',
-      logs: ''
+      logs: '',
+      exists: false
     };
   }
 }

@@ -4,7 +4,7 @@
   <h2 class="dragger">{name} v{version}</h2>
   <div class="grid-container" data-viewmodel="spirit/VersionVM" data-model="{model|js}">
     
-    {?stopped}
+    {?canReincarnate}
       <div class="box">
         <h3>Rollback</h3>
         <div class="text-center" style="padding: 1em">
@@ -16,7 +16,7 @@
           <span class="validation-error-message text-center" data-bind="validationMessageFor: rollback"></span>
         </div>
       </div>
-    {/stopped}
+    {/canReincarnate}
     
     <div class="box box-large">
       <div class="box-header box-tabs">
