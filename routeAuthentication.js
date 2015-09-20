@@ -41,4 +41,14 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-module.exports = passport;
+module.exports = {
+  initialize(){
+    return passport.initialize();
+  },
+  session(){
+    return passport.session();
+  },
+  login(type, config){
+    return passport.authenticate(type, config);
+  }
+};
