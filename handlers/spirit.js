@@ -80,7 +80,7 @@ module.exports = [
   qvc.command('restartSpirit', co.wrap(function*(command){
     const currentLife = yield samsara().spirit(command.name).currentLife;
     
-    if(currentLife && (yield currentLife.status) == 'running'){
+    if(currentLife){
       const container = yield currentLife.container;
       return yield container.restart();
     }
@@ -91,8 +91,8 @@ module.exports = [
   })),
   qvc.query('getVolumes', co.wrap(function*(query){
     try{
-      console.log(query.name);
       const currentLife = yield samsara().spirit(query.name).currentLife;
+      if(currentLife == null) return [];
       const container = yield currentLife.container;
       const inspect = yield container.inspect();
 
