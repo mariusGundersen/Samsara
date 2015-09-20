@@ -8,7 +8,8 @@ router.get('/:name', co.wrap(function*(req, res, next) {
   const state = yield spirit.status;
   const config = yield spirit.config;
   const isDeploying = yield spirit.isDeploying;
-  const life = ((yield spirit.currentLife) || (yield spirit.latestLife) || {life: '?'}).life;
+  const currentLife = yield spirit.currentLife;
+  const life = (currentLife || (yield spirit.latestLife) || {life: '?'}).life;
   
   const pageModel = yield makePageModel(req.params.name, {
     name: req.params.name,
@@ -24,9 +25,9 @@ router.get('/:name', co.wrap(function*(req, res, next) {
     },
     controls: {
       name: req.params.name,
-      state: state,
-      running: state === 'running',
-      stopped: state == 'stopped'
+      canStop: state === 'running',
+      canStart: state == 'stopped' && currentLife && (yield currentLife.container),
+      canRestart: state == 'running'
     }
   }, req.params.name, 'status');
   res.render('spirits/spirit/status', pageModel);
