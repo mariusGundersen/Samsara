@@ -18,4 +18,9 @@ router.use('/spirit(s?)/', require('./routes/version'));
 router.use('/setting(s?)/', require('./routes/settings'));
 router.use('/', require('./routes/index'));
 
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
 module.exports = router;
