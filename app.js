@@ -8,54 +8,11 @@ const session = require('express-session');
 
 const dust = require('dustjs-linkedin');
 const cons = require('consolidate');
+const passport = require('./routeAuthentication');
 
-const auth = require('http-auth');
 const mkdirp = require('mkdirp');
 
 mkdirp.sync(__dirname+'/config/spirits');
-
-const basic = auth.basic({
-    realm: "Samsara",
-    file: __dirname+"/config/authentication"
-});
-
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const htpasswd = require('htpasswd');
-const fs = require('fs');
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    const lines = fs.readFileSync(__dirname +'/config/authentication', 'UTF-8').replace(/\r\n/g, "\n").split("\n");
-    const accounts = lines.filter(line => line).map(line => {
-      const split = line.split(':');
-      return {
-        user: split.shift(),
-        hash: split.join(':')
-      };
-    });
-    
-    const found = accounts.filter(account => account.user === username)[0];
-    console.log(found);
-    
-    if (!found) {
-      return done(null, false, { message: 'Incorrect username.' });
-    }
-    if (!htpasswd.verify(found.hash, password)) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-    console.log("done");
-    return done(null, found.user);
-  }
-));
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
 
 const app = express();
 app.enable('trust proxy');
@@ -73,7 +30,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  secret: 'keyboard cat',
+  secret: process.env['SESSION_SECRET'] || 'keyboard cat',
   resave: false,
   saveUninitialized: true
 }));
@@ -82,14 +39,11 @@ app.use(passport.session());
 
 
 app.use(require('./routeAnonymous'));
-//app.use(auth.connect(basic));
 app.use((req, res, next) => {
   if (req.isAuthenticated())
     return next();
   res.redirect('/login');
 }, require('./routeAuthenticated'));
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
