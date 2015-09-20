@@ -50,7 +50,7 @@ module.exports = {
       });
 
       logger.writeln('pulling image');
-      yield docker.pull(config.image, function(event){
+      yield docker.pull(config.image+':'+config.tag, function(event){
         eventBus.emit('deployProcessPullStepProgress', {
           id: config.name,
           progress: event
