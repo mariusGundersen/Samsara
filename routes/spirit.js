@@ -45,7 +45,7 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
 router.get('/:name/versions', co.wrap(function*(req, res, next) {
   const spirit = samsara().spirit(req.params.name);
   const lives = yield spirit.lives;
-  const list = yield lives.map(co.wrap(function *(life){
+  const list = yield lives.reverse().map(co.wrap(function *(life){
     return {
       name: life.name,
       life: life.life,
