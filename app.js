@@ -21,7 +21,6 @@ app.enable('trust proxy');
 app.engine('dust', cons.dust);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'dust');
-app.set('template_engine', 'dust');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -37,7 +36,6 @@ app.use(session({
 app.use(authentication.initialize());
 app.use(authentication.session());
 
-
 app.use(require('./routeAnonymous'));
 app.use(authentication.restrict, require('./routeAuthenticated'));
 
@@ -48,26 +46,7 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-          title: 'Error',
-          menu:{settings:false},
-          content: {
-            message: err.message,
-            error: err
-          }
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
+// error handler
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -75,7 +54,7 @@ app.use(function(err, req, res, next) {
       mentu:{settings:false},
       content: {
         message: err.message,
-        error: {}
+        error: app.get('env') === 'development' ? err : {}
       }
     });
 });
