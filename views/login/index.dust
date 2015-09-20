@@ -6,6 +6,7 @@
   <div class="grid-container">
     <section class="box">
       <form class="pure-form pure-form-stacked box-form" action="/login" method="post">
+      <span class="validation-error-message">{message}</span>
         <label class="small-label">Username</label>
         <input type="text" name="username" id="username" autofocus/>
 

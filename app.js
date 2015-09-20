@@ -5,10 +5,11 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const dust = require('dustjs-linkedin');
 const cons = require('consolidate');
-const passport = require('./routeAuthentication');
+const authentication = require('./routeAuthentication');
 
 const mkdirp = require('mkdirp');
 
@@ -25,6 +26,7 @@ app.set('template_engine', 'dust');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(flash());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,8 +36,8 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(authentication.initialize());
+app.use(authentication.session());
 
 
 app.use(require('./routeAnonymous'));
