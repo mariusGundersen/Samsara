@@ -48,7 +48,19 @@ module.exports = {
   session(){
     return passport.session();
   },
-  login(type, config){
-    return passport.authenticate(type, config);
+  login(){
+    return passport.authenticate('local', {
+      failureRedirect: '/login',
+      failureFlash: true
+    });
+  },
+  redirectAfterLogin(defaultPath){
+    return (req, res) => res.redirect(req.session.returnTo || defaultPath || '/')
+  },
+  restrict(req, res, next){
+    if (req.isAuthenticated())
+      return next();
+    req.session.returnTo = req.path;
+    res.redirect('/login');
   }
 };
