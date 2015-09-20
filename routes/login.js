@@ -6,10 +6,8 @@ router.get('/', co.wrap(function*(req, res, next) {
   return res.render('login/index', {title:'Login', content:{message:req.flash('error')}, menu:null});
 }));
 
-router.post('/', authentication.login('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true
-}));
+router.post('/',
+  authentication.login(),
+  authentication.redirectAfterLogin('/'));
 
 module.exports = router;

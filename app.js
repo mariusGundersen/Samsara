@@ -39,11 +39,7 @@ app.use(authentication.session());
 
 
 app.use(require('./routeAnonymous'));
-app.use((req, res, next) => {
-  if (req.isAuthenticated())
-    return next();
-  res.redirect('/login');
-}, require('./routeAuthenticated'));
+app.use(authentication.restrict, require('./routeAuthenticated'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -83,6 +79,5 @@ app.use(function(err, req, res, next) {
       }
     });
 });
-
 
 module.exports = app;
