@@ -8,7 +8,8 @@ router.use('/login', require('./routes/login'));
 
 router.use(express.static(path.join(__dirname, 'public'), {
   etag: false,
-  maxage: process.env.NODE_ENV === 'development' ? 0 : 60*60*24
+  lastModified: false,
+  maxAge: process.env.NODE_ENV === 'development' ? 0 : '1d'
 }));
 
 module.exports = router;
