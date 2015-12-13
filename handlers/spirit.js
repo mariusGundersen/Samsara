@@ -42,8 +42,7 @@ module.exports = [
   }),
   qvc.command('deploySpirit', co.wrap(function*(command){
     try{
-      const config = yield samsara().spirit(command.name).config;
-      return yield deploy.deploy(config);
+      return yield deploy.deploy(command.name);
     }catch(error){
       console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};

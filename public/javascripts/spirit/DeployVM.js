@@ -14,10 +14,17 @@ define([
     var self = this;
     
     this.isDeploying = ko.observable(model.isDeploying);
-    this.step = ko.observable('idle');
     this.steps = ko.observableArray([]);
     this.success = ko.observable(true);
-    this.done = ko.observable(false);
+    this.showDeployProgress = ko.observable(model.isDeploying);
+    this.pullStatus = ko.observableArray([]);
+    this.deployLog = ko.observableArray([]);
+    
+    this.step = ko.pureComputed(function(){
+      var activeStep = self.steps().filter(function(step){return step.isActive})[0];
+      console.log("step:", activeStep ? activeStep.id : null);
+      return activeStep ? activeStep.id : 'done';
+    });
         
     this.deploy = qvc.createCommand('deploySpirit', {
       name: model.name
@@ -25,18 +32,17 @@ define([
       return !self.isDeploying();
     });
     
-    this.pullStatus = ko.observableArray([]);
-    
     this.isBusy = ko.pureComputed(function(){
       return self.isDeploying() || self.deploy.isBusy();
     });
     
     this.isDeploying.subscribe(function(deploying){
+      self.showDeployProgress(true);
       if(!deploying){
         var message = self.success() ? "Deployed "+model.name : "Failed to deploy "+model.name; 
         notifications.notify(message);
       }
-    })
+    });
     
     init: {
       var socket = io.connect();
@@ -46,14 +52,19 @@ define([
       });
     
       socket.on('spiritDeployStatus', function(data){
+        console.log('status', data.plan);
         self.success(data.success);
         self.isDeploying(data.isDeploying);
-        self.step(data.step);
         self.pullStatus([]);
-        self.done(data.step === 'done');
+        self.deployLog([]);
         self.steps(data.plan.map(function(step){
           return new Step(step);
         }));
+      });
+      
+      socket.on('spiritDeployLog', function(data){
+        console.log(data);
+        self.deployLog.push(data);
       });
     
       socket.on('spiritDeployPullStatus', function(data){
@@ -83,6 +94,7 @@ define([
   }
   
   function Step(step){
+    this.id = step.id;
     this.isActive = step.state == 'active';
     this.isDone = step.state == 'done';
     this.isPending = step.state == 'pending';

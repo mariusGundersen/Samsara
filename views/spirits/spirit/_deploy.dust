@@ -17,8 +17,8 @@
     </button>
   </div>
   <div data-bind="validationMessageFor: deploy" class="text-center validation-error-message"></div>
-  <div data-bind="visible: step()!='idle'" style="display: none">
-    <ol class="step-list" data-bind="foreach: steps, css: {'failed': done() && !success()}">
+  <div data-bind="visible: showDeployProgress" style="display: none">
+    <ol class="step-list" data-bind="foreach: steps, css: {'failed': !success()}">
       <li class="step-list-item" data-bind="css:{active:isActive, done:isDone, fail:isFail}">
         <span>
           <i class="fa fa-fw" data-bind="css:{'fa-circle-thin': isPending, 'fa-refresh': isActive, 'fa-spin': isActive, 'fa-check': isDone, 'fa-close': isFail}"></i>&nbsp;
@@ -26,29 +26,25 @@
         </span>
       </li>
     </ol>
-    <div data-bind="ifSelected: step, name: 'init'">
-      
+    <div data-bind="if: deployLog().length" />
+      <pre class="logs" data-bind="foreach: deployLog">
+        <span data-bind="text: $data"></span><br>
+      </pre>
     </div>
     <div data-bind="ifSelected: step, name: 'pull'">
-      <ul data-bind="foreach: pullStatus">
-        <li>
-          <span data-bind="text: status"></span>&nbsp;
-          <span data-bind="if: progress">(<span data-bind="text: progress"></span>)</span>
-        </li>
-      </ul>
-    </div>
-    <div data-bind="ifSelected: step, name: 'create'">
-      
-    </div>
-    <div data-bind="ifSelected: step, name: 'start'">
-      
-    </div>
-    <div data-bind="ifSelected: step, name: 'stop'">
-      
+      <pre class="logs" data-bind="foreach: pullStatus">
+        <span data-bind="text: id"></span>:&nbsp;
+        <span data-bind="text: status"></span>&nbsp;
+        <span data-bind="if: progress">(<span data-bind="text: progress"></span>)</span>
+        <br>
+      </pre>
     </div>
     <div data-bind="ifSelected: step, name: 'done'">
       <p data-bind="if: success">
         <a href="{deploy.name}/version/latest">Latest version</a> deployed successfully
+      </p>
+      <p data-bind="ifnot: success">
+        <a href="{deploy.name}/version/latest">Latest version</a> failed to deploy
       </p>
     </div>
   </div>

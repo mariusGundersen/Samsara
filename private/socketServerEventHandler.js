@@ -8,13 +8,14 @@ module.exports = function(io){
       eventBus.emit('deployStatusRequest', {id: name, socket: socket});
     });
   });
-  
+
   var deploySaga = new EventSaga(eventBus);
-  
-  deploySaga.createOn('deployLockGained', function(data){
+
+  deploySaga.createOn('spirit.deploy.start', function(data){
     this.data = {
+      name: data.spirit,
+      life: data.life,
       isDeploying: true,
-      step: 'init',
       plan: data.plan.map(function(step){
         return {
           id: step,
@@ -26,56 +27,53 @@ module.exports = function(io){
     };
     io.to('spirit/'+this.id+'/deploy').emit('spiritDeployStatus', this.data);
   });
-  
+
   deploySaga.on('deployStatusRequest', function(data){
     data.socket.emit('spiritDeployStatus', this.data);
   });
 
-  deploySaga.on('deployProcessStep', function(data){
-    this.data.step = data.step;
-    var activeIndex = this.data.plan.map(function(step){ return step.id; }).indexOf(data.step);
+  deploySaga.on('spirit.deploy.stage', function(data){
+    var activeIndex = this.data.plan.map(step => step.state).indexOf('pending');
     var activeStep = this.data.plan[activeIndex];
     if(activeStep){
       activeStep.state = 'active';
       activeStep.label = stepLabel(activeStep.id, 'active');
     }
-    
+
     var previousStep = this.data.plan[activeIndex - 1];
     if(previousStep){
       previousStep.state = 'done';
       previousStep.label = stepLabel(previousStep.id, 'done');
     }
-    
+
     io.to('spirit/'+this.id+'/deploy').emit('spiritDeployStatus', this.data);
   });
-  
-  deploySaga.on('deployFailed', function(data){
-    this.data.error = data.error;
-    var activeIndex = this.data.plan.map(function(step){ return step.id; }).indexOf(this.data.step);
+
+  deploySaga.on('spirit.deploy.message', function(data){
+    if(data.message){
+      if(typeof(data.message) == 'object'){
+        if('progressDetail' in data.message){
+          io.to('spirit/'+this.id+'/deploy').emit('spiritDeployPullStatus', {id: data.message.id, status: data.message.status, progressDetail: data.message.progressDetail});
+        }else if('status' in data.message){
+          io.to('spirit/'+this.id+'/deploy').emit('spiritDeployLog', data.message.status);
+        }
+      }else{
+        io.to('spirit/'+this.id+'/deploy').emit('spiritDeployLog', data.message);
+      }
+    }
+  });
+
+  deploySaga.on('spirit.deploy.stop', function(data){
+    this.data.isDeploying = false;
+    this.data.success = !data.error;
+    var activeIndex = this.data.plan.map(step => step.state).indexOf('active');
     var activeStep = this.data.plan[activeIndex];
     if(activeStep){
-      activeStep.failed = true;
-      activeStep.state = 'failed';
+      activeStep.state = data.error ? 'failed' : 'done';
+      activeStep.failed = !!data.error;
       activeStep.label = stepLabel(activeStep.id, 'done');
     }
-  });
-  
-  deploySaga.on('deployProcessPullStepProgress', function(data){
-    if(data && 'progress' in data && 'id' in data.progress){
-      io.to('spirit/'+this.id+'/deploy').emit('spiritDeployPullStatus', data.progress);
-    }
-  });
-  
-  deploySaga.on('deployLockReleased', function(data){
-    this.data.step = 'done';
-    this.data.isDeploying = false;
-    this.data.success = data.success;
-    var activeIndex = this.data.plan.map(function(step){ return step.id; }).indexOf('done');
-    var activeStep = this.data.plan[activeIndex];
-    if(activeStep && activeStep.state == 'active'){
-      activeStep.state = 'done';
-    }
-    
+
     io.to('spirit/'+this.id+'/deploy').emit('spiritDeployStatus', this.data);
     this.done();
   });
@@ -90,10 +88,4 @@ function stepLabel(step, state){
     'cleanup': ['Cleanup', 'Cleaning', 'Cleaned'],
     'done': ['Done', 'Done', 'Done'],
   }[step][['pending', 'active', 'done'].indexOf(state)];
-}
-
-function stepState(step, currentIndex, index){
-  return currentIndex < index ? 'pending' 
-    : currentIndex == index && step != 'done' ? 'active' //done cannot be active, it can only be pending and done
-    : 'done';
 }

@@ -7,119 +7,16 @@ const mkdirp = require('mkdirp-then');
 const eventBus = require('./eventBus');
 
 module.exports = {
-  deploy: co.wrap(function*(config){
-    const plan = [
-      'pull',
-      'create',
-      config.deploymentMethod === 'stop-before-start' ? 'stop' : 'start',
-      config.deploymentMethod === 'stop-before-start' ? 'start' : 'stop',
-      'cleanup',
-      'done'
-    ].filter(step => config.cleanupLimit > 0 || step != 'cleanup');
-    
-    
-    try{
-      yield lockDeployment(config.name);
-      eventBus.emit('deployLockGained', {
-        id: config.name,
-        plan: plan
-      });
-    }catch(e){
-      throw new Error(config.name+' is already being deployed!');
-    }
-    var success = false;
-    
-    try{
-      console.log('deploying', config.image);
+  deploy: co.wrap(function*(name){
+    const spirit = samsara().spirit(name);
+    const progress = spirit.deploy();
+    progress.on('start', translateEvent(eventBus, 'spirit.deploy.start'));
+    progress.on('message', translateEvent(eventBus, 'spirit.deploy.message'));
+    progress.on('stage', translateEvent(eventBus, 'spirit.deploy.stage'));
+    progress.on('stop', translateEvent(eventBus, 'spirit.deploy.stop'));
+    //const logger = yield createLogger(config.name, nextLife);
 
-      const spirit = samsara().spirit(config.name);
-      
-      const latestLife = yield spirit.latestLife;
-      const currentLife = yield spirit.currentLife;
-
-      const nextLife = getNextLife(latestLife);
-
-      const logger = yield createLogger(config.name, nextLife);
-
-      yield writeConfig(config, nextLife);
-
-      const containerName = getNewName(config.name, nextLife);
-
-      eventBus.emit('deployProcessStep', {
-        id: config.name,
-        step: 'pull'
-      });
-
-      logger.writeln('pulling image');
-      const pulling = yield docker.pull(config.image+':'+config.tag);
-      yield docker.followProgress(pulling, function(event){
-        eventBus.emit('deployProcessPullStepProgress', {
-          id: config.name,
-          progress: event
-        });
-        logger.writeln(JSON.stringify(event)+'');
-      });
-      logger.writeln('image pulled');
-
-      eventBus.emit('deployProcessStep', {
-        id: config.name,
-        step: 'create'
-      });
-
-      logger.writeln('compiling config');
-      const dockerConfig = yield samsara().createContainerConfig(containerName, nextLife, config);
-      logger.writeln('config compiled');
-
-      logger.writeln('creating container');
-      const containerToStart = yield docker.createContainer(dockerConfig)
-      logger.writeln('container created');
-
-      const containerToStop = yield getContainerToStop(currentLife);
-
-      if(config.deploymentMethod === 'stop-before-start'){
-        logger.writeln('stop-before-start');
-        yield stopBeforeStart(containerToStop, containerToStart, config.name);
-      }else{
-        logger.writeln('start-before-stop');
-        yield startBeforeStop(containerToStart, containerToStop, config.name);
-      }
-
-      if(config.cleanupLimit > 0){
-        eventBus.emit('deployProcessStep', {
-          id: config.name,
-          step: 'cleanup'
-        });
-
-        logger.writeln('cleaning up old containers and images');
-        yield cleanupOldContainers(oldContainers, nextLife - config.cleanupLimit, logger);
-        logger.writeln('cleanup completed');
-      }
-
-      eventBus.emit('deployProcessStep', {
-        id: config.name,
-        step: 'done'
-      });
-      
-      logger.writeln(config.name + ' deployed successfully');
-      success = true;
-    }catch(e){
-      if(logger){
-        logger.writeln('Failed to deploy!');
-        logger.writeln(e && e.message || e);
-      }
-      eventBus.emit('deployFailed', {
-        id: config.name,
-        error: e && e.message || e
-      });
-      throw e;
-    }finally{
-      logger && logger.end('Done');
-      yield unlockDeployment(config.name);
-      eventBus.emit('deployLockReleased', {
-        id: config.name,
-        success: success
-      });
-    }
+    //yield writeConfig(config, nextLife);
   }),
   rollback: co.wrap(function*(config, version){
     try{
@@ -308,4 +205,8 @@ function delay(ms){
 
 function distinct(value, index, collection){
   return collection.indexOf(value) === index;
+}
+
+function translateEvent(out, name){
+  return event => out.emit(name, Object.assign({id: event.spirit}, event));
 }
