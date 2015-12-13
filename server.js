@@ -111,3 +111,6 @@ process.on('SIGINT', function(){
   server.close();
   process.exit(1);
 });
+process.on('unhandledRejection', function(reason, p) {
+  console.error(p, reason);
+});
