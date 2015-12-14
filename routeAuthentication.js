@@ -1,33 +1,28 @@
 'use strict';
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const htpasswd = require('htpasswd');
-const fs = require('fs-promise');
 const co = require('co');
+const md5 = require('apache-md5');
+const auth = require('./providers/authentication');
 
 passport.use(new LocalStrategy(co.wrap(function*(username, password, done) {
   try{
-    const contents = yield fs.readFile(__dirname +'/config/authentication', 'UTF-8');
-    const found = contents
-    .replace(/\r\n/g, "\n")
-    .split("\n")
-    .filter(line => line)
-    .map(line => line.split(':'))
-    .map(parts => ({
-      user: parts.shift(),
-      hash: parts.join(':')
-    }))
-    .filter(account => account.user === username)[0];
-    console.log(found);
-
+    const users = yield auth();
+    console.log(users);
+    const found = users.filter(x => x.username === username)[0];
+    
     if (!found) {
       return done(null, false, { message: 'Incorrect username.' });
     }
-    if (!htpasswd.verify(found.hash, password)) {
+    console.log(found.secret);
+    console.log(md5(password));
+    console.log(md5(password, found.secret));
+    if (found.secret !== md5(password, found.secret)) {
       return done(null, false, { message: 'Incorrect password.' });
     }
-    console.log("done");
-    return done(null, found.user);
+    
+    return done(null, found.username);
   }catch(e){
     done(e);
   }
