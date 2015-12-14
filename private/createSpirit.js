@@ -9,12 +9,12 @@ module.exports = co.wrap(function *(name, image, tag){
     image: image,
     tag: tag,
     deploymentMethod: 'start-before-stop',
+    cleanupLimit: 10,
     description: '',
     url: '',
     webhook: {
       enable: false,
-      secret: '',
-      'from-ip': '162.242.195.64/26'
+      secret: ''
     },
     raw: {},
     env: {},

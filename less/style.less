@@ -335,13 +335,14 @@ pre.logs{
   padding: 0;
   display: flex;
   
-  li {
+  li.step-list-item {
     flex: 1 1 auto;
     white-space: nowrap;
     position: relative;
     height: 30px;
     background: #E6E6E6;
     padding: 5px 0 5px 20px;
+    overflow-x: hidden;
     
     &:first-child {
       padding-left: 10px;
@@ -350,7 +351,7 @@ pre.logs{
       padding-right: 10px;
     }
     
-    &:not(:last-child):after, &:not(:first-child):before {
+    &:not(:first-child):after, &:not(:first-child)>span:after {
       content: "";
       position: absolute;
       top: 0;
@@ -362,38 +363,39 @@ pre.logs{
       border-left-style: solid;
     }
     
-    &:before{
-      left: 2px;
+    &>span:after{
+      left: 0px;
       border-left-color: white;
     }
-    &:after{
-      right: -15px;
-      z-index: 1;
+    +li.step-list-item:after{
+      left: -1px;
       border-left-color: #E6E6E6;
     }
     
     &.done {
       background: #9c9;
       
-      &:after{
+      +li.step-list-item:after{
         border-left-color: #9c9;
       }
     }
     
     &.active {
-      background: #90C0F9;
+      flex-shrink: 0;
+      background: #99C9F5;
       
-      &:after{
-        border-left-color: #90C0F9;
+      +li.step-list-item:after{
+        border-left-color: #99C9F5;
       }
     }
   }
   
   &.failed li{
-    &.done {
+    &.fail{
       background: #d88;
+      flex-shrink: 0;
       
-      &:after{
+      +li.step-list-item:after{
         border-left-color: #d88;
       }
     }

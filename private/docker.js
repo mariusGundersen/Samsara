@@ -23,6 +23,9 @@ module.exports = {
   },
   getContainer: function(id){
     return promiseifyContainer(docker.getContainer(id));
+  },
+  getImage: function(id){
+    return promiseifyImage(docker.getImage(id));
   }
 };
 
@@ -35,5 +38,11 @@ function promiseifyContainer(container){
     stop: denodeify(container.stop.bind(container)),
     remove: denodeify(container.remove.bind(container)),
     logs: denodeify(container.logs.bind(container))
+  };
+}
+
+function promiseifyImage(image){
+  return {
+    remove: denodeify(image.remove.bind(image))
   };
 }
