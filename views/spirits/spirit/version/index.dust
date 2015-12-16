@@ -6,14 +6,14 @@
     
     {?canReincarnate}
       <div class="box">
-        <h3>Rollback</h3>
+        <h3>Revive</h3>
         <div class="text-center" style="padding: 1em">
           <div class="button-group">
-              <button class="pure-button container-state-running" data-bind="click: rollback, disable: rollback.isBusy">
-                <i class="fa fa-play fa-fw" data-bind="spinIcon: rollback.isBusy"></i>&nbsp;Roll back to version {version}
+              <button class="pure-button container-state-running" data-bind="click: revive, disable: revive.isBusy">
+                <i class="fa fa-play fa-fw" data-bind="spinIcon: revive.isBusy"></i>&nbsp;Revive life {version}
               </button>
           </div>
-          <span class="validation-error-message text-center" data-bind="validationMessageFor: rollback"></span>
+          <span class="validation-error-message text-center" data-bind="validationMessageFor: revive"></span>
         </div>
       </div>
     {/canReincarnate}

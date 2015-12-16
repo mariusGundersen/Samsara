@@ -4,11 +4,9 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     
     this.tab = ko.observable('logs');
         
-    this.rollback = qvc.createCommand('rollbackSpirit', {
+    this.revive = qvc.createCommand('reviveSpiritLife', {
       name: model.name,
-      version: model.version
-    }).success(function(){
-      document.location.reload();
+      life: model.version
     });
   };
 });

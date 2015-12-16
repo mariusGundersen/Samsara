@@ -48,17 +48,16 @@ module.exports = [
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
     }
   })),
-  qvc.command('rollbackSpirit', co.wrap(function*(command){
+  qvc.command('reviveSpiritLife', co.wrap(function*(command){
     try{
-      console.log('rolling back container');
-      const config = yield samsara().spirit(command.name).config;
-      return yield deploy.rollback(config, command.version);
+      console.log('reviving container');
+      return yield deploy.revive(command.name, command.life);
     }catch(e){
       return {success:false, valid:false, violations: [{fieldName:'', message:e.message}]};
     }
   },{
     'name': NotEmpty(''),
-    'version': NotEmpty('')
+    'life': NotEmpty('')
   })),
   qvc.command('stopSpirit', co.wrap(function*(command){
     const currentLife = yield samsara().spirit(command.name).currentLife;
