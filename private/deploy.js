@@ -1,9 +1,5 @@
-const docker = require('./docker');
 const co = require('co');
-const extend = require('extend');
 const samsara = require('samsara-lib');
-const fs = require('fs-promise');
-const mkdirp = require('mkdirp-then');
 const eventBus = require('./eventBus');
 
 module.exports = {

@@ -4,7 +4,6 @@ const Pattern = require('qvc/constraints/Pattern');
 const co = require('co');
 const samsara = require('samsara-lib');
 const deploy = require('../private/deploy');
-const docker = require('../private/docker');
 const dockerHub = require('../private/dockerHub');
 
 module.exports = [
