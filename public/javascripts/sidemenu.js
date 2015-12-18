@@ -1,5 +1,5 @@
 window.onload = function(){
-  var PANEL_WIDTH = 200;
+  var PANEL_WIDTH = 300;
   var ICON_WIDTH = 35;
   
   var ACCELERATION = 2400;
@@ -18,8 +18,9 @@ window.onload = function(){
     dragger.element.querySelector("h2 a[href='#']").addEventListener('click', function(){
       handleMenuClicked(panes[panes.length - (2 + index)]);
     }, false);
-    dragger.element.addEventListener('pointerdown', handlePointerDown, false);
   });
+  
+  document.body.addEventListener('pointerdown', handlePointerDown, false);
   document.body.addEventListener('pointermove', handlePointerMove, false);
   document.body.addEventListener('pointerup', handlePointerUp, false);
   document.body.addEventListener('pointerleave', handlePointerUp, false);
@@ -39,7 +40,7 @@ window.onload = function(){
         startX: e.clientX - delta,
         startY: e.clientY,
         prevX: e.clientX,
-        prevT: e.timeStamp,
+        prevT: Date.now(),
         velocity: 0
       };
     }
@@ -62,10 +63,11 @@ window.onload = function(){
         pointer = null;
         return;
       }else{
+        var currentT = Date.now();
         pointer.stable = true;
-        pointer.velocity = (e.clientX - pointer.prevX)/(e.timeStamp - pointer.prevT)*1000;
+        pointer.velocity = (e.clientX - pointer.prevX)/(currentT - pointer.prevT)*1000;
         pointer.prevX = e.clientX;
-        pointer.prevT = e.timeStamp;
+        pointer.prevT = currentT;
       }
       delta = repositionMenus(dx, false);
       e.preventDefault();
@@ -75,7 +77,7 @@ window.onload = function(){
   function handlePointerUp(e){
     if(pointer && pointer.id === e.pointerId){
       var dx = e.clientX - pointer.startX;
-      delta = animateRepositionMenus(dx, e.timeStamp - pointer.prevT>100 ? 0 : pointer.velocity);
+      delta = animateRepositionMenus(dx, Date.now() - pointer.prevT>100 ? 0 : pointer.velocity);
       pointer = null;
     }
   }
@@ -86,18 +88,43 @@ window.onload = function(){
     var t = Math.abs(velocity/ACCELERATION);
     var a = velocity > 0 ? -ACCELERATION : ACCELERATION;
     dx = dx + velocity*t + a/2*t*t;
-
-    if(size == -1){
+    console.log('width',document.body.offsetWidth);
+    if(size <= -1){
+      var screenRealEstate = PANEL_WIDTH + ICON_WIDTH*(panes.length-1);
+      var stops = panes.map(function(e, i, c){
+        if(i==0){
+          console.log("stops");
+          return 0;
+        }else{
+          var stop = (PANEL_WIDTH-ICON_WIDTH)*i + Math.max(0, ICON_WIDTH*(c.length-2));
+          var limitedStop = (document.body.offsetWidth - ICON_WIDTH*2)*i + Math.max(0, ICON_WIDTH*(c.length-2))*(2-i);
+          console.log(stop, limitedStop);
+          return Math.min(stop, limitedStop);
+        }
+      }).map(function(e, i, c){
+        var prev = (c[i-1]||0);
+        return {
+          middle: e-(e-prev)/2,
+          stop: e
+        };
+      });
+      
+      dx = stops.filter(function(e){
+        return dx >= e.middle;
+      }).map(function(e){
+        return e.stop;
+      }).reverse()[0] || 0;
+      console.log(dx, stops);
       //here be magic! this needs to be improved
-      if(dx < PANEL_WIDTH/2){
+      /*if(dx < (PANEL_WIDTH-ICON_WIDTH)/2){
         dx = 0;
       }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)/2){
-        dx = PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3));
+        dx = PANEL_WIDTH-ICON_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-2));
       }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)){
-        dx = PANEL_WIDTH*2+Math.max(0, ICON_WIDTH*(panes.length-4));
+        dx = (PANEL_WIDTH-ICON_WIDTH)*2+Math.max(0, ICON_WIDTH*(panes.length-2));
       }else{
         dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3))))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3)));
-      }
+      }*/
       return repositionMenus(dx, true, velocity);
     }else{
       dx = Math.ceil(Math.floor(dx/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH);
@@ -153,7 +180,7 @@ window.onload = function(){
   }
 
   function screenSize(){
-    return Math.floor(document.body.offsetWidth/1.5/PANEL_WIDTH)-2;
+    return Math.max(-1, Math.floor(document.body.offsetWidth/1.5/PANEL_WIDTH)-2);
   }
   
   function createPanes(panes, size){
@@ -170,7 +197,7 @@ window.onload = function(){
       };
     });
 
-    if(size == -1 && panes.length > 2){
+    if(size <= -1 && panes.length > 2){
       panes[panes.length-2].widthIcon = -ICON_WIDTH*(panes.length-3);
     }
 
