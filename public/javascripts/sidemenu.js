@@ -88,18 +88,22 @@ window.onload = function(){
     var t = Math.abs(velocity/ACCELERATION);
     var a = velocity > 0 ? -ACCELERATION : ACCELERATION;
     dx = dx + velocity*t + a/2*t*t;
-    console.log('width',document.body.offsetWidth);
+    
     if(size <= -1){
-      var screenRealEstate = PANEL_WIDTH + ICON_WIDTH*(panes.length-1);
       var stops = panes.map(function(e, i, c){
         if(i==0){
-          console.log("stops");
           return 0;
         }else{
-          var stop = (PANEL_WIDTH-ICON_WIDTH)*i + Math.max(0, ICON_WIDTH*(c.length-2));
-          var limitedStop = (document.body.offsetWidth - ICON_WIDTH*2)*i + Math.max(0, ICON_WIDTH*(c.length-2))*(2-i);
-          console.log(stop, limitedStop);
-          return Math.min(stop, limitedStop);
+          var panelContentWidth = PANEL_WIDTH - ICON_WIDTH;
+          var maxWidth = panelContentWidth + ICON_WIDTH*c.length;
+          var leftIconOffset = Math.max(0, ICON_WIDTH*(c.length-2));
+          if(document.body.offsetWidth < panelContentWidth + ICON_WIDTH*2){
+            return (document.body.offsetWidth - ICON_WIDTH*2)*i + leftIconOffset*(2-i);
+          }else if(document.body.offsetWidth < maxWidth){
+            return panelContentWidth*i + leftIconOffset - (maxWidth - document.body.offsetWidth)*(i-1);
+          }else{
+            return panelContentWidth*i + leftIconOffset;
+          }
         }
       }).map(function(e, i, c){
         var prev = (c[i-1]||0);
@@ -108,23 +112,13 @@ window.onload = function(){
           stop: e
         };
       });
-      
+            
       dx = stops.filter(function(e){
         return dx >= e.middle;
       }).map(function(e){
         return e.stop;
       }).reverse()[0] || 0;
-      console.log(dx, stops);
-      //here be magic! this needs to be improved
-      /*if(dx < (PANEL_WIDTH-ICON_WIDTH)/2){
-        dx = 0;
-      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)/2){
-        dx = PANEL_WIDTH-ICON_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-2));
-      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)){
-        dx = (PANEL_WIDTH-ICON_WIDTH)*2+Math.max(0, ICON_WIDTH*(panes.length-2));
-      }else{
-        dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3))))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3)));
-      }*/
+      
       return repositionMenus(dx, true, velocity);
     }else{
       dx = Math.ceil(Math.floor(dx/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH);
