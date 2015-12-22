@@ -83,41 +83,23 @@ window.onload = function(){
     }
   }
   
-  function animateRepositionMenus(dx, velocity){
-    var size = screenSize();
-    
+  function animateRepositionMenus(dx, velocity){    
     var t = Math.abs(velocity/ACCELERATION);
     var a = velocity > 0 ? -ACCELERATION : ACCELERATION;
     dx = dx + velocity*t + a/2*t*t;
     
-    var stops = panes.map(function(e, i, c){
-      if(i==0){
-        return 0;
-      }else if(size <= -1){
-        var maxWidth = LABEL_WIDTH + ICON_WIDTH*c.length;
-        var leftIconOffset = Math.max(0, ICON_WIDTH*(c.length-2));
-        if(document.body.offsetWidth < LABEL_WIDTH + ICON_WIDTH*2){
-          return (document.body.offsetWidth - ICON_WIDTH*2)*i + leftIconOffset*(2-i);
-        }else if(document.body.offsetWidth < maxWidth){
-          return LABEL_WIDTH*i + leftIconOffset - (maxWidth - document.body.offsetWidth)*(i-1);
-        }else{
-          return LABEL_WIDTH*i + leftIconOffset;
-        }
-      }else{
-        return LABEL_WIDTH*i;
-      }
-    }).map(function(e, i, c){
-      var prev = (c[i-1]||0);
+    dx = panes.map(function(pane){
+      return pane.maxPullStop;
+    }).map(function(maxPullStop, i, panes){
+      var prevMaxPullStop = (panes[i-1]||0);
       return {
-        middle: e-(e-prev)/2,
-        stop: e
+        middle: maxPullStop - (maxPullStop - prevMaxPullStop)/2,
+        maxPullStop: maxPullStop
       };
-    });
-          
-    dx = stops.filter(function(e){
+    }).filter(function(e){
       return dx >= e.middle;
     }).map(function(e){
-      return e.stop;
+      return e.maxPullStop;
     }).reverse()[0] || 0;
     
     return repositionMenus(dx, true, velocity);
@@ -182,7 +164,7 @@ window.onload = function(){
         element: pane,
         widthIcon: ICON_WIDTH,
         widthPane: PANEL_WIDTH,
-        marginLeft: PANEL_WIDTH-ICON_WIDTH,
+        marginLeft: LABEL_WIDTH,
         maxPull: 0,
         leftEdge: 0
       };
@@ -209,6 +191,24 @@ window.onload = function(){
     });
 
     panes.reverse();
+    
+    var maxWidth = LABEL_WIDTH + ICON_WIDTH*panes.length;
+    var leftIconOffset = Math.max(0, ICON_WIDTH*(panes.length-2));
+    panes.forEach(function(pane, index, panes){
+      if(index == 0){
+        pane.maxPullStop = 0;
+      }else if(size <= -1){
+        if(document.body.offsetWidth < LABEL_WIDTH + ICON_WIDTH*2){
+          pane.maxPullStop = (document.body.offsetWidth - ICON_WIDTH*2)*index + leftIconOffset*(2-index);
+        }else if(document.body.offsetWidth < maxWidth){
+          pane.maxPullStop = LABEL_WIDTH*index + leftIconOffset - (maxWidth - document.body.offsetWidth)*(index-1);
+        }else{
+          pane.maxPullStop = LABEL_WIDTH*index + leftIconOffset;
+        }
+      }else{
+        pane.maxPullStop = LABEL_WIDTH*index;
+      }
+    });
 
     panes.reduce(function(widthIcons, pane){
       pane.rightEdge = pane.leftEdge + widthIcons + pane.widthIcon;
