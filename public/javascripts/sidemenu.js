@@ -1,6 +1,7 @@
 window.onload = function(){
-  var PANEL_WIDTH = 200;
+  var PANEL_WIDTH = 300;
   var ICON_WIDTH = 35;
+  var LABEL_WIDTH = PANEL_WIDTH - ICON_WIDTH;
   
   var ACCELERATION = 2400;
   
@@ -18,8 +19,9 @@ window.onload = function(){
     dragger.element.querySelector("h2 a[href='#']").addEventListener('click', function(){
       handleMenuClicked(panes[panes.length - (2 + index)]);
     }, false);
-    dragger.element.addEventListener('pointerdown', handlePointerDown, false);
   });
+  
+  document.body.addEventListener('pointerdown', handlePointerDown, false);
   document.body.addEventListener('pointermove', handlePointerMove, false);
   document.body.addEventListener('pointerup', handlePointerUp, false);
   document.body.addEventListener('pointerleave', handlePointerUp, false);
@@ -39,7 +41,7 @@ window.onload = function(){
         startX: e.clientX - delta,
         startY: e.clientY,
         prevX: e.clientX,
-        prevT: e.timeStamp,
+        prevT: Date.now(),
         velocity: 0
       };
     }
@@ -62,10 +64,11 @@ window.onload = function(){
         pointer = null;
         return;
       }else{
+        var currentT = Date.now();
         pointer.stable = true;
-        pointer.velocity = (e.clientX - pointer.prevX)/(e.timeStamp - pointer.prevT)*1000;
+        pointer.velocity = (e.clientX - pointer.prevX)/(currentT - pointer.prevT)*1000;
         pointer.prevX = e.clientX;
-        pointer.prevT = e.timeStamp;
+        pointer.prevT = currentT;
       }
       delta = repositionMenus(dx, false);
       e.preventDefault();
@@ -75,34 +78,31 @@ window.onload = function(){
   function handlePointerUp(e){
     if(pointer && pointer.id === e.pointerId){
       var dx = e.clientX - pointer.startX;
-      delta = animateRepositionMenus(dx, e.timeStamp - pointer.prevT>100 ? 0 : pointer.velocity);
+      delta = animateRepositionMenus(dx, Date.now() - pointer.prevT>100 ? 0 : pointer.velocity);
       pointer = null;
     }
   }
   
-  function animateRepositionMenus(dx, velocity){
-    var size = screenSize();
-    
+  function animateRepositionMenus(dx, velocity){    
     var t = Math.abs(velocity/ACCELERATION);
     var a = velocity > 0 ? -ACCELERATION : ACCELERATION;
     dx = dx + velocity*t + a/2*t*t;
-
-    if(size == -1){
-      //here be magic! this needs to be improved
-      if(dx < PANEL_WIDTH/2){
-        dx = 0;
-      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)/2){
-        dx = PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3));
-      }else if(dx < (PANEL_WIDTH+ICON_WIDTH)+(PANEL_WIDTH-ICON_WIDTH)){
-        dx = PANEL_WIDTH*2+Math.max(0, ICON_WIDTH*(panes.length-4));
-      }else{
-        dx = Math.ceil(Math.floor((dx-(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3))))/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH)+(PANEL_WIDTH+Math.max(0, ICON_WIDTH*(panes.length-3)));
-      }
-      return repositionMenus(dx, true, velocity);
-    }else{
-      dx = Math.ceil(Math.floor(dx/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH);
-      return repositionMenus(dx, true, velocity);
-    }
+    
+    dx = panes.map(function(pane){
+      return pane.maxPullStop;
+    }).map(function(maxPullStop, i, panes){
+      var prevMaxPullStop = (panes[i-1]||0);
+      return {
+        middle: maxPullStop - (maxPullStop - prevMaxPullStop)/2,
+        maxPullStop: maxPullStop
+      };
+    }).filter(function(e){
+      return dx >= e.middle;
+    }).map(function(e){
+      return e.maxPullStop;
+    }).reverse()[0] || 0;
+    
+    return repositionMenus(dx, true, velocity);
   }
   
   function repositionMenus(delta, animate, velocity){
@@ -153,7 +153,7 @@ window.onload = function(){
   }
 
   function screenSize(){
-    return Math.floor(document.body.offsetWidth/1.5/PANEL_WIDTH)-2;
+    return Math.max(-1, Math.floor(document.body.offsetWidth/1.5/PANEL_WIDTH)-2);
   }
   
   function createPanes(panes, size){
@@ -164,13 +164,13 @@ window.onload = function(){
         element: pane,
         widthIcon: ICON_WIDTH,
         widthPane: PANEL_WIDTH,
-        marginLeft: PANEL_WIDTH-ICON_WIDTH,
+        marginLeft: LABEL_WIDTH,
         maxPull: 0,
         leftEdge: 0
       };
     });
 
-    if(size == -1 && panes.length > 2){
+    if(size <= -1 && panes.length > 2){
       panes[panes.length-2].widthIcon = -ICON_WIDTH*(panes.length-3);
     }
 
@@ -191,6 +191,24 @@ window.onload = function(){
     });
 
     panes.reverse();
+    
+    var maxWidth = LABEL_WIDTH + ICON_WIDTH*panes.length;
+    var leftIconOffset = Math.max(0, ICON_WIDTH*(panes.length-2));
+    panes.forEach(function(pane, index, panes){
+      if(index == 0){
+        pane.maxPullStop = 0;
+      }else if(size <= -1){
+        if(document.body.offsetWidth < LABEL_WIDTH + ICON_WIDTH*2){
+          pane.maxPullStop = (document.body.offsetWidth - ICON_WIDTH*2)*index + leftIconOffset*(2-index);
+        }else if(document.body.offsetWidth < maxWidth){
+          pane.maxPullStop = LABEL_WIDTH*index + leftIconOffset - (maxWidth - document.body.offsetWidth)*(index-1);
+        }else{
+          pane.maxPullStop = LABEL_WIDTH*index + leftIconOffset;
+        }
+      }else{
+        pane.maxPullStop = LABEL_WIDTH*index;
+      }
+    });
 
     panes.reduce(function(widthIcons, pane){
       pane.rightEdge = pane.leftEdge + widthIcons + pane.widthIcon;
