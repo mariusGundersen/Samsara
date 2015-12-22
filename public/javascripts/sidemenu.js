@@ -1,6 +1,7 @@
 window.onload = function(){
   var PANEL_WIDTH = 300;
   var ICON_WIDTH = 35;
+  var LABEL_WIDTH = PANEL_WIDTH - ICON_WIDTH;
   
   var ACCELERATION = 2400;
   
@@ -89,41 +90,37 @@ window.onload = function(){
     var a = velocity > 0 ? -ACCELERATION : ACCELERATION;
     dx = dx + velocity*t + a/2*t*t;
     
-    if(size <= -1){
-      var stops = panes.map(function(e, i, c){
-        if(i==0){
-          return 0;
+    var stops = panes.map(function(e, i, c){
+      if(i==0){
+        return 0;
+      }else if(size <= -1){
+        var maxWidth = LABEL_WIDTH + ICON_WIDTH*c.length;
+        var leftIconOffset = Math.max(0, ICON_WIDTH*(c.length-2));
+        if(document.body.offsetWidth < LABEL_WIDTH + ICON_WIDTH*2){
+          return (document.body.offsetWidth - ICON_WIDTH*2)*i + leftIconOffset*(2-i);
+        }else if(document.body.offsetWidth < maxWidth){
+          return LABEL_WIDTH*i + leftIconOffset - (maxWidth - document.body.offsetWidth)*(i-1);
         }else{
-          var panelContentWidth = PANEL_WIDTH - ICON_WIDTH;
-          var maxWidth = panelContentWidth + ICON_WIDTH*c.length;
-          var leftIconOffset = Math.max(0, ICON_WIDTH*(c.length-2));
-          if(document.body.offsetWidth < panelContentWidth + ICON_WIDTH*2){
-            return (document.body.offsetWidth - ICON_WIDTH*2)*i + leftIconOffset*(2-i);
-          }else if(document.body.offsetWidth < maxWidth){
-            return panelContentWidth*i + leftIconOffset - (maxWidth - document.body.offsetWidth)*(i-1);
-          }else{
-            return panelContentWidth*i + leftIconOffset;
-          }
+          return LABEL_WIDTH*i + leftIconOffset;
         }
-      }).map(function(e, i, c){
-        var prev = (c[i-1]||0);
-        return {
-          middle: e-(e-prev)/2,
-          stop: e
-        };
-      });
-            
-      dx = stops.filter(function(e){
-        return dx >= e.middle;
-      }).map(function(e){
-        return e.stop;
-      }).reverse()[0] || 0;
-      
-      return repositionMenus(dx, true, velocity);
-    }else{
-      dx = Math.ceil(Math.floor(dx/((PANEL_WIDTH-ICON_WIDTH)/2))/2)*(PANEL_WIDTH-ICON_WIDTH);
-      return repositionMenus(dx, true, velocity);
-    }
+      }else{
+        return LABEL_WIDTH*i;
+      }
+    }).map(function(e, i, c){
+      var prev = (c[i-1]||0);
+      return {
+        middle: e-(e-prev)/2,
+        stop: e
+      };
+    });
+          
+    dx = stops.filter(function(e){
+      return dx >= e.middle;
+    }).map(function(e){
+      return e.stop;
+    }).reverse()[0] || 0;
+    
+    return repositionMenus(dx, true, velocity);
   }
   
   function repositionMenus(delta, animate, velocity){
