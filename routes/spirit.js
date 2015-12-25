@@ -51,7 +51,7 @@ router.get('/:name/versions', co.wrap(function*(req, res, next) {
       name: life.name,
       life: life.life,
       status: yield life.status,
-      uptime: ''
+      uptime: yield life.uptime
     };
   }));
   const pageModel = yield makePageModel(req.params.name, {
