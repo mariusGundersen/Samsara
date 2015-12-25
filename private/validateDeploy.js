@@ -1,10 +1,10 @@
 const co = require('co');
 
-module.exports = co.wrap(function*(config, name, secret, image, callback_url){
+module.exports = co.wrap(function*(config, name, secret, image, tag, callback_url){
     
   console.log('config', config);
   if(config.name !== name){
-    throw 'config folder name does not match config.json name';
+    throw 'wrong spirit name';
   }
 
   console.log('enabled', config.webhook.enable);
@@ -20,6 +20,11 @@ module.exports = co.wrap(function*(config, name, secret, image, callback_url){
   console.log('image', config.image, image);
   if(config.image !== image){
     throw 'wrong image';
+  }
+
+  console.log('tag', config.tag, tag);
+  if(config.tag !== tag){
+    throw 'wrong tag';
   }
 
   console.log('callback_url', callback_url);

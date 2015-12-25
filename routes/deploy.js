@@ -17,6 +17,7 @@ router.post('/:name/:secret', co.wrap(function*(req, res, next){
       req.params.name,
       req.params.secret,
       req.body.repository && req.body.repository.repo_name,
+      req.body.push_data && req.body.push_data.tag,
       req.body.callback_url);
 
     console.log('config is valid');
