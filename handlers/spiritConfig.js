@@ -51,7 +51,11 @@ module.exports = [
   qvc.command('saveWebhook', function(command){
     return mutateSpiritConfig(command.name, function(config){
       config.webhook['secret'] = command.secret;
+      config.webhook['matchTag'] = command.matchTag;
     });
+  }, {
+    'secret': new NotEmpty('Specify a secret key to validate the webhook request'),
+    'matchTag': new NotEmpty('Specify either an exact tag or a semver tag to match against') 
   }),
   qvc.command('addEnvVar', function(command){
     return mutateSpiritConfig(command.name, function(config){
