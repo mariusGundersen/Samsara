@@ -6,9 +6,8 @@ module.exports = co.wrap(function*(title, content, spirit, version){
   const lives = yield samsara().spirit(spirit).lives;
   
   const menu = yield Promise.all(lives.reverse().map(co.wrap(function *(life){
-    //const container = yield life.container;
     const status = yield life.status;
-    const uptime = '';
+    const uptime = yield life.uptime;
     return {
       spirit: spirit,
       version: life.life,
