@@ -14,7 +14,7 @@ router.use('/qvc', qvc(
 router.use('/container(s?)/', require('./routes/container'));
 router.use('/spirit(s?)/', require('./routes/spirits'));
 router.use('/spirit(s?)/', require('./routes/spirit'));
-router.use('/spirit(s?)/', require('./routes/version'));
+router.use('/spirit(s?)/', require('./routes/life'));
 router.use('/setting(s?)/', require('./routes/settings'));
 router.use('/', require('./routes/index'));
 

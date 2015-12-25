@@ -1,11 +1,11 @@
 const router = require('express-promise-router')();
 const samsara = require('samsara-lib');
-const makePageModel = require('../pageModels/version');
+const makePageModel = require('../pageModels/life');
 const prettifyLogs = require('../private/prettifyLogs');
 const co = require('co');
 const fs = require('fs-promise');
 
-router.get('/:name/version/latest', co.wrap(function*(req, res, next){
+router.get('/:name/life/latest', co.wrap(function*(req, res, next){
   const latestLife = yield samsara().spirit(req.params.name).latestLife;
   
   if(!latestLife) throw new Error('404');
@@ -13,18 +13,18 @@ router.get('/:name/version/latest', co.wrap(function*(req, res, next){
   res.redirect(latestLife.life);
 }));
 
-router.get('/:name/version/:version', co.wrap(function*(req, res, next){
-  const life = samsara().spirit(req.params.name).life(req.params.version);
+router.get('/:name/life/:life', co.wrap(function*(req, res, next){
+  const life = samsara().spirit(req.params.name).life(req.params.life);
   
   const status = yield life.status;
   const config = yield life.config;
   const container = yield tryGetContainer(life);
   
-  const deployLogs = yield readFile(req.params.name, req.params.version, 'deploy.log');
+  const deployLogs = yield readFile(req.params.name, req.params.life, 'deploy.log');
 
-  const pageModel = yield makePageModel(req.params.name + ' - ' + req.params.version, {
+  const pageModel = yield makePageModel(req.params.name + ' - ' + req.params.life, {
     name: req.params.name,
-    version: req.params.version,
+    life: req.params.life,
     json: container.inspect,
     config: JSON.stringify(config, null, '  '),
     log: container.logs,
@@ -32,14 +32,14 @@ router.get('/:name/version/:version', co.wrap(function*(req, res, next){
     canReincarnate: status == 'stopped' && container.exists,
     model: {
       name: req.params.name,
-      version: req.params.version
+      life: req.params.life
     }
-  }, req.params.name, req.params.version);
-  res.render('spirits/spirit/version/index', pageModel);
+  }, req.params.name, req.params.life);
+  res.render('spirits/spirit/life/index', pageModel);
 }));
 
-router.get('/:name/version/:version/logs/download', co.wrap(function*(req, res, next){
-  const container = yield samsara().spirit(req.params.name).life(req.params.version).container;
+router.get('/:name/life/:life/logs/download', co.wrap(function*(req, res, next){
+  const container = yield samsara().spirit(req.params.name).life(req.params.life).container;
   const config = yield container.inspect();
   
   res.setHeader('Content-disposition', 'attachment;filename='+config.Name.substr(1)+'.log');

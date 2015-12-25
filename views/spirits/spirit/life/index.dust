@@ -1,8 +1,8 @@
-{>"spirits/spirit/version/layout"/}
-{<spiritVersionPage}
+{>"spirits/spirit/life/layout"/}
+{<spiritLifePage}
 <div class="pane content">
-  <h2 class="dragger">{name} v{version}</h2>
-  <div class="grid-container" data-viewmodel="spirit/VersionVM" data-model="{model|js}">
+  <h2 class="dragger">{name} {life}</h2>
+  <div class="grid-container" data-viewmodel="spirit/LifeVM" data-model="{model|js}">
     
     {?canReincarnate}
       <div class="box">
@@ -10,7 +10,7 @@
         <div class="text-center" style="padding: 1em">
           <div class="button-group">
               <button class="pure-button container-state-running" data-bind="click: revive, disable: revive.isBusy">
-                <i class="fa fa-play fa-fw" data-bind="spinIcon: revive.isBusy"></i>&nbsp;Revive life {version}
+                <i class="fa fa-play fa-fw" data-bind="spinIcon: revive.isBusy"></i>&nbsp;Revive life {life}
               </button>
           </div>
           <span class="validation-error-message text-center" data-bind="validationMessageFor: revive"></span>
@@ -28,7 +28,7 @@
       <div data-bind="ifSelected: tab, name: 'logs'" style="position:relative">
         <pre class="logs">
           {log|s}
-          <a href="{version}/logs/download" class="pure-button download-logs-button">
+          <a href="{life}/logs/download" class="pure-button download-logs-button">
             <i class="fa fa-fw fa-download"></i>
           </a>
         </pre>
@@ -42,4 +42,4 @@
     </div>
   </div>
 </div>
-{/spiritVersionPage}
+{/spiritLifePage}

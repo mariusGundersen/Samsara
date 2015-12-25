@@ -1,13 +1,13 @@
 {>"spirits/spirit/layout"/}
 {<spiritPage}
   <div class="menu pane">
-    <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/spirit/{content.name}/versions">Versions</a></h2>
+    <h2><a href="#"><i class="fa fa-history fa-fw"></i></a><a href="/spirit/{content.name}/lives">Lives</a></h2>
     <ul>
       {#menu}
         <li class="container-state-{status} {?selected}selected{/selected}">
-          <a href="/spirit/{spirit}/version/{version}">
-            <span class="version">
-              {version}
+          <a href="/spirit/{spirit}/life/{life}">
+            <span class="life">
+              {life}
             </span>- 
             {uptime}
           </a>
@@ -18,21 +18,21 @@
   
   
   {#content}
-  {+spiritVersionPage}
+  {+spiritLifePage}
   <div class="content pane">
     <h2>Create a new page!</h2>
     <pre>
 {`
-{&gt;"spirit/version/layout"/}
-{&lt;spiritVersionPage}
+{&gt;"spirit/life/layout"/}
+{&lt;spiritLifePage}
   &lt;div class="pane content"&gt;
     &lt;h2&gt;Put something here&lt;/h2&gt;
     &lt;p&gt;And something more here...&lt;/p&gt;
   &lt;/div&gt;
-{/spiritVersionPage}
+{/spiritLifePage}
 `}
     </pre>
   </div>
-  {/spiritVersionPage}
+  {/spiritLifePage}
   {/content}
 {/spiritPage}

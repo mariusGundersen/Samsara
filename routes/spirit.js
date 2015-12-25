@@ -15,7 +15,7 @@ router.get('/:name', co.wrap(function*(req, res, next) {
     name: req.params.name,
     url: config.url,
     description: config.description,
-    version: life,
+    life: life,
     deploy: {
       name: config.name,
       image: config.image,
@@ -43,7 +43,7 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
   res.render('spirits/spirit/configure', pageModel);
 }));
 
-router.get('/:name/versions', co.wrap(function*(req, res, next) {
+router.get('/:name/lives', co.wrap(function*(req, res, next) {
   const spirit = samsara().spirit(req.params.name);
   const lives = yield spirit.lives;
   const list = yield lives.reverse().map(co.wrap(function *(life){
@@ -57,8 +57,8 @@ router.get('/:name/versions', co.wrap(function*(req, res, next) {
   const pageModel = yield makePageModel(req.params.name, {
     name: req.params.name,
     lives: list
-  }, req.params.name, 'versions');
-  res.render('spirits/spirit/versions', pageModel);
+  }, req.params.name, 'lives');
+  res.render('spirits/spirit/lives', pageModel);
 }));
 
 module.exports = router;

@@ -2,7 +2,7 @@
   <table class="pure-table pure-table-striped table-fixed">
     <thead>
       <tr>
-        <th>Version</th>
+        <th>Life</th>
         <th>Status</th>
         <th>Uptime</th>
       </tr>
@@ -10,7 +10,7 @@
     <tbody>
       {#lives}
         <tr>
-          <td><a href="/spirit/{name}/version/{life}">v{life}</a></td>
+          <td><a href="/spirit/{name}/life/{life}">{life}</a></td>
           <td>{status}</td>
           <td>{uptime}</td>
         </tr>

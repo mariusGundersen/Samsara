@@ -2,7 +2,7 @@ const makePageModel = require('./spirit');
 const samsara = require('samsara-lib');
 const co = require('co');
 
-module.exports = co.wrap(function*(title, content, spirit, version){
+module.exports = co.wrap(function*(title, content, spirit, selectedLife){
   const lives = yield samsara().spirit(spirit).lives;
   
   const menu = yield Promise.all(lives.reverse().map(co.wrap(function *(life){
@@ -10,8 +10,8 @@ module.exports = co.wrap(function*(title, content, spirit, version){
     const uptime = yield life.uptime;
     return {
       spirit: spirit,
-      version: life.life,
-      selected: life.life == version,
+      life: life.life,
+      selected: life.life == selectedLife,
       uptime: uptime,
       status: status
     };
@@ -20,5 +20,5 @@ module.exports = co.wrap(function*(title, content, spirit, version){
   return makePageModel(title, {
     menu: menu,
     content:content
-  }, spirit, 'versions');
+  }, spirit, 'lives');
 });

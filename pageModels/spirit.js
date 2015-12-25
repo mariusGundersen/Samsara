@@ -7,7 +7,7 @@ module.exports = function(title, content, spirit, selected){
       spirit: spirit,
       status: selected == 'status',
       config: selected == 'config',
-      versions: selected == 'versions',
+      lives: selected == 'lives',
       settings: selected == 'settings'
     }
   }, spirit);

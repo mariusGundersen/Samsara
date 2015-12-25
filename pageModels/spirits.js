@@ -10,7 +10,7 @@ module.exports = co.wrap(function*(title, content, currentSpiritName){
       name: spirit.name,
       id: spirit.name,
       state: yield spirit.status,
-      version: ((yield spirit.currentLife) || (yield spirit.latestLife) || {life: '?'}).life,
+      life: ((yield spirit.currentLife) || (yield spirit.latestLife) || {life: '?'}).life,
       selected: spirit.name == currentSpiritName
     };
   })));

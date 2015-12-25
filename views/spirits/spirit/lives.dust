@@ -2,6 +2,6 @@
 {<spiritPage}
   <div class="pane content">
     <h2 class="dragger"><i class="fa fa-fw fa-history"></i>{name}</h2>
-    {>"spirits/spirit/_versionTable"/}
+    {>"spirits/spirit/_lifeTable"/}
   </div>
 {/spiritPage}
