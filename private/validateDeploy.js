@@ -1,4 +1,5 @@
 const co = require('co');
+const semver = require('semver');
 
 module.exports = co.wrap(function*(config, name, secret, image, tag, callback_url){
     
@@ -22,8 +23,9 @@ module.exports = co.wrap(function*(config, name, secret, image, tag, callback_ur
     throw 'wrong image';
   }
 
-  console.log('tag', config.tag, tag);
-  if(config.tag !== tag){
+  const matchTag = config.webhook.matchTag || config.tag;
+  console.log('tag', matchTag, tag);
+  if(!semverSatisfies(matchTag, tag) || matchTag !== tag){
     throw 'wrong tag';
   }
 
@@ -34,3 +36,9 @@ module.exports = co.wrap(function*(config, name, secret, image, tag, callback_ur
 
   return true;
 });
+
+function semverSatisfies(matchTag, tag, currentTag){
+  return semver.validRange(matchTag)
+    && semver.satisfies(tag, matchTag)
+    && semver.gt(tag, currentTag);
+}
