@@ -8,32 +8,32 @@ const request = require('request-promise');
 router.post('/:name/:secret', co.wrap(function*(req, res, next){
   console.log('deploying', req.params.name, req.body);
   
-  const config = yield samsara().spirit(req.params.name).config;
-
   try{
+    const spirit = samsara().spirit(req.params.name);
+    const config = yield spirit.config;
+    
     yield validateDeploy(
       config,
       req.params.name,
       req.params.secret,
       req.body.repository && req.body.repository.repo_name,
       req.body.callback_url);
+
+    console.log('config is valid');
+    
+    deployInBackground(config, req.body.callback_url)
+    .catch(function(error){
+      console.error(error);
+    });
+    
+    res.write('success');
   }catch(error){
     console.log('validation failed for', req.params.name, error);
     res.status('403');
     res.write(JSON.stringify(error, null, ' '));
+  }finally{
     res.end();
-    return;
   }
-
-  console.log('config is valid');
-  
-  deployInBackground(config, req.body.callback_url)
-  .catch(function(error){
-    console.error(error);
-  });
-  
-  res.write('success');
-  res.end();
 }));
 
 router.use(function(error, req, res, next){
@@ -43,7 +43,7 @@ router.use(function(error, req, res, next){
 });
 
 const deployInBackground = co.wrap(function*(config, callback_url){
-  const result = yield tryDeploy(config);
+  const result = yield tryDeploy(config.name);
 
   result.context = config.description;
   result.target_url = config.url;
@@ -56,11 +56,11 @@ const deployInBackground = co.wrap(function*(config, callback_url){
   });
 });
 
-function *tryDeploy(config){
+function *tryDeploy(name){
   try{
     console.log('deploying');
     
-    yield deploy(config);
+    yield deploy(name);
     
     return {
       state: 'success',
