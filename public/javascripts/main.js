@@ -20,7 +20,8 @@ require.config({
   ]
 });
 
-require(['deco'], function(deco){
+require(['deco', 'knockout'], function(deco, ko){
+  ko.options.deferUpdates = true;
   deco.config({
     qvc:{
       baseUrl: '/qvc'

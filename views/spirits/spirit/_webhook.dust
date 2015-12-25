@@ -41,7 +41,7 @@
       </span>
     </h3>
     <form class="pure-form box-form">
-      <p class="text-center">By enabling the webhook the Docker Hub can deploy a new version of this spirit</p>
+      <p class="text-center">By enabling the webhook the Docker Hub can automatically deploy the latest version of the container</p>
       <span class="pure-u-1-4"></span>
       <button class="pure-button pure-button-primary button-xlarge pure-input-1-2" data-bind="click:enable"><i class="fa fa-fw fa-anchor"></i>&nbsp;Enable</button>
     </form>

@@ -1,5 +1,4 @@
 const qvc = require('qvc');
-const spirit = require('../providers/spirit');
 const mutateSpiritConfig = require('../mutators/spiritConfig');
 const NotEmpty = require('qvc/constraints/NotEmpty');
 const Pattern = require('qvc/constraints/Pattern');

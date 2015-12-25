@@ -4,7 +4,7 @@
 
 const socketIO = require('socket.io');
 const app = require('./app');
-const debug = require('debug')('docker-spaceport:server');
+const debug = require('debug')('samsara:server');
 const http = require('http');
 const socketServerEventHandler = require('./private/socketServerEventHandler');
 
@@ -110,4 +110,7 @@ process.on('SIGINT', function(){
   console.log("SIGINT");
   server.close();
   process.exit(1);
+});
+process.on('unhandledRejection', function(reason, p) {
+  console.error(p, reason);
 });

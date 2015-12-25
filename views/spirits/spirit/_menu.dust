@@ -7,8 +7,8 @@
     <li class="{?menu.config}selected{/menu.config}">
       <a href="/spirit/{menu.spirit}/configure"><i class="fa fa-wrench fa-fw"></i>Configure</a>
     </li>
-    <li class="{?menu.versions}selected{/menu.versions}">
-      <a href="/spirit/{menu.spirit}/versions"><i class="fa fa-history fa-fw"></i>History</a>
+    <li class="{?menu.lives}selected{/menu.lives}">
+      <a href="/spirit/{menu.spirit}/lives"><i class="fa fa-history fa-fw"></i>Lives</a>
     </li>
   </ul>
 </div>

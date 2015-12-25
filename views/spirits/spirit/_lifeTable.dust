@@ -2,19 +2,19 @@
   <table class="pure-table pure-table-striped table-fixed">
     <thead>
       <tr>
-        <th>Version</th>
+        <th>Life</th>
         <th>Status</th>
         <th>Uptime</th>
       </tr>
     </thead>
     <tbody>
-      {#containers}
+      {#lives}
         <tr>
-          <td><a href="/spirit/{spirit}/version/{version}" title="{id}">v{version}</a></td>
-          <td>{state}</td>
+          <td><a href="/spirit/{name}/life/{life}">{life|nth} life</a></td>
           <td>{status}</td>
+          <td>{uptime}</td>
         </tr>
-      {/containers}
+      {/lives}
     </tbody>
   </table>
 </div>

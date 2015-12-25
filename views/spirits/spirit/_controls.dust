@@ -8,20 +8,20 @@
   <div class="text-center box-form">
     <div class="button-group">
       <button class="pure-button container-state-running"
-              data-bind="click: start, disable: isBusy()||state()!='stopped'" 
-              {^controls.stopped}disabled{/controls.stopped}>
+              data-bind="click: start, disable: isBusy()||!canStart()"
+              {^controls.canStart}disabled{/controls.canStart}>
         <i class="fa fa-fw fa-play" data-bind="spinIcon: start.isBusy"></i>&nbsp;
         Start
       </button>
-      <button class="pure-button" 
-              data-bind="click: restart, disable: isBusy()||state()!='running'" 
-              {^controls.running}disabled{/controls.running}>
+      <button class="pure-button"
+              data-bind="click: restart, disable: isBusy()||!canRestart()"
+              {^controls.canRestart}disabled{/controls.canRestart}>
         <i class="fa fa-fw fa-refresh" data-bind="spinIcon: restart.isBusy"></i>&nbsp;
         Restart
       </button>
-      <button class="pure-button container-state-stopped" 
-              data-bind="click: stop, disable: isBusy()||state()!='running'" 
-              {^controls.running}disabled{/controls.running}>
+      <button class="pure-button container-state-stopped"
+              data-bind="click: stop, disable: isBusy()||!canStop()"
+              {^controls.canStop}disabled{/controls.canStop}>
         <i class="fa fa-fw fa-stop" data-bind="spinIcon: stop.isBusy"></i>&nbsp;
         Stop
       </button>
