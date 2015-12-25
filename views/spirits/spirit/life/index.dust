@@ -1,7 +1,7 @@
 {>"spirits/spirit/life/layout"/}
 {<spiritLifePage}
 <div class="pane content">
-  <h2 class="dragger">{name} {life}</h2>
+  <h2 class="dragger">{life|nth} life of {name}</h2>
   <div class="grid-container" data-viewmodel="spirit/LifeVM" data-model="{model|js}">
     
     {?canReincarnate}

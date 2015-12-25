@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 
+const nth = require('nth');
 const dust = require('dustjs-linkedin');
 const cons = require('consolidate');
 const authentication = require('./routeAuthentication');
@@ -17,6 +18,14 @@ const app = express();
 app.enable('trust proxy');
 
 // view engine setup
+dust.filters.nth = function(value){
+  try{
+    return nth.appendSuffix(value);
+  }catch(e){
+    return 'no';
+  }
+}
+
 app.engine('dust', cons.dust);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'dust');

@@ -10,7 +10,7 @@
     <tbody>
       {#lives}
         <tr>
-          <td><a href="/spirit/{name}/life/{life}">{life}</a></td>
+          <td><a href="/spirit/{name}/life/{life}">{life|nth} life</a></td>
           <td>{status}</td>
           <td>{uptime}</td>
         </tr>

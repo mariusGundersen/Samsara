@@ -6,10 +6,7 @@
       {#menu}
         <li class="container-state-{status} {?selected}selected{/selected}">
           <a href="/spirit/{spirit}/life/{life}">
-            <span class="life">
-              {life}
-            </span>- 
-            {uptime}
+              {life|nth}&nbsp;-&nbsp;{uptime}
           </a>
         </li>
       {/menu}
