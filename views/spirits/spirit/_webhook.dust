@@ -1,5 +1,5 @@
 <section data-viewmodel="spirit/WebhookVM" data-model="{config|js}" class="box">
-  
+
   <div data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
     <h3>
       <span>
@@ -11,9 +11,11 @@
     <form class="box-form pure-form">
       <label class="small-label" for="url">Webhook url</label>
       <input id="url" readonly data-bind="value: url" value="http://example.com/deploy/{config.name}/{config.webhook.secret}">
+      <label class="small-label">Match tag</label>
+      <span class="control-like" data-bind="text: matchTag">{config.webhook.matchTag}</span>
     </form>
   </div>
-  
+
   <div data-bind="visible: editing" style="display:none">
     <h3>
       <span>
@@ -27,7 +29,7 @@
       <input id="secret" data-bind="value: secret" class="pure-input-1-2">
       <label class="small-label" for="matchTag">Match tag</label>
       <input id="matchTag" data-bind="value: matchTag" class="pure-input-1-2" placeholder="e.g. 'latest' or '~1.0.0'">
-    
+
       <div class="button-group">
         <button class="pure-button button-success" type="submit" data-bind="click: save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
         <button class="pure-button" type="cancel" data-bind="click: cancel"><i class="fa fa-fw fa-undo"></i>&nbsp;Cancel</button>
@@ -35,7 +37,7 @@
       </div>
     </form>
   </div>
-  
+
   <div data-bind="visible: disabled" style="{?config.webhook.enable}display:none{/config.webhook.enable}">
     <h3>
       <span>
@@ -49,5 +51,5 @@
       <button class="pure-button pure-button-primary button-xlarge pure-input-1-2" data-bind="click:enable"><i class="fa fa-fw fa-anchor"></i>&nbsp;Enable</button>
     </form>
   </div>
-  
+
 </section>
