@@ -1,8 +1,11 @@
 const co = require('co');
 const semver = require('semver');
+const samsara = require('samsara-lib');
 
-module.exports = co.wrap(function*(config, name, secret, image, tag, callback_url){
-    
+module.exports = co.wrap(function*(name, secret, image, tag, callback_url){
+  const spirit = samsara().spirit(name);
+  const config = yield spirit.config;
+  
   console.log('config', config);
   if(config.name !== name){
     throw 'wrong spirit name';
@@ -24,8 +27,9 @@ module.exports = co.wrap(function*(config, name, secret, image, tag, callback_ur
   }
 
   const matchTag = config.webhook.matchTag || config.tag;
-  console.log('tag', matchTag, tag);
-  if(!semverSatisfies(matchTag, tag) || matchTag !== tag){
+  const currentTag = yield getCurrentTag(spirit);
+  console.log('tag', matchTag, tag, currentTag);
+  if(!semverSatisfies(matchTag, tag, currentTag) || matchTag !== tag){
     throw 'wrong tag';
   }
 
@@ -40,5 +44,18 @@ module.exports = co.wrap(function*(config, name, secret, image, tag, callback_ur
 function semverSatisfies(matchTag, tag, currentTag){
   return semver.validRange(matchTag)
     && semver.satisfies(tag, matchTag)
-    && semver.gt(tag, currentTag);
+    && (!semver.valid(currentTag) || semver.gt(tag, currentTag));
 }
+
+const getCurrentTag = co.wrap(function*(spirit){
+  const currentLife = (yield spirit.currentLife) || (yield spirit.latestLife);
+  if(currentLife == null){
+    return '0';
+  }
+  try{
+    const config = yield currentLife.config;
+    return config.tag;
+  }catch(e){
+    return '0';
+  }
+});

@@ -1,6 +1,6 @@
 const router = require('express-promise-router')();
-const samsara = require('samsara-lib');
 const co = require('co');
+const mutateSpiritConfig = require('../mutators/spiritConfig')
 const deploy = require('../private/deploy').deploy;
 const validateDeploy = require('../private/validateDeploy');
 const request = require('request-promise');
@@ -8,12 +8,8 @@ const request = require('request-promise');
 router.post('/:name/:secret', co.wrap(function*(req, res, next){
   console.log('deploying', req.params.name, req.body);
   
-  try{
-    const spirit = samsara().spirit(req.params.name);
-    const config = yield spirit.config;
-    
+  try{    
     yield validateDeploy(
-      config,
       req.params.name,
       req.params.secret,
       req.body.repository && req.body.repository.repo_name,
@@ -21,8 +17,11 @@ router.post('/:name/:secret', co.wrap(function*(req, res, next){
       req.body.callback_url);
 
     console.log('config is valid');
+    yield mutateSpiritConfig(req.params.name, function(config){
+      config.tag = req.body.push_data.tag;
+    });
     
-    deployInBackground(config, req.body.callback_url)
+    deployInBackground(name, req.body.callback_url)
     .catch(function(error){
       console.error(error);
     });
@@ -43,11 +42,8 @@ router.use(function(error, req, res, next){
   res.end();
 });
 
-const deployInBackground = co.wrap(function*(config, callback_url){
-  const result = yield tryDeploy(config.name);
-
-  result.context = config.description;
-  result.target_url = config.url;
+const deployInBackground = co.wrap(function*(name, callback_url){
+  const result = yield tryDeploy(name);
 
   console.log('responding', result);
 
