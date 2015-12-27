@@ -4,14 +4,14 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const co = require('co');
 const md5 = require('apache-md5');
-const auth = require('./providers/authentication');
+const auth = require('./private/authentication');
 
 passport.use(new LocalStrategy(co.wrap(function*(username, password, done) {
   try{
-    const users = yield auth();
+    const users = yield auth.users();
     console.log(users);
     const found = users.filter(x => x.username === username)[0];
-    
+
     if (!found) {
       return done(null, false, { message: 'Incorrect username.' });
     }
@@ -21,7 +21,7 @@ passport.use(new LocalStrategy(co.wrap(function*(username, password, done) {
     if (found.secret !== md5(password, found.secret)) {
       return done(null, false, { message: 'Incorrect password.' });
     }
-    
+
     return done(null, found.username);
   }catch(e){
     done(e);
