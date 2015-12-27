@@ -19,7 +19,7 @@ router.post('/:name/:secret', co.wrap(function* (req, res, next) {
     console.log('config is valid');
     yield samsara().spirit(req.params.name).mutateConfig(config => config.tag = req.body.push_data.tag);
 
-    deploy(name)
+    deploy(req.params.name)
       .then(success => ({state: 'success', description: 'deployed'}))
       .catch(error => ({state: 'error', description: error}))
       .then(result => request.post({

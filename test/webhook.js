@@ -11,10 +11,10 @@ const json = {
   "push_data": {
     "pushed_at": 1451039481,
     "images": [],
-    "tag": "latest",
+    "tag": "v1.2.1",
     "pusher": "mariusgundersen"
   },
-  "callback_url": "http://172.17.42.1:9090/callback",
+  "callback_url": "http://localhost:9090/callback",
   "repository": {
     "status": "Active",
     "description": "Scrabble + Twitter = Scratter",
@@ -30,7 +30,7 @@ const json = {
     "comment_count": 0,
     "date_created": 1448919441,
     "dockerfile": "FROM node:4.2-onbuild\n\nEXPOSE 8080",
-    "repo_name": "mariusgundersen/scratter"
+    "repo_name": "mariusgundersen/samsara"
   }
 };
 
