@@ -3,6 +3,7 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     var self = this;
     
     this.secret = ko.observable(model.webhook['secret']);
+    this.matchTag = ko.observable(model.webhook['matchTag'] || model.tag);
     
     this.state = ko.observable(model.webhook['enable'] ? 'enabled' : 'disabled');
     this.disabled = ko.computed(function(){
@@ -43,6 +44,7 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
     this.save = qvc.createCommand('saveWebhook', {
       name: model.name,
       secret: this.secret,
+      matchTag: this.matchTag
     }).success(function(){
       model.webhook['secret'] = self.secret();
       self.state('enabled');

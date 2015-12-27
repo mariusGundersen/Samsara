@@ -1,250 +1,238 @@
 const qvc = require('qvc');
-const mutateSpiritConfig = require('../mutators/spiritConfig');
+const samsara = require('samsara-lib');
 const NotEmpty = require('qvc/constraints/NotEmpty');
 const Pattern = require('qvc/constraints/Pattern');
 
 module.exports = [
   qvc.command('setSpiritImage', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.image = command.value;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => config.image = command.value);
   }),
   qvc.command('setSpiritTag', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.tag = command.value;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => config.tag = command.value);
   }),
   qvc.command('setSpiritDescription', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.description = command.value;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => config.description = command.value);
   }),
   qvc.command('setSpiritUrl', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.url = command.value;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => config.url = command.value);
   }),
   qvc.command('setSpiritDeploymentMethod', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.deploymentMethod = command.value;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => config.deploymentMethod = command.value);
   }),
   qvc.command('setSpiritCleanupLimit', function(command){
-    if(command.value >= 0){
-      return mutateSpiritConfig(command.name, function(config){
-        config.cleanupLimit = command.value|0;
-      });
-    }else{
-      return {success:false, valid:false, violations: [{fieldName:'value', message:'Value must be positive'}]};
-    }
+	if(command.value >= 0){
+	  return samsara().spirit(command.name).mutateConfig(config => config.cleanupLimit = command.value|0);
+	}else{
+	  return {success:false, valid:false, violations: [{fieldName:'value', message:'Value must be positive'}]};
+	}
   }),
   qvc.command('enableWebhook', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.webhook.enable = true;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => config.webhook.enable = true);
   }),
   qvc.command('disableWebhook', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.webhook.enable = false;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => config.webhook.enable = false);
   }),
   qvc.command('saveWebhook', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      config.webhook['secret'] = command.secret;
-    });
+	return samsara().spirit(command.name).mutateConfig(config => {
+		config.webhook['secret'] = command.secret;
+		config.webhook['matchTag'] = command.matchTag;
+	});
+  }, {
+	'secret': new NotEmpty('Specify a secret key to validate the webhook request'),
+	'matchTag': new NotEmpty('Specify either an exact tag or a semver tag to match against')
   }),
   qvc.command('addEnvVar', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.env){
-        config.env = {};
-      }
-      config.env[command.key] = command.value;
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.env){
+		config.env = {};
+	  }
+	  config.env[command.key] = command.value;
+	});
   }, {
-    'key': new NotEmpty('Please specify a key for the new environment variable')
+	'key': new NotEmpty('Please specify a key for the new environment variable')
   }),
   qvc.command('setEnvVar', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.env){
-        config.env = {};
-      }
-      if(command.key in config.env == false){
-        throw new Error(command.key+" is not in the environment variable list");
-      }
-      config.env[command.key] = command.value;
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.env){
+		config.env = {};
+	  }
+	  if(command.key in config.env == false){
+		throw new Error(command.key+" is not in the environment variable list");
+	  }
+	  config.env[command.key] = command.value;
+	});
   }),
   qvc.command('removeEnvVar', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.env){
-        config.env = {};
-      }
-      config.env[command.key] = undefined;
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.env){
+		config.env = {};
+	  }
+	  config.env[command.key] = undefined;
+	});
   }),
   qvc.command('addVolume', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.volumes){
-        config.volumes = {};
-      }
-      config.volumes[command.containerPath] = {
-        hostPath: command.hostPath,
-        readOnly: command.readOnly
-      };
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.volumes){
+		config.volumes = {};
+	  }
+	  config.volumes[command.containerPath] = {
+		hostPath: command.hostPath,
+		readOnly: command.readOnly
+	  };
+	});
   }, {
-    'containerPath': new NotEmpty('Please specify a containerPath for the new volume')
+	'containerPath': new NotEmpty('Please specify a containerPath for the new volume')
   }),
   qvc.command('setVolume', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.volumes){
-        config.volumes = {};
-      }
-      if(command.containerPath in config.volumes == false){
-        throw new Error(command.containerPath+" is not in the volume list");
-      }
-      config.volumes[command.containerPath] = {
-        hostPath: command.hostPath,
-        readOnly: command.readOnly
-      };
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.volumes){
+		config.volumes = {};
+	  }
+	  if(command.containerPath in config.volumes == false){
+		throw new Error(command.containerPath+" is not in the volume list");
+	  }
+	  config.volumes[command.containerPath] = {
+		hostPath: command.hostPath,
+		readOnly: command.readOnly
+	  };
+	});
   }),
   qvc.command('removeVolume', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.volumes){
-        config.volumes = {};
-      }
-      config.volumes[command.containerPath] = undefined;
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.volumes){
+		config.volumes = {};
+	  }
+	  config.volumes[command.containerPath] = undefined;
+	});
   }),
   qvc.command('addPort', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.ports){
-        config.ports = {};
-      }
-      config.ports[command.hostPort] = {
-        containerPort: command.containerPort,
-        hostIp: command.hostIp
-      };
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.ports){
+		config.ports = {};
+	  }
+	  config.ports[command.hostPort] = {
+		containerPort: command.containerPort,
+		hostIp: command.hostIp
+	  };
+	});
   }, {
-    'hostPort': [
-      new NotEmpty('Please specify a host port for the new port'),
-      new Pattern(/^\d+$/, 'The host port must be a number')
-    ],
-    'containerPort': [
-      new NotEmpty('Please specify a container port for the new port'),
-      new Pattern(/^\d+$/, 'The container port must be a number')
-    ],
-    'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
+	'hostPort': [
+	  new NotEmpty('Please specify a host port for the new port'),
+	  new Pattern(/^\d+$/, 'The host port must be a number')
+	],
+	'containerPort': [
+	  new NotEmpty('Please specify a container port for the new port'),
+	  new Pattern(/^\d+$/, 'The container port must be a number')
+	],
+	'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
   }),
   qvc.command('setPort', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.ports){
-        config.ports = {};
-      }
-      if(command.hostPort in config.ports == false){
-        throw new Error(command.hostPort+" is not in the ports list");
-      }
-      config.ports[command.hostPort] = {
-        containerPort: command.containerPort,
-        hostIp: command.hostIp
-      };
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.ports){
+		config.ports = {};
+	  }
+	  if(command.hostPort in config.ports == false){
+		throw new Error(command.hostPort+" is not in the ports list");
+	  }
+	  config.ports[command.hostPort] = {
+		containerPort: command.containerPort,
+		hostIp: command.hostIp
+	  };
+	});
   }, {
-    'hostPort': [
-      new NotEmpty('Please specify a host port for the new port'),
-      new Pattern(/^\d+$/, 'The host port must be a number')
-    ],
-    'containerPort': [
-      new NotEmpty('Please specify a container port for the new port'),
-      new Pattern(/^\d+$/, 'The container port must be a number')
-    ],
-    'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
+	'hostPort': [
+	  new NotEmpty('Please specify a host port for the new port'),
+	  new Pattern(/^\d+$/, 'The host port must be a number')
+	],
+	'containerPort': [
+	  new NotEmpty('Please specify a container port for the new port'),
+	  new Pattern(/^\d+$/, 'The container port must be a number')
+	],
+	'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
   }),
   qvc.command('removePort', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.ports){
-        config.ports = {};
-      }
-      config.ports[command.hostPort] = undefined;
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.ports){
+		config.ports = {};
+	  }
+	  config.ports[command.hostPort] = undefined;
+	});
   }),
   qvc.command('addLink', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.links){
-        config.links = {};
-      }
-      config.links[command.alias] = {
-        spirit: command.spirit
-      };
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.links){
+		config.links = {};
+	  }
+	  config.links[command.alias] = {
+		spirit: command.spirit
+	  };
+	});
   }, {
-    'alias': new NotEmpty('Please specify a alias for the new link')
+	'alias': new NotEmpty('Please specify a alias for the new link')
   }),
   qvc.command('setLink', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.links){
-        config.links = {};
-      }
-      if(command.alias in config.links == false){
-        throw new Error(command.alias+" is not in the links list");
-      }
-      config.links[command.alias] = {
-        spirit: command.spirit
-      };
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.links){
+		config.links = {};
+	  }
+	  if(command.alias in config.links == false){
+		throw new Error(command.alias+" is not in the links list");
+	  }
+	  config.links[command.alias] = {
+		spirit: command.spirit
+	  };
+	});
   }),
   qvc.command('removeLink', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.links){
-        config.links = {};
-      }
-      config.links[command.alias] = undefined;
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.links){
+		config.links = {};
+	  }
+	  config.links[command.alias] = undefined;
+	});
   }),
   qvc.command('addVolumesFrom', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.volumesFrom){
-        config.volumesFrom = [];
-      }
-      config.volumesFrom.push({
-        spirit: command.fromSpirit,
-        readOnly: command.readOnly
-      });
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.volumesFrom){
+		config.volumesFrom = [];
+	  }
+	  config.volumesFrom.push({
+		spirit: command.fromSpirit,
+		readOnly: command.readOnly
+	  });
+	});
   }, {
-    'fromSpirit': new NotEmpty('Please specify the spirit to use volumes from')
+	'fromSpirit': new NotEmpty('Please specify the spirit to use volumes from')
   }),
   qvc.command('setVolumesFrom', function(command){
-    console.log("setVolumesFrom", command.name);
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.volumesFrom){
-        config.volumesFrom = [];
-      }
-      
-      const found = config.volumesFrom.filter(function(volumesFrom){
-        return volumesFrom.spirit == command.oldFromSpirit;
-      })[0];
-            
-      if(found){
-        found.spirit = command.fromSpirit;
-        found.readOnly = command.readOnly;
-      }
-    });
+	console.log("setVolumesFrom", command.name);
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.volumesFrom){
+		config.volumesFrom = [];
+	  }
+
+	  const found = config.volumesFrom.filter(function(volumesFrom){
+		return volumesFrom.spirit == command.oldFromSpirit;
+	  })[0];
+
+	  if(found){
+		found.spirit = command.fromSpirit;
+		found.readOnly = command.readOnly;
+	  }
+	});
   }),
   qvc.command('removeVolumesFrom', function(command){
-    return mutateSpiritConfig(command.name, function(config){
-      if(!config.volumesFrom){
-        config.volumesFrom = [];
-      }
-      const found = config.volumesFrom.filter(function(volumesFrom){
-        return volumesFrom.spirit == command.fromSpirit;
-      })[0];
-      
-      if(found){
-        config.volumesFrom.splice(config.volumesFrom.indexOf(found), 1);
-      }
-    });
+	return samsara().spirit(command.name).mutateConfig(function(config){
+	  if(!config.volumesFrom){
+		config.volumesFrom = [];
+	  }
+	  const found = config.volumesFrom.filter(function(volumesFrom){
+		return volumesFrom.spirit == command.fromSpirit;
+	  })[0];
+
+	  if(found){
+		config.volumesFrom.splice(config.volumesFrom.indexOf(found), 1);
+	  }
+	});
   })
 ];
