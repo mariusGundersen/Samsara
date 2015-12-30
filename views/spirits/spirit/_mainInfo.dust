@@ -6,6 +6,34 @@
     </span>
   </h3>
   <div class="box-list">
+    <div class="box-list-item" data-bind="with:description">
+      <label class="small-label">Description</label>
+      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
+        <span class="control-like" data-bind="text:value">{config.description}</span>
+        <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.description}display:none{/config.description}">(not set)</span>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <input data-bind="value:value, hasFocus:editing()">
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>
+      </form>
+    </div>
+
+    <div class="box-list-item" data-bind="with:url">
+      <label class="small-label">Website</label>
+      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
+        <a class="control-like" href="{config.url}" data-bind="text:value, attr:{href:value}, click: function(){return true}, clickBubble:false" target="_blank">{config.url}</a>
+        <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.url}display:none{/config.url}">(not set)</span>
+        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change website url"><i class="fa fa-fw fa-pencil"></i></button>
+      </div>
+      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
+        <input data-bind="value:value, hasFocus:editing()" placeholder="http://">
+        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
+        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>
+      </form>
+    </div>
+
     <div class="box-list-item" data-bind="with:deploymentMethod">
       <label class="small-label">Deployment</label>
       <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
@@ -32,34 +60,6 @@
       </div>
       <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
         <input type="number" min="0" data-bind="value:value, hasFocus:editing()">
-        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
-        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>
-      </form>
-    </div>
-
-    <div class="box-list-item" data-bind="with:description">
-      <label class="small-label">Description</label>
-      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
-        <span class="control-like" data-bind="text:value">{config.description}</span>
-        <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.description}display:none{/config.description}">(not set)</span>
-        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change description"><i class="fa fa-fw fa-pencil"></i></button>
-      </div>
-      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
-        <input data-bind="value:value, hasFocus:editing()">
-        <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
-        <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>
-      </form>
-    </div>
-
-    <div class="box-list-item" data-bind="with:url">
-      <label class="small-label">Website</label>
-      <div class="box-list-item-show" data-bind="visible:!editing(), click:edit">
-        <a class="control-like" href="{config.url}" data-bind="text:value, attr:{href:value}, click: function(){return true}, clickBubble:false" target="_blank">{config.url}</a>
-        <span class="text-muted control-like" data-bind="visible:!value()" style="{?config.url}display:none{/config.url}">(not set)</span>
-        <button class="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Change website url"><i class="fa fa-fw fa-pencil"></i></button>
-      </div>
-      <form class="pure-form box-list-item-edit" data-bind="visible:editing, submit:save" style="display:none">
-        <input data-bind="value:value, hasFocus:editing()" placeholder="http://">
         <button class="pure-button button-success" type="submit" data-bind="click:save"><i class="fa fa-fw fa-check"></i></button>
         <button class="pure-button" type="cancel" data-bind="click:cancel"><i class="fa fa-fw fa-close"></i></button>
       </form>
