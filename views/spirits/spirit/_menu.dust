@@ -4,8 +4,11 @@
     <li class="{?menu.status}selected{/menu.status}">
       <a href="/spirit/{menu.spirit}"><i class="fa fa-info fa-fw"></i>Status</a>
     </li>
+    <li class="{?menu.settings}selected{/menu.settings}">
+      <a href="/spirit/{menu.spirit}/settings"><i class="fa fa-gear fa-fw"></i>Spirit settings</a>
+    </li>
     <li class="{?menu.config}selected{/menu.config}">
-      <a href="/spirit/{menu.spirit}/configure"><i class="fa fa-wrench fa-fw"></i>Configure</a>
+      <a href="/spirit/{menu.spirit}/configure"><i class="fa fa-wrench fa-fw"></i>Container config</a>
     </li>
     <li class="{?menu.lives}selected{/menu.lives}">
       <a href="/spirit/{menu.spirit}/lives"><i class="fa fa-history fa-fw"></i>Lives</a>

@@ -1,0 +1,35 @@
+<section data-viewmodel="spirit/RepositoryVM" data-model="{config|js}" class="box">
+  <div data-bind="visible: editing" style="display:none">
+    <h3>
+      <span>
+        <i class="fa fa-fw fa-info"></i>
+        Repository information
+      </span>
+      <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
+    </h3>
+    <form class="pure-form pure-form-stacked box-form" data-bind="submit: save">
+      {>"spirits/spirit/_imageAndTag"/}
+
+      <div class="button-group">
+        <button class="pure-button button-success" type="submit" data-bind="click: save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
+        <button class="pure-button" type="cancel" data-bind="click: cancel"><i class="fa fa-fw fa-undo"></i>&nbsp;Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <div data-bind="visible: !editing()">
+    <h3>
+      <span>
+        <i class="fa fa-fw fa-info"></i>
+        Repository information
+      </span>
+      <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:edit" title="Edit container repository"><i class="fa fa-fw fa-pencil"></i></button>
+    </h3>
+    <form class="box-form pure-form-stacked pure-form">
+      <label class="small-label" for="url">Image</label>
+      <a class="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:image, attr:{href:'https://registry.hub.docker.com/'+(image().indexOf('/')>0 ? 'u/'+image() : '_/'+image())}" target="_blank">{config.image}</a>
+      <label class="small-label">Tag</label>
+      <span class="control-like" href="https://registry.hub.docker.com/u/{config.tag}" data-bind="text:tag">{config.tag}</span>
+    </form>
+  </div>
+</section>

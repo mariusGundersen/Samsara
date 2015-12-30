@@ -10,7 +10,7 @@ router.get('/:name', co.wrap(function*(req, res, next) {
   const isDeploying = yield spirit.isDeploying;
   const currentLife = yield spirit.currentLife;
   const life = (currentLife || (yield spirit.latestLife) || {life: '?'}).life;
-  
+
   const pageModel = yield makePageModel(req.params.name, {
     name: req.params.name,
     url: config.url,
@@ -41,6 +41,16 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
     config: config
   }, req.params.name, 'config');
   res.render('spirits/spirit/configure', pageModel);
+}));
+
+router.get('/:name/settings', co.wrap(function*(req, res, next) {
+  const spirit = samsara().spirit(req.params.name);
+  const config = yield spirit.config;
+  const pageModel = yield makePageModel(req.params.name, {
+    name: req.params.name,
+    config: config
+  }, req.params.name, 'settings');
+  res.render('spirits/spirit/settings', pageModel);
 }));
 
 router.get('/:name/lives', co.wrap(function*(req, res, next) {

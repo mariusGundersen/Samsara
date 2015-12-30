@@ -1,0 +1,25 @@
+<div class="box-form" style="padding:0" data-viewmodel="spirit/ImageAndTagVM" data-params="image:image, tag:tag">
+          <label class="small-label">Image&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:image"></span></label>
+          <input data-bind="textInput: image, hasFocus:imageHasFocus, css:{'autocomplete-input-focus':imageHasFocus}" class="autocomplete-input" placeholder="ex: nginx">
+          <div class="autocomplete-list" data-bind="visible: imageHasFocus" style="display:none">
+            <ul class="pure-menu-list" data-bind="foreach: images">
+              <li class="pure-menu-item">
+                <a href="#" class="pure-menu-link" data-bind="text: name, click: $parent.selectImage, hasFocus: focus"></a>
+              </li>
+            </ul>
+            <div data-bind="visible: search.isBusy" style="display:none; padding: .5em 1em" class="text-muted">
+              <i class="fa fa-fw fa-spin fa-refresh"></i>&nbsp;Searching...
+            </div>
+          </div>
+
+          <label class="small-label">Tags&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:tag, visible: tags().length"></span></label>
+          <select data-bind="options: tags,
+                            optionsValue: 'name',
+                            optionsText: 'name',
+                            value: tag,
+                            valueAllowUnset: true,
+                            hasFocus: tagHasFocus,
+                            optionsCaption: tags().length ? 'Choose tag...' : 'Unknown image'">
+            <option>Unknown image</option>
+          </select>
+        </div>
