@@ -5,6 +5,7 @@ router.use('/qvc', qvc(
   require('./handlers/container'),
   require('./handlers/spirit'),
   require('./handlers/spiritConfig'),
+  require('./handlers/spiritSettings'),
   require('./handlers/settings'),
   {
     debug: process.env.NODE_ENV === 'development'

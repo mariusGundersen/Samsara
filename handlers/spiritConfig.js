@@ -13,22 +13,6 @@ module.exports = [
     'image': new NotEmpty('Specify the image to use'),
     'tag': new NotEmpty('Specify the tag')
   }),
-  qvc.command('setSpiritDescription', function (command) {
-    return samsara().spirit(command.name).mutateConfig(config => config.description = command.value);
-  }),
-  qvc.command('setSpiritUrl', function (command) {
-    return samsara().spirit(command.name).mutateConfig(config => config.url = command.value);
-  }),
-  qvc.command('setSpiritDeploymentMethod', function (command) {
-    return samsara().spirit(command.name).mutateConfig(config => config.deploymentMethod = command.value);
-  }),
-  qvc.command('setSpiritCleanupLimit', function (command) {
-    if (command.value >= 0) {
-      return samsara().spirit(command.name).mutateConfig(config => config.cleanupLimit = command.value | 0);
-    } else {
-      return { success: false, valid: false, violations: [{ fieldName: 'value', message: 'Value must be positive' }] };
-    }
-  }),
   qvc.command('enableWebhook', function (command) {
     return samsara().spirit(command.name).mutateConfig(config => config.webhook.enable = true);
   }),
