@@ -4,12 +4,12 @@
     <h2 class="dragger"><i class="fa fa-fw fa-wrench"></i>Container configuration for {name}</h2>
     <p class="text-center">Changes made here will take effect in the next life. Use the Deploy button on the status page to put the new configuration into effect.</p>
     <div class="grid-container">
-      {>"spirits/spirit/_repository"/}
-      {>"spirits/spirit/_envVars"/}
-      {>"spirits/spirit/_volumes"/}
-      {>"spirits/spirit/_ports"/}
-      {>"spirits/spirit/_links"/}
-      {>"spirits/spirit/_volumesFrom"/}
+      {>"spirits/spirit/_repository" config=repository/}
+      {>"spirits/spirit/_envVars" config=environment/}
+      {>"spirits/spirit/_volumes" config=volumes/}
+      {>"spirits/spirit/_ports" config=ports/}
+      {>"spirits/spirit/_links" config=links/}
+      {>"spirits/spirit/_volumesFrom" config=volumesFrom/}
     </div>
   </div>
 {/spiritPage}

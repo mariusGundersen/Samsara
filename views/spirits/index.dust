@@ -5,7 +5,7 @@
     <ul class="pure-menu-list">
       {#spirits}
         <li class="pure-menu-item">
-          <a href="spirit/{name}" class="pure-menu-link">{name} <span class="text-faded">({image})</span></a>
+          <a href="spirit/{name}" class="pure-menu-link">{name} <span class="text-faded">({life|nth} life)</span></a>
         </li>
       {/spirits}
     </ul>

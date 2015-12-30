@@ -4,53 +4,62 @@ const makePageModel = require('../pageModels/spirit');
 const co = require('co');
 
 router.get('/:name', co.wrap(function*(req, res, next) {
-  const spirit = samsara().spirit(req.params.name);
+  const name = req.params.name;
+  const spirit = samsara().spirit(name);
   const state = yield spirit.status;
-  const config = yield spirit.config;
+  const settings = yield spirit.settings;
+  const config = yield spirit.containerConfig;
   const isDeploying = yield spirit.isDeploying;
   const currentLife = yield spirit.currentLife;
-  const life = (currentLife || (yield spirit.latestLife) || {life: '?'}).life;
+  const latestLife = yield spirit.latestLife;
+  const life = (currentLife || latestLife || {life: '?'}).life;
 
-  const pageModel = yield makePageModel(req.params.name, {
-    name: req.params.name,
-    url: config.url,
-    description: config.description,
+  const pageModel = yield makePageModel(name, {
+    name: name,
+    url: settings.url,
+    description: settings.description,
     life: life,
     deploy: {
-      name: config.name,
+      name: name,
       image: config.image,
-      tag: config.tag,
-      stopBeforeStart: config.deploymentMethod == 'stop-before-start',
+      stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
       isDeploying: isDeploying
     },
     controls: {
-      name: req.params.name,
+      name: name,
       canStop: state === 'running',
-      canStart: state == 'stopped' && currentLife && (yield currentLife.container),
+      canStart: state == 'stopped' && latestLife && (yield latestLife.container),
       canRestart: state == 'running'
     }
-  }, req.params.name, 'status');
+  }, name, 'status');
   res.render('spirits/spirit/status', pageModel);
 }));
 
-router.get('/:name/configure', co.wrap(function*(req, res, next) {
-  const spirit = samsara().spirit(req.params.name);
-  const config = yield spirit.config;
-  const pageModel = yield makePageModel(req.params.name, {
-    name: req.params.name,
-    config: config
-  }, req.params.name, 'config');
-  res.render('spirits/spirit/configure', pageModel);
+router.get('/:name/settings', co.wrap(function*(req, res, next) {
+  const name = req.params.name
+  const spirit = samsara().spirit(name);
+  const settings = yield spirit.settings;
+  const pageModel = yield makePageModel(name, {
+    name: name,
+    settings: settings
+  }, name, 'settings');
+  res.render('spirits/spirit/settings', pageModel);
 }));
 
-router.get('/:name/settings', co.wrap(function*(req, res, next) {
-  const spirit = samsara().spirit(req.params.name);
-  const config = yield spirit.config;
-  const pageModel = yield makePageModel(req.params.name, {
-    name: req.params.name,
-    config: config
-  }, req.params.name, 'settings');
-  res.render('spirits/spirit/settings', pageModel);
+router.get('/:name/configure', co.wrap(function*(req, res, next) {
+  const name = req.params.name
+  const spirit = samsara().spirit(name);
+  const config = yield spirit.containerConfig;
+  const pageModel = yield makePageModel(name, {
+    name: name,
+    repository: repositoryModel(config, name),
+    environment: environmentModel(config, name),
+    volumes: {},
+    ports: {},
+    links: {},
+    volumesFrom: {}
+  }, name, 'config');
+  res.render('spirits/spirit/configure', pageModel);
 }));
 
 router.get('/:name/lives', co.wrap(function*(req, res, next) {
@@ -72,3 +81,35 @@ router.get('/:name/lives', co.wrap(function*(req, res, next) {
 }));
 
 module.exports = router;
+
+function repositoryModel(config, name){
+  const imageAndTag = config.image.split(':');
+  return {
+    name: name,
+    image: imageAndTag[0],
+    tag: imageAndTag[1]
+  };
+}
+
+function environmentModel(config, name){
+  if(Array.isArray(config.environment)){
+    return {
+      name: name,
+      environment: config.environment
+        .map(env => env.split('='))
+        .map(pair => ({
+          key: pair[0],
+          value: pair[1]
+        }))
+    };
+  }else{
+    return {
+      name: name,
+      environment: Object.keys(config.environment || {})
+        .map(key => ({
+          key: key,
+          value: config.environment[key]
+        }))
+    };
+  }
+}

@@ -1,23 +1,23 @@
 define(['spirit/EditEnvVar', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, qvc){
   return function EnvVarsVM(model, when){
     var self = this;
-    
-    this.envVars = ko.observableArray(toEnvList(model.env).map(function(envVar){
+
+    this.envVars = ko.observableArray(model.environment.map(function(envVar){
       return new EditEnvVar(envVar, model.name);
     }));
-    
+
     this.creating = ko.observable(false);
-    
+
     this.add = function(){
       self.create.clearValidationMessages();
       self.creating(true);
     };
-    
+
     this.fresh = {
       key: ko.observable(),
       value: ko.observable()
     };
-    
+
     this.remove = function(entry){
       qvc.createCommand('removeEnvVar', {
         name: model.name,
@@ -26,7 +26,7 @@ define(['spirit/EditEnvVar', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, q
         self.envVars.remove(entry);
       })();
     };
-        
+
     this.create = qvc.createCommand("addEnvVar", {
       name: model.name,
       key: self.fresh.key,
@@ -37,24 +37,11 @@ define(['spirit/EditEnvVar', 'knockout', 'deco/qvc'], function(EditEnvVar, ko, q
       self.fresh.key('');
       self.creating(false);
     });
-    
+
     this.cancelCreate = function(){
       self.fresh.value('');
       self.fresh.key('');
       self.creating(false);
     };
   };
-  
-  
-  function toEnvList(env){
-    var result = [];
-    if(env){
-      for(var name in env){
-        if(env.hasOwnProperty(name)){
-          result.push({key: name, value: env[name]});
-        }
-      }
-    }
-    return result;
-  }
 });

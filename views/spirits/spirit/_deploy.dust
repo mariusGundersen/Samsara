@@ -6,7 +6,7 @@
     </span>
   </h3>
   <p class="text-center">
-    Pull <code>{deploy.image}:{deploy.tag}</code> from the Docker Hub and
+    Pull <code>{deploy.image}</code> from the Docker Hub and
     {?deploy.stopBeforeStart} stop the currently running container before starting a new life {/deploy.stopBeforeStart}
     {^deploy.stopBeforeStart} start a new container before stopping the currently running life {/deploy.stopBeforeStart}
   </p>

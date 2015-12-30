@@ -5,31 +5,15 @@ const Pattern = require('qvc/constraints/Pattern');
 
 module.exports = [
   qvc.command('setSpiritImageAndTag', function (command) {
-    return samsara().spirit(command.name).mutateConfig(config => {
-      config.image = command.image;
-      config.tag = command.tag;
+    return samsara().spirit(command.name).mutateContainerConfig(config => {
+      config.image = command.image+':'+command.tag;
     });
   }, {
     'image': new NotEmpty('Specify the image to use'),
     'tag': new NotEmpty('Specify the tag')
   }),
-  qvc.command('enableWebhook', function (command) {
-    return samsara().spirit(command.name).mutateConfig(config => config.webhook.enable = true);
-  }),
-  qvc.command('disableWebhook', function (command) {
-    return samsara().spirit(command.name).mutateConfig(config => config.webhook.enable = false);
-  }),
-  qvc.command('saveWebhook', function (command) {
-    return samsara().spirit(command.name).mutateConfig(config => {
-      config.webhook['secret'] = command.secret;
-      config.webhook['matchTag'] = command.matchTag;
-    });
-  }, {
-    'secret': new NotEmpty('Specify a secret key to validate the webhook request'),
-    'matchTag': new NotEmpty('Specify either an exact tag or a semver tag to match against')
-  }),
   qvc.command('addEnvVar', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.env) {
         config.env = {};
       }
@@ -39,7 +23,7 @@ module.exports = [
     'key': new NotEmpty('Please specify a key for the new environment variable')
   }),
   qvc.command('setEnvVar', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.env) {
         config.env = {};
       }
@@ -50,7 +34,7 @@ module.exports = [
     });
   }),
   qvc.command('removeEnvVar', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.env) {
         config.env = {};
       }
@@ -58,7 +42,7 @@ module.exports = [
     });
   }),
   qvc.command('addVolume', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.volumes) {
         config.volumes = {};
       }
@@ -71,7 +55,7 @@ module.exports = [
     'containerPath': new NotEmpty('Please specify a containerPath for the new volume')
   }),
   qvc.command('setVolume', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.volumes) {
         config.volumes = {};
       }
@@ -85,7 +69,7 @@ module.exports = [
     });
   }),
   qvc.command('removeVolume', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.volumes) {
         config.volumes = {};
       }
@@ -93,7 +77,7 @@ module.exports = [
     });
   }),
   qvc.command('addPort', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.ports) {
         config.ports = {};
       }
@@ -114,7 +98,7 @@ module.exports = [
     'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
   }),
   qvc.command('setPort', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.ports) {
         config.ports = {};
       }
@@ -138,7 +122,7 @@ module.exports = [
     'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
   }),
   qvc.command('removePort', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.ports) {
         config.ports = {};
       }
@@ -146,7 +130,7 @@ module.exports = [
     });
   }),
   qvc.command('addLink', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.links) {
         config.links = {};
       }
@@ -158,7 +142,7 @@ module.exports = [
     'alias': new NotEmpty('Please specify a alias for the new link')
   }),
   qvc.command('setLink', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.links) {
         config.links = {};
       }
@@ -171,7 +155,7 @@ module.exports = [
     });
   }),
   qvc.command('removeLink', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.links) {
         config.links = {};
       }
@@ -179,7 +163,7 @@ module.exports = [
     });
   }),
   qvc.command('addVolumesFrom', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.volumesFrom) {
         config.volumesFrom = [];
       }
@@ -193,7 +177,7 @@ module.exports = [
   }),
   qvc.command('setVolumesFrom', function (command) {
     console.log("setVolumesFrom", command.name);
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.volumesFrom) {
         config.volumesFrom = [];
       }
@@ -209,7 +193,7 @@ module.exports = [
     });
   }),
   qvc.command('removeVolumesFrom', function (command) {
-    return samsara().spirit(command.name).mutateConfig(function (config) {
+    return samsara().spirit(command.name).mutateContainerConfig(function (config) {
       if (!config.volumesFrom) {
         config.volumesFrom = [];
       }

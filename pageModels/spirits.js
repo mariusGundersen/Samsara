@@ -3,8 +3,7 @@ const co = require('co');
 const makePageModel = require('./root');
 
 module.exports = co.wrap(function*(title, content, currentSpiritName){
-  const sam = samsara();
-  const list = yield sam.spirits();
+  const list = yield samsara().spirits();
   const spirits = yield Promise.all(list.map(co.wrap(function*(spirit){
     return {
       name: spirit.name,
@@ -14,12 +13,12 @@ module.exports = co.wrap(function*(title, content, currentSpiritName){
       selected: spirit.name == currentSpiritName
     };
   })));
-  
+
   return makePageModel(title, {
     menu: {
       newSpirit: currentSpiritName == 'new',
       spirits: spirits
     },
-    content: content || {}
+    content: content || {spirits: spirits}
   }, 'spirits');
 });

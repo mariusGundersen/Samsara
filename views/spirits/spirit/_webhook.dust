@@ -1,6 +1,6 @@
-<section data-viewmodel="spirit/WebhookVM" data-model="{config|js}" class="box">
+<section data-viewmodel="spirit/WebhookVM" data-model="{settings|js}" class="box">
 
-  <div data-bind="visible: enabled" style="{^config.webhook.enable}display:none{/config.webhook.enable}">
+  <div data-bind="visible: enabled" style="{^settings.webhook.enable}display:none{/settings.webhook.enable}">
     <h3>
       <span>
         <i class="fa fa-fw fa-anchor"></i>
@@ -10,9 +10,9 @@
     </h3>
     <form class="box-form pure-form pure-form-stacked">
       <label class="small-label" for="url">Webhook url</label>
-      <input id="url" readonly data-bind="value: url" value="http://example.com/deploy/{config.name}/{config.webhook.secret}">
+      <input id="url" readonly data-bind="value: url" value="http://example.com/deploy/{settings.name}/{settings.webhook.secret}">
       <label class="small-label">Match tag</label>
-      <span class="control-like" data-bind="text: matchTag">{config.webhook.matchTag}</span>
+      <span class="control-like" data-bind="text: matchTag">{settings.webhook.matchTag}</span>
     </form>
   </div>
 
@@ -38,7 +38,7 @@
     </form>
   </div>
 
-  <div data-bind="visible: disabled" style="{?config.webhook.enable}display:none{/config.webhook.enable}">
+  <div data-bind="visible: disabled" style="{?settings.webhook.enable}display:none{/settings.webhook.enable}">
     <h3>
       <span>
         <i class="fa fa-fw fa-anchor"></i>
