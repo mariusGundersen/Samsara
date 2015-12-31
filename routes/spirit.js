@@ -57,7 +57,7 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
     environment: environmentModel(config, name),
     volumes: volumesModel(config, name),
     ports: portsModel(config, name),
-    links: {},
+    links: linksModel(config, name),
     volumesFrom: {}
   }, name, 'config');
   res.render('spirits/spirit/configure', pageModel);
@@ -110,5 +110,12 @@ function portsModel(config, name){
   return {
     name: name,
     ports: transform.portsFromCompose(config)
+  };
+}
+
+function linksModel(config, name){
+  return {
+    name: name,
+    links: transform.linksFromCompose(config)
   };
 }

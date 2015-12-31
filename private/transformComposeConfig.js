@@ -72,5 +72,35 @@ module.exports = {
           return port.containerPort;
         }
       });
+  },
+  linksFromCompose: function(config){
+    return (config.links || [])
+      .map(link => {
+        const parts = link.split(':');
+        const match = /^spirit\(([a-zA-Z0-9_\.-]+)\)$/.exec(parts[0]);
+        if(match){
+          if(parts.length == 1){
+            return {spirit: match[1], alias: match[1], container: null};
+          }else if(parts.length == 2){
+            return {spirit: match[1], alias: parts[1], container: null};
+          }
+        }else{
+          if(parts.length == 1){
+            return {container: parts[0], alias: parts[0]};
+          }else if(parts.length == 2){
+            return {container: parts[0], alias: parts[1]};
+          }
+        }
+      });
+  },
+  linksToCompose: function(links){
+    return links
+      .map(link => {
+        if(link.spirit){
+          return `spirit(${link.spirit}):${link.alias}`;
+        }else{
+          return `${link.container}:${link.alias}`;
+        }
+      });
   }
 }

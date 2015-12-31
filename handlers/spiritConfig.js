@@ -116,35 +116,30 @@ module.exports = [
   }),
   qvc.command('addLink', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.links) {
-        config.links = {};
-      }
-      config.links[command.alias] = {
-        spirit: command.spirit
-      };
+      let links = transform.linksFromCompose(config);
+      links.push({alias: command.alias, spirit: command.spirit, container: command.container});
+      config.links = transform.linksToCompose(links);
     });
   }, {
-    'alias': new NotEmpty('Please specify a alias for the new link')
+    'alias': new NotEmpty('Please specify an alias for the new link')
   }),
   qvc.command('setLink', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.links) {
-        config.links = {};
-      }
-      if (command.alias in config.links == false) {
-        throw new Error(command.alias + " is not in the links list");
-      }
-      config.links[command.alias] = {
-        spirit: command.spirit
-      };
+      let links = transform.linksFromCompose(config);
+      links
+        .filter(link => link.alias === command.alias)
+        .forEach(link => {
+          link.spirit = command.spirit;
+          link.container = command.container;
+        });
+      config.links = transform.linksToCompose(links);
     });
   }),
   qvc.command('removeLink', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.links) {
-        config.links = {};
-      }
-      config.links[command.alias] = undefined;
+      let links = transform.linksFromCompose(config)
+        .filter(link => link.alias !== command.alias);
+      config.links = transform.linksToCompose(links);
     });
   }),
   qvc.command('addVolumesFrom', function (command) {
