@@ -102,5 +102,35 @@ module.exports = {
           return `${link.container}:${link.alias}`;
         }
       });
+  },
+  volumesFromFromCompose: function(config){
+    return (config.volumesFrom || [])
+      .map(volumeFrom => {
+        const parts = volumeFrom.split(':');
+        const match = /^spirit\(([a-zA-Z0-9_\.-]+)\)$/.exec(parts[0]);
+        if(match){
+          if(parts.length == 1){
+            return {spirit: match[1], readOnly: false, container: null};
+          }else if(parts.length == 2){
+            return {spirit: match[1], readOnly: parts[1] === 'ro', container: null};
+          }
+        }else{
+          if(parts.length == 1){
+            return {container: parts[0], readOnly: false};
+          }else if(parts.length == 2){
+            return {container: parts[0], readOnly: parts[1] === 'ro'};
+          }
+        }
+      });
+  },
+  volumesFromToCompose: function(volumesFrom){
+    return volumesFrom
+      .map(volumeFrom => {
+        if(volumeFrom.spirit){
+          return `spirit(${volumeFrom.spirit})`+(volumeFrom.readOnly ? ':ro' : '');
+        }else{
+          return volumeFrom.container + (volumeFrom.readOnly ? ':ro' : '');
+        }
+      });
   }
 }

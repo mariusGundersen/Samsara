@@ -144,13 +144,9 @@ module.exports = [
   }),
   qvc.command('addVolumesFrom', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.volumesFrom) {
-        config.volumesFrom = [];
-      }
-      config.volumesFrom.push({
-        spirit: command.fromSpirit,
-        readOnly: command.readOnly
-      });
+      let volumesFrom = transform.volumesFromFromCompose(config);
+      volumesFrom.push({spirit: command.fromSpirit, container: command.fromContainer, readOnly: command.readOnly});
+      config.volumesFrom = transform.volumesFromToCompose(volumesFrom);
     });
   }, {
     'fromSpirit': new NotEmpty('Please specify the spirit to use volumes from')
@@ -158,32 +154,22 @@ module.exports = [
   qvc.command('setVolumesFrom', function (command) {
     console.log("setVolumesFrom", command.name);
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.volumesFrom) {
-        config.volumesFrom = [];
-      }
-
-      const found = config.volumesFrom.filter(function (volumesFrom) {
-        return volumesFrom.spirit == command.oldFromSpirit;
-      })[0];
-
-      if (found) {
-        found.spirit = command.fromSpirit;
-        found.readOnly = command.readOnly;
-      }
+      let volumesFrom = transform.volumesFromFromCompose(config);
+      volumesFrom
+        .filter(volumeFrom => volumeFrom.spirit === command.oldFromSpirit && volumeFrom.container === command.oldFromContainer)
+        .forEach(volumeFrom => {
+          volumeFrom.spirit = command.fromSpirit;
+          volumeFrom.container = command.fromContainer;
+          volumeFrom.readOnly = command.readOnly;
+        });
+      config.volumesFrom = transform.volumesFromToCompose(volumesFrom);
     });
   }),
   qvc.command('removeVolumesFrom', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.volumesFrom) {
-        config.volumesFrom = [];
-      }
-      const found = config.volumesFrom.filter(function (volumesFrom) {
-        return volumesFrom.spirit == command.fromSpirit;
-      })[0];
-
-      if (found) {
-        config.volumesFrom.splice(config.volumesFrom.indexOf(found), 1);
-      }
+      let volumesFrom = transform.volumesFromFromCompose(config)
+        .filter(volumeFrom => volumeFrom.spirit !== command.fromSpirit && volumeFrom.container !== command.fromContainer)
+      config.volumesFrom = transform.volumesFromToCompose(volumesFrom);
     });
   })
 ];
