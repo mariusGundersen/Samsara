@@ -45,5 +45,32 @@ module.exports = {
           }
         }
       });
+  },
+  portsFromCompose: function(config){
+    return (config.ports || [])
+      .map(port => {
+        const parts = port.split(':');
+        if(parts.length == 1){
+          return {containerPort: parts[0], hostPort: '', hostIp: ''};
+        }else if(parts.length == 2){
+          return {containerPort: parts[1], hostPort: parts[0], hostIp: ''};
+        }else if(parts.length == 3){
+          return {containerPort: parts[2], hostPort: parts[1], hostIp: parts[0]};
+        }
+      });
+  },
+  portsToCompose: function(ports){
+    return ports
+      .map(port => {
+        if(port.hostPort){
+          if(port.hostIp){
+            return port.hostIp+':'+port.hostPort+':'+port.containerPort;
+          }else{
+            return port.hostPort+':'+port.containerPort;
+          }
+        }else{
+          return port.containerPort;
+        }
+      });
   }
 }

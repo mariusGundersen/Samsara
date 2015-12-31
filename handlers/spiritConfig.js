@@ -70,13 +70,9 @@ module.exports = [
   }),
   qvc.command('addPort', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.ports) {
-        config.ports = {};
-      }
-      config.ports[command.hostPort] = {
-        containerPort: command.containerPort,
-        hostIp: command.hostIp
-      };
+      let ports = transform.portsFromCompose(config);
+      ports.push({hostPort: command.hostPort, containerPort: command.containerPort, hostIp: command.hostIp});
+      config.ports = transform.portsToCompose(ports);
     });
   }, {
     'hostPort': [
@@ -91,16 +87,14 @@ module.exports = [
   }),
   qvc.command('setPort', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.ports) {
-        config.ports = {};
-      }
-      if (command.hostPort in config.ports == false) {
-        throw new Error(command.hostPort + " is not in the ports list");
-      }
-      config.ports[command.hostPort] = {
-        containerPort: command.containerPort,
-        hostIp: command.hostIp
-      };
+      let ports = transform.portsFromCompose(config);
+      ports
+        .filter(port => port.hostPort === command.hostPort)
+        .forEach(port => {
+          port.containerPort = command.containerPort;
+          port.hostIp = command.hostIp;
+        });
+      config.ports = transform.portsToCompose(ports);
     });
   }, {
     'hostPort': [
@@ -115,10 +109,9 @@ module.exports = [
   }),
   qvc.command('removePort', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.ports) {
-        config.ports = {};
-      }
-      config.ports[command.hostPort] = undefined;
+      let ports = transform.portsFromCompose(config)
+        .filter(port => port.hostPort !== command.hostPort);
+      config.ports = transform.portsToCompose(ports);
     });
   }),
   qvc.command('addLink', function (command) {

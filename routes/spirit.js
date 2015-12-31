@@ -56,7 +56,7 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
     repository: repositoryModel(config, name),
     environment: environmentModel(config, name),
     volumes: volumesModel(config, name),
-    ports: {},
+    ports: portsModel(config, name),
     links: {},
     volumesFrom: {}
   }, name, 'config');
@@ -103,5 +103,12 @@ function volumesModel(config, name){
   return {
     name: name,
     volumes: transform.volumesFromCompose(config)
+  };
+}
+
+function portsModel(config, name){
+  return {
+    name: name,
+    ports: transform.portsFromCompose(config)
   };
 }
