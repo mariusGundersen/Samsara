@@ -1,7 +1,8 @@
 const router = require('express-promise-router')();
 const samsara = require('samsara-lib');
-const makePageModel = require('../pageModels/spirit');
 const co = require('co');
+const makePageModel = require('../pageModels/spirit');
+const transform = require('../private/transformComposeConfig');
 
 router.get('/:name', co.wrap(function*(req, res, next) {
   const name = req.params.name;
@@ -54,7 +55,7 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
     name: name,
     repository: repositoryModel(config, name),
     environment: environmentModel(config, name),
-    volumes: {},
+    volumes: volumesModel(config, name),
     ports: {},
     links: {},
     volumesFrom: {}
@@ -92,24 +93,15 @@ function repositoryModel(config, name){
 }
 
 function environmentModel(config, name){
-  if(Array.isArray(config.environment)){
-    return {
-      name: name,
-      environment: config.environment
-        .map(env => env.split('='))
-        .map(pair => ({
-          key: pair[0],
-          value: pair[1]
-        }))
-    };
-  }else{
-    return {
-      name: name,
-      environment: Object.keys(config.environment || {})
-        .map(key => ({
-          key: key,
-          value: config.environment[key]
-        }))
-    };
-  }
+  return {
+    name: name,
+    environment: transform.environmentFromCompose(config)
+  };
+}
+
+function volumesModel(config, name){
+  return {
+    name: name,
+    volumes: transform.volumesFromCompose(config)
+  };
 }

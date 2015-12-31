@@ -1,7 +1,10 @@
+'use strict'
+
 const qvc = require('qvc');
 const samsara = require('samsara-lib');
 const NotEmpty = require('qvc/constraints/NotEmpty');
 const Pattern = require('qvc/constraints/Pattern');
+const transform = require('../private/transformComposeConfig');
 
 module.exports = [
   qvc.command('setSpiritImageAndTag', function (command) {
@@ -14,66 +17,55 @@ module.exports = [
   }),
   qvc.command('addEnvVar', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.env) {
-        config.env = {};
-      }
-      config.env[command.key] = command.value;
+      let environment = transform.environmentFromCompose(config);
+      environment.push({key:command.key, value: command.value});
+      config.environment = transform.environmentToCompose(environment);
     });
   }, {
     'key': new NotEmpty('Please specify a key for the new environment variable')
   }),
   qvc.command('setEnvVar', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.env) {
-        config.env = {};
-      }
-      if (command.key in config.env == false) {
-        throw new Error(command.key + " is not in the environment variable list");
-      }
-      config.env[command.key] = command.value;
+      let environment = transform.environmentFromCompose(config);
+      environment
+        .filter(env => env.key === command.key)
+        .forEach(env => env.value = command.value);
+      config.environment = transform.environmentToCompose(environment);
     });
   }),
   qvc.command('removeEnvVar', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.env) {
-        config.env = {};
-      }
-      config.env[command.key] = undefined;
+      let environment = transform.environmentFromCompose(config)
+        .filter(env => env.key !== command.key);
+      config.environment = transform.environmentToCompose(environment);
     });
   }),
   qvc.command('addVolume', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.volumes) {
-        config.volumes = {};
-      }
-      config.volumes[command.containerPath] = {
-        hostPath: command.hostPath,
-        readOnly: command.readOnly
-      };
+      let volumes = transform.volumesFromCompose(config);
+      volumes.push({containerPath:command.containerPath, hostPath: command.hostPath, readOnly: command.readOnly});
+      config.volumes = transform.volumesToCompose(volumes);
     });
   }, {
     'containerPath': new NotEmpty('Please specify a containerPath for the new volume')
   }),
   qvc.command('setVolume', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.volumes) {
-        config.volumes = {};
-      }
-      if (command.containerPath in config.volumes == false) {
-        throw new Error(command.containerPath + " is not in the volume list");
-      }
-      config.volumes[command.containerPath] = {
-        hostPath: command.hostPath,
-        readOnly: command.readOnly
-      };
+      let volumes = transform.volumesFromCompose(config);
+      volumes
+        .filter(volume => volume.containerPath === command.containerPath)
+        .forEach(volume => {
+          volume.hostPath = command.hostPath;
+          volume.readOnly = command.readOnly;
+        });
+      config.volumes = transform.volumesToCompose(volumes);
     });
   }),
   qvc.command('removeVolume', function (command) {
     return samsara().spirit(command.name).mutateContainerConfig(function (config) {
-      if (!config.volumes) {
-        config.volumes = {};
-      }
-      config.volumes[command.containerPath] = undefined;
+      let volumes = transform.volumesFromCompose(config)
+        .filter(volume => volume.containerPath !== command.containerPath);
+      config.volumes = transform.volumesToCompose(volumes);
     });
   }),
   qvc.command('addPort', function (command) {
