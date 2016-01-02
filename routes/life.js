@@ -17,7 +17,7 @@ router.get('/:name/life/:life', co.wrap(function*(req, res, next){
   const life = samsara().spirit(req.params.name).life(req.params.life);
 
   const status = yield life.status;
-  const config = yield life.containerConfig;
+  const config = yield life.containerConfig.catch(e => '');
   const container = yield tryGetContainer(life);
 
   const deployLogs = yield readFile(req.params.name, req.params.life, 'deploy.log');
