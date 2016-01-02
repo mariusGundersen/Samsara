@@ -41,10 +41,10 @@
     </div>
     <div data-bind="ifSelected: step, name: 'done'">
       <p data-bind="if: success">
-        <a href="{deploy.name}/life/latest">Latest life</a> deployed successfully
+        <a href="/spirit/{deploy.name}/life/latest">Latest life</a> deployed successfully
       </p>
       <p data-bind="ifnot: success">
-        <a href="{deploy.name}/life/latest">Latest life</a> failed to deploy
+        <a href="/spirit/{deploy.name}/life/latest">Latest life</a> failed to deploy
       </p>
     </div>
   </div>

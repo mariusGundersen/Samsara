@@ -21,7 +21,7 @@ router.get('/:name', co.wrap(function*(req, res, next) {
     life: life,
     deploy: {
       name: name,
-      image: config.image,
+      image: config.image+':'+config.tag,
       stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
       isDeploying: isDeploying
     },
