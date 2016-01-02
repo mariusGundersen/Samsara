@@ -28,7 +28,7 @@ router.get('/:name', co.wrap(function*(req, res, next) {
     controls: {
       name: name,
       canStop: state === 'running',
-      canStart: state == 'stopped' && latestLife && (yield latestLife.container),
+      canStart: state == 'stopped' && latestLife && (yield latestLife.container.catch(e => false)),
       canRestart: state == 'running'
     }
   }, name, 'status');

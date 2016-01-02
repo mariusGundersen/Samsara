@@ -10,10 +10,6 @@ const dust = require('dustjs-linkedin');
 const cons = require('consolidate');
 const authentication = require('./routeAuthentication');
 
-const mkdirp = require('mkdirp');
-
-mkdirp.sync(__dirname+'/config/spirits');
-
 const app = express();
 app.enable('trust proxy');
 
