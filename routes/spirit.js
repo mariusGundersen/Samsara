@@ -2,7 +2,6 @@ const router = require('express-promise-router')();
 const samsara = require('samsara-lib');
 const co = require('co');
 const makePageModel = require('../pageModels/spirit');
-const transform = require('../private/transformComposeConfig');
 
 router.get('/:name', co.wrap(function*(req, res, next) {
   const name = req.params.name;
@@ -84,45 +83,44 @@ router.get('/:name/lives', co.wrap(function*(req, res, next) {
 module.exports = router;
 
 function repositoryModel(config, name){
-  const imageAndTag = config.image.split(':');
   return {
     name: name,
-    image: imageAndTag[0],
-    tag: imageAndTag[1]
+    image: config.image,
+    tag: config.tag
   };
 }
 
 function environmentModel(config, name){
   return {
     name: name,
-    environment: transform.environmentFromCompose(config)
+    environment: config.environment
   };
 }
 
 function volumesModel(config, name){
   return {
     name: name,
-    volumes: transform.volumesFromCompose(config)
+    volumes: config.volumes
   };
 }
 
 function portsModel(config, name){
   return {
     name: name,
-    ports: transform.portsFromCompose(config)
+    ports: config.ports
   };
 }
 
 function linksModel(config, name){
   return {
     name: name,
-    links: transform.linksFromCompose(config)
+    links: config.links
   };
 }
 
 function volumesFromModel(config, name){
   return {
     name: name,
-    volumesFrom: transform.volumesFromFromCompose(config)
+    volumesFrom: config.volumesFrom
   };
 }

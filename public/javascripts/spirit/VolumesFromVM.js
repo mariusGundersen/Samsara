@@ -30,7 +30,8 @@ define(['spirit/EditVolumesFrom', 'knockout', 'deco/qvc'], function(EditVolumesF
     this.remove = function(entry){
       qvc.createCommand('removeVolumesFrom', {
         name: model.name,
-        fromSpirit: entry.fromSpirit()
+        fromSpirit: entry.fromSpirit(),
+        fromContainer: '',
       }).success(function(){
         self.volumesFromList.remove(entry);
       })();
