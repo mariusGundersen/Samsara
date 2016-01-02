@@ -6,9 +6,9 @@ module.exports = function(title, content, spirit, selected){
     menu: {
       spirit: spirit,
       status: selected == 'status',
+      settings: selected == 'settings',
       config: selected == 'config',
-      lives: selected == 'lives',
-      settings: selected == 'settings'
+      lives: selected == 'lives'
     }
   }, spirit);
 };

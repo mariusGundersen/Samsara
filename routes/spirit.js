@@ -1,56 +1,65 @@
 const router = require('express-promise-router')();
 const samsara = require('samsara-lib');
-const makePageModel = require('../pageModels/spirit');
 const co = require('co');
+const makePageModel = require('../pageModels/spirit');
 
 router.get('/:name', co.wrap(function*(req, res, next) {
-  const spirit = samsara().spirit(req.params.name);
+  const name = req.params.name;
+  const spirit = samsara().spirit(name);
   const state = yield spirit.status;
-  const config = yield spirit.config;
+  const settings = yield spirit.settings;
+  const config = yield spirit.containerConfig;
   const isDeploying = yield spirit.isDeploying;
   const currentLife = yield spirit.currentLife;
-  const life = (currentLife || (yield spirit.latestLife) || {life: '?'}).life;
+  const latestLife = yield spirit.latestLife;
+  const life = (currentLife || latestLife || {life: '?'}).life;
 
-  const pageModel = yield makePageModel(req.params.name, {
-    name: req.params.name,
-    url: config.url,
-    description: config.description,
+  const pageModel = yield makePageModel(name, {
+    name: name,
+    url: settings.url,
+    description: settings.description,
     life: life,
     deploy: {
-      name: config.name,
-      image: config.image,
-      tag: config.tag,
-      stopBeforeStart: config.deploymentMethod == 'stop-before-start',
+      name: name,
+      image: config.image+':'+config.tag,
+      stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
       isDeploying: isDeploying
     },
     controls: {
-      name: req.params.name,
+      name: name,
       canStop: state === 'running',
-      canStart: state == 'stopped' && currentLife && (yield currentLife.container),
+      canStart: state == 'stopped' && latestLife && (yield latestLife.container.catch(e => false)),
       canRestart: state == 'running'
     }
-  }, req.params.name, 'status');
+  }, name, 'status');
   res.render('spirits/spirit/status', pageModel);
 }));
 
-router.get('/:name/configure', co.wrap(function*(req, res, next) {
-  const spirit = samsara().spirit(req.params.name);
-  const config = yield spirit.config;
-  const pageModel = yield makePageModel(req.params.name, {
-    name: req.params.name,
-    config: config
-  }, req.params.name, 'config');
-  res.render('spirits/spirit/configure', pageModel);
+router.get('/:name/settings', co.wrap(function*(req, res, next) {
+  const name = req.params.name
+  const spirit = samsara().spirit(name);
+  const settings = yield spirit.settings;
+  const pageModel = yield makePageModel(name, {
+    name: name,
+    settings: settings
+  }, name, 'settings');
+  res.render('spirits/spirit/settings', pageModel);
 }));
 
-router.get('/:name/settings', co.wrap(function*(req, res, next) {
-  const spirit = samsara().spirit(req.params.name);
-  const config = yield spirit.config;
-  const pageModel = yield makePageModel(req.params.name, {
-    name: req.params.name,
-    config: config
-  }, req.params.name, 'settings');
-  res.render('spirits/spirit/settings', pageModel);
+router.get('/:name/configure', co.wrap(function*(req, res, next) {
+  const name = req.params.name
+  const spirit = samsara().spirit(name);
+  const config = yield spirit.containerConfig;
+  const pageModel = yield makePageModel(name, {
+    name: name,
+    repository: repositoryModel(config, name),
+    environment: environmentModel(config, name),
+    volumes: volumesModel(config, name),
+    ports: portsModel(config, name),
+    links: linksModel(config, name),
+    volumesFrom: volumesFromModel(config, name)
+  }, name, 'config');
+  res.render('spirits/spirit/configure', pageModel);
 }));
 
 router.get('/:name/lives', co.wrap(function*(req, res, next) {
@@ -72,3 +81,46 @@ router.get('/:name/lives', co.wrap(function*(req, res, next) {
 }));
 
 module.exports = router;
+
+function repositoryModel(config, name){
+  return {
+    name: name,
+    image: config.image,
+    tag: config.tag
+  };
+}
+
+function environmentModel(config, name){
+  return {
+    name: name,
+    environment: config.environment
+  };
+}
+
+function volumesModel(config, name){
+  return {
+    name: name,
+    volumes: config.volumes
+  };
+}
+
+function portsModel(config, name){
+  return {
+    name: name,
+    ports: config.ports
+  };
+}
+
+function linksModel(config, name){
+  return {
+    name: name,
+    links: config.links
+  };
+}
+
+function volumesFromModel(config, name){
+  return {
+    name: name,
+    volumesFrom: config.volumesFrom
+  };
+}

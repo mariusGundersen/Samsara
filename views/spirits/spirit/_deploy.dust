@@ -6,7 +6,7 @@
     </span>
   </h3>
   <p class="text-center">
-    Pull <code>{deploy.image}:{deploy.tag}</code> from the Docker Hub and
+    Pull <code>{deploy.image}</code> from the Docker Hub and
     {?deploy.stopBeforeStart} stop the currently running container before starting a new life {/deploy.stopBeforeStart}
     {^deploy.stopBeforeStart} start a new container before stopping the currently running life {/deploy.stopBeforeStart}
   </p>
@@ -41,10 +41,10 @@
     </div>
     <div data-bind="ifSelected: step, name: 'done'">
       <p data-bind="if: success">
-        <a href="{deploy.name}/life/latest">Latest life</a> deployed successfully
+        <a href="/spirit/{deploy.name}/life/latest">Latest life</a> deployed successfully
       </p>
       <p data-bind="ifnot: success">
-        <a href="{deploy.name}/life/latest">Latest life</a> failed to deploy
+        <a href="/spirit/{deploy.name}/life/latest">Latest life</a> failed to deploy
       </p>
     </div>
   </div>

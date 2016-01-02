@@ -30,16 +30,16 @@
       <p class="text-center text-muted">Click the pluss icon above to expose another port</p>
     </div>
   </div>
-  <form class="box-form pure-form pure-form-aligned" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
+  <form class="box-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style="display:none">
     <label class="small-label">Host port&nbsp;<span class="validation-error-message" data-bind="validationMessageFor: fresh.hostPort"></span></label>
     <input value="" data-bind="value:fresh.hostPort, hasFocus: creating()" placeholder="for example: 80">
-    
+
     <label class="small-label">Container port&nbsp;<span class="validation-error-message" data-bind="validationMessageFor: fresh.containerPort"></span></label>
     <input value="" data-bind="value:fresh.containerPort" placeholder="for example: 8080">
-    
+
     <label class="small-label">Host IP (optional)&nbsp;<span class="validation-error-message" data-bind="validationMessageFor: fresh.hostIp"></span></label>
     <input value="" data-bind="value:fresh.hostIp" placeholder="for example: 127.0.0.1">
-    
+
     <div class="button-group">
       <button class="pure-button button-success" type="submit" data-bind="click:create"><i class="fa fa-fw fa-check"></i>&nbsp;Create</button>
       <button class="pure-button" type="cancel" data-bind="click:cancelCreate"><i class="fa fa-fw fa-close"></i>&nbsp;Cancel</button>
