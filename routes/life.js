@@ -3,7 +3,6 @@ const samsara = require('samsara-lib');
 const makePageModel = require('../pageModels/life');
 const prettifyLogs = require('../private/prettifyLogs');
 const co = require('co');
-const fs = require('fs-promise');
 
 router.get('/:name/life/latest', co.wrap(function*(req, res, next){
   const latestLife = yield samsara().spirit(req.params.name).latestLife;
@@ -17,18 +16,15 @@ router.get('/:name/life/:life', co.wrap(function*(req, res, next){
   const life = samsara().spirit(req.params.name).life(req.params.life);
 
   const status = yield life.status;
-  const config = yield life.containerConfig.catch(e => '');
   const container = yield tryGetContainer(life);
-
-  const deployLogs = yield readFile(req.params.name, req.params.life, 'deploy.log');
 
   const pageModel = yield makePageModel(req.params.name + ' - ' + req.params.life, {
     name: req.params.name,
     life: req.params.life,
     json: container.inspect,
-    config: config,
+    config: life.containerConfig.catch(e => ''),
     log: container.logs,
-    deploy: deployLogs,
+    deploy: life.deployLog.catch(e => ''),
     canReincarnate: status == 'stopped' && container.exists,
     model: {
       name: req.params.name,
@@ -65,14 +61,6 @@ function *tryGetContainer(life){
       logs: '',
       exists: false
     };
-  }
-}
-
-function *readFile(name, life, file){
-  try{
-    return yield fs.readFile('config/spirits/'+name+'/lives/'+life+'/'+file, 'utf8');
-  }catch(e){
-    return '';
   }
 }
 
