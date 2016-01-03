@@ -13,13 +13,13 @@ router.get('/', co.wrap(function*(req, res, next) {
 router.get('/:id', co.wrap(function*(req, res, next) {
   const container = samsara().container(req.params.id);
   const config = yield container.inspect();
-  const logs = yield prettifyLogs(yield container.logs({stdout:true, stderr:true, tail:50}));
+  const logs = yield container.logs({stdout:true, stderr:true, tail:50});
 
   const pageModel = yield makePageModel(config.Name.substr(1) + ' - Container', {
     info: config,
     name: config.Name.substr(1),
     json: JSON.stringify(config, null, '  '),
-    log: logs,
+    log: logs.pipe(prettifyLogs()),
     controls: {
       id: config.Id,
       name: config.Name.substr(1),
@@ -31,7 +31,7 @@ router.get('/:id', co.wrap(function*(req, res, next) {
 }));
 
 router.get('/:id/logs/download', co.wrap(function*(req, res, next){
-  const container = docker.getContainer(req.params.id);
+  const container = samsara().container(req.params.id);
   const config = yield container.inspect();
 
   res.setHeader('Content-disposition', 'attachment;filename='+config.Name.substr(1)+'.log');

@@ -44,7 +44,7 @@ router.get('/:name/life/:life/logs/download', co.wrap(function*(req, res, next){
 
   res.setHeader('Content-disposition', 'attachment;filename='+config.Name.substr(1)+'.log');
   const logs = yield container.logs({stdout:true, stderr:true});
-  logs.pipe(res);
+  logs.pipe(prettifyLogs({html:false})).pipe(res);
 }));
 
 function *tryGetContainer(life){
@@ -53,11 +53,10 @@ function *tryGetContainer(life){
 
     const inspect = yield container.inspect();
     const logs = yield container.logs({stdout:true, stderr:true, tail: 50});
-    const prettyLogs = yield prettifyLogs(logs);
 
     return {
       inspect: JSON.stringify(inspect, null, '  '),
-      logs: prettyLogs,
+      logs: logs.pipe(prettifyLogs()),
       exists: true
     };
   }catch(e){
