@@ -1,8 +1,8 @@
 {>layout/}
 {<content}
   <div class="pane content">
-    <h2 class="dragger">Samsara</h2>
-    
+    <h2>Samsara</h2>
+
   <div class="grid-container">
     <section class="box">
       <form class="pure-form pure-form-stacked box-form" action="/login" method="post">

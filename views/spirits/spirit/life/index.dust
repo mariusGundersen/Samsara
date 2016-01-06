@@ -1,9 +1,9 @@
 {>"spirits/spirit/life/layout"/}
 {<spiritLifePage}
 <div class="pane content">
-  <h2 class="dragger">{life|nth} life of {name}</h2>
+  <h2>{life|nth} life of {name}</h2>
   <div class="grid-container" data-viewmodel="spirit/LifeVM" data-model="{model|js}">
-    
+
     {?canReincarnate}
       <div class="box">
         <h3>Revive</h3>
@@ -17,7 +17,7 @@
         </div>
       </div>
     {/canReincarnate}
-    
+
     <div class="box box-large">
       <div class="box-header box-tabs">
         <a data-bind="selectable: tab, name:'logs'" href="#" class="box-tab" selected>Logs</a>
@@ -33,11 +33,11 @@
           </a>
         </pre>
       </div>
-      
+
       <pre class="logs" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
-      
+
       <pre class="logs" data-bind="ifSelected: tab, name: 'config'" style="display:none">{config}</pre>
-      
+
       <pre class="logs" data-bind="ifSelected: tab, name: 'deploy'" style="display:none">{deploy}</pre>
     </div>
   </div>

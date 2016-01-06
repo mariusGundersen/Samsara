@@ -1,7 +1,7 @@
 {>layout/}
 {<content}
   <div class="pane content">
-    <h2 class="dragger"><i class="fa fa-fw fa-cog"></i>Settings</h2>
+    <h2><i class="fa fa-fw fa-cog"></i>Settings</h2>
     <div class="grid-container">
       <div class="box" data-viewmodel="UsersVM" data-model="{users|js}">
         <h3>

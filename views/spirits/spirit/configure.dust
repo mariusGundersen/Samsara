@@ -1,7 +1,7 @@
 {>"spirits/spirit/layout"/}
 {<spiritPage}
   <div class="pane content">
-    <h2 class="dragger"><i class="fa fa-fw fa-wrench"></i>Container configuration for {name}</h2>
+    <h2><i class="fa fa-fw fa-wrench"></i>Container configuration for {name}</h2>
     <p class="text-center">Changes made here will take effect in the next life. Use the Deploy button on the status page to put the new configuration into effect.</p>
     <div class="grid-container">
       {>"spirits/spirit/_repository" config=repository/}

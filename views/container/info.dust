@@ -1,26 +1,26 @@
 {>"container/layout"/}
 {<containerPage}
 <div data-viewmodel="ContainerViewModel" data-model="{controls|js}" class="pane content">
-  <h2 class="dragger">{name}</h2>
+  <h2>{name}</h2>
   <div class="grid-container">
     <div class="box">
       <h3>Controls</h3>
       <div class="text-center" style="padding: 1em">
         <div class="button-group">
-          <button class="pure-button container-state-running" 
-                  data-bind="click: start, disable:running()||isBusy()" 
+          <button class="pure-button container-state-running"
+                  data-bind="click: start, disable:running()||isBusy()"
                   {?info.State.Running}disabled{/info.State.Running}>
             <i class="fa fa-fw fa-play" data-bind="spinIcon: start.isBusy"></i>&nbsp;
             Start
           </button>
-          <button class="pure-button" 
-                  data-bind="click: restart, disable: !running()||isBusy()" 
+          <button class="pure-button"
+                  data-bind="click: restart, disable: !running()||isBusy()"
                   {^info.State.Running}disabled{/info.State.Running}>
             <i class="fa fa-fw fa-refresh" data-bind="spinIcon: restart.isBusy"></i>&nbsp;
             Restart
           </button>
-          <button class="pure-button container-state-stopped" 
-                  data-bind="click: stop, disable: !running()||isBusy()" 
+          <button class="pure-button container-state-stopped"
+                  data-bind="click: stop, disable: !running()||isBusy()"
                   {^info.State.Running}disabled{/info.State.Running}>
             <i class="fa fa-fw fa-stop" data-bind="spinIcon: stop.isBusy"></i>&nbsp;
             Stop
@@ -28,23 +28,23 @@
         </div>
       </div>
     </div>
-      
+
     <div class="box">
       <h3>Remove container</h3>
       <div class="text-center" style="padding: 1em">
-        <button class="pure-button button-error" 
-                data-bind="click: remove, disable: running()||isBusy()" 
+        <button class="pure-button button-error"
+                data-bind="click: remove, disable: running()||isBusy()"
                 {?info.State.Running}disabled{/info.State.Running}>
           <i class="fa fa-fw fa-trash-o" data-bind="spinIcon: remove.isBusy"></i>&nbsp;
           Remove
         </button>
       </div>
     </div>
-      
+
     <div class="box">
       <h3>Convert to spirit</h3>
       <div class="text-center" style="padding: 1em">
-        <button class="pure-button pure-button-primary button-xlarge" 
+        <button class="pure-button pure-button-primary button-xlarge"
                 data-bind="click: toSpirit, disable: isBusy">
           <i class="fa fa-fw fa-sun-o" data-bind="spinIcon: toSpirit.isBusy"></i>&nbsp;
           Create Spirit
@@ -65,9 +65,9 @@
           </a>
         </pre>
       </div>
-      
+
       <pre class="logs" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
     </div>
   </div>
 </div>
-{/containerPage}  
+{/containerPage}

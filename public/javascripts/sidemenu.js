@@ -7,7 +7,6 @@ window.onload = function(){
 
   var pointer = null;
   var delta = 0;
-  var draggers = document.querySelectorAll('.pane.menu');
   var paneElements = document.querySelectorAll('.pane');
   var panes = createPanes(paneElements, screenSize());
 
@@ -15,8 +14,8 @@ window.onload = function(){
 
   panes.filter(function(pane){
     return Array.prototype.indexOf.call(pane.element.classList, 'menu') != -1;
-  }).forEach(function(dragger, index, draggers){
-    dragger.element.querySelector("h2 a[href='#']").addEventListener('click', function(){
+  }).forEach(function(pane, index, panes){
+    pane.element.querySelector("h2 a[href='#']").addEventListener('click', function(){
       handleMenuClicked(panes[panes.length - (2 + index)]);
     }, false);
   });
@@ -26,8 +25,6 @@ window.onload = function(){
   document.body.addEventListener('pointerup', handlePointerUp, false);
   document.body.addEventListener('pointerleave', handlePointerUp, false);
   document.body.addEventListener('pointercancel', handlePointerUp, false);
-
-  document.querySelector('.content h2.dragger').addEventListener('pointerdown', handlePointerDown, false);
 
   function handleWindowResize(){
     panes = createPanes(paneElements, screenSize());

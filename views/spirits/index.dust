@@ -1,7 +1,7 @@
 {>"spirits/layout"/}
 {<spiritsPage}
   <div class="pane content">
-    <h2 class="dragger">Spirits</h2>
+    <h2>Spirits</h2>
     <ul class="pure-menu-list">
       {#spirits}
         <li class="pure-menu-item">

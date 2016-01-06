@@ -1,7 +1,7 @@
 {>"spirits/layout"/}
 {<spiritsPage}
 <div class="pane content">
-  <h2 class="dragger">New spirit</h2>
+  <h2>New spirit</h2>
   <div class="grid-container">
     <section class="box" data-viewmodel="NewSpiritVM">
       <form class="pure-form pure-form-stacked box-form" data-bind="submit: create">
