@@ -7,13 +7,13 @@ module.exports = co.wrap(function*(name, secret, image, tag, callback_url){
   const config = yield spirit.containerConfig;
   const settings = yield spirit.settings;
 
-  console.log('config', config);
+  console.log('name', settings.name, name);
   if(settings.name !== name){
     throw 'wrong spirit name';
   }
 
   console.log('enabled', settings.webhook.enable);
-  if(!config.webhook.enable){
+  if(!settings.webhook.enable){
     throw 'webhook disabled';
   }
 

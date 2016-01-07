@@ -6,9 +6,9 @@ const validateDeploy = require('../private/validateDeploy');
 const request = require('request-promise');
 
 router.post('/:name/:secret', co.wrap(function* (req, res, next) {
-  console.log('deploying', req.params.name, req.body);
 
   try {
+    console.log('deploy request', req.params.name, req.body.repository.repo_name, req.body.push_data.tag);
     yield validateDeploy(
       req.params.name,
       req.params.secret,
@@ -17,17 +17,14 @@ router.post('/:name/:secret', co.wrap(function* (req, res, next) {
       req.body.callback_url);
 
     console.log('config is valid');
-    yield samsara().spirit(req.params.name).mutateConfig(config => config.tag = req.body.push_data.tag);
+    const config = yield samsara().spirit(req.params.name).containerConfig;
+    config.tag = req.body.push_data.tag;
+    yield config.save();
 
     deploy(req.params.name)
-      .then(success => ({state: 'success', description: 'deployed'}))
-      .catch(error => ({state: 'error', description: error}))
-      .then(result => request.post({
-        url: req.body.callback_url,
-        body: JSON.stringify(result)
-      }))
-      .catch(error => console.error(error));
+      .on('stop', data => respondTo(data, req.body.callback_url));
 
+    console.log('deploying');
     res.write('success');
   } catch (error) {
     console.log('validation failed for', req.params.name, error);
@@ -45,3 +42,14 @@ router.use(function (error, req, res, next) {
 });
 
 module.exports = router;
+
+function respondTo(data, url){
+  request.post({
+    url: url,
+    body: JSON.stringify(
+      data.error
+      ? {state: 'error', description: data.error}
+      : {state: 'success', description: 'deployed'}
+    )
+  });
+}

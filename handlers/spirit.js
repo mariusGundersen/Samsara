@@ -25,7 +25,7 @@ module.exports = [
   }),
   qvc.query('searchImages', co.wrap(function*(query){
     const result = yield dockerHub.searchImages(query.term)
-    
+
     return result.results;
   }), {
     'term': new NotEmpty('')
@@ -41,7 +41,7 @@ module.exports = [
   }),
   qvc.command('deploySpirit', co.wrap(function*(command){
     try{
-      return yield deploy.deploy(command.name);
+      deploy.deploy(command.name);
     }catch(error){
       console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
@@ -50,7 +50,7 @@ module.exports = [
   qvc.command('reviveSpiritLife', co.wrap(function*(command){
     try{
       console.log('reviving container');
-      return yield deploy.revive(command.name, command.life);
+      deploy.revive(command.name, command.life);
     }catch(e){
       return {success:false, valid:false, violations: [{fieldName:'', message:e.message}]};
     }
@@ -60,7 +60,7 @@ module.exports = [
   })),
   qvc.command('stopSpirit', co.wrap(function*(command){
     const currentLife = yield samsara().spirit(command.name).currentLife;
-    
+
     if(currentLife && (yield currentLife.status) == 'running'){
       const container = yield currentLife.container;
       return yield container.stop();
@@ -68,7 +68,7 @@ module.exports = [
   })),
   qvc.command('startSpirit', co.wrap(function*(command){
     const latestLife = yield samsara().spirit(command.name).latestLife;
-    
+
     if(latestLife && (yield latestLife.status) == 'stopped'){
       const container = yield latestLife.container;
       return yield container.start();
@@ -76,7 +76,7 @@ module.exports = [
   })),
   qvc.command('restartSpirit', co.wrap(function*(command){
     const currentLife = yield samsara().spirit(command.name).currentLife;
-    
+
     if(currentLife){
       const container = yield currentLife.container;
       return yield container.restart();

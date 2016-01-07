@@ -11,7 +11,7 @@ const json = {
   "push_data": {
     "pushed_at": 1451039481,
     "images": [],
-    "tag": "v1.2.1",
+    "tag": "latest",
     "pusher": "mariusgundersen"
   },
   "callback_url": "http://localhost:9090/callback",
@@ -30,7 +30,7 @@ const json = {
     "comment_count": 0,
     "date_created": 1448919441,
     "dockerfile": "FROM node:4.2-onbuild\n\nEXPOSE 8080",
-    "repo_name": "mariusgundersen/samsara"
+    "repo_name": "nginx"
   }
 };
 
