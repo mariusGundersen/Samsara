@@ -43,10 +43,7 @@ define(['knockout', 'deco/qvc'], function(ko, qvc){
 
     this.searchTags = qvc.createQuery("searchImageTags", {
       image: ko.computed(this.query)
-    }).result(this.tags)
-    .success(function(){
-      self.tag('latest');
-    });
+    }).result(this.tags);
 
     this.query.subscribe(function(){
       self.images([])
