@@ -4,6 +4,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
+const favicon = require('serve-favicon');
 
 const nth = require('nth');
 const dust = require('dustjs-linkedin');
@@ -26,7 +27,7 @@ app.engine('dust', cons.dust);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'dust');
 
-// uncomment after placing your favicon in /public
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(flash());
 app.use(logger('dev'));
 app.use(bodyParser.json());

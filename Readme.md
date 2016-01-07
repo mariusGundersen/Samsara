@@ -1,4 +1,4 @@
-# Samsara
+# ![logo](./documentation/logo.png) Samsara
 
 > **Saṃsāra** is a Sanskrit word, the literal meaning of which is "a wandering through" – in reference to the passage through many states of existence that is involved in the endless cycle of death and rebirth
 
@@ -8,11 +8,11 @@ Samsara is a Docker orchestration tool I made for my servers. Samsara runs in a 
 docker run -d --name samsara -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -v samsara-config:/app/config mariusgundersen/samsara
 ```
 
-You can now log into Samsara using `admin:admin` on http://localhost:8080. You should change the password in the Settings menu. 
+You can now log into Samsara using `admin:admin` on http://localhost:8080. You should change the password in the Settings menu.
 
 ## Spirits
 
-Samsara captures the spirit (the soul) of your Docker containers so it can be reincarnated into a new container. With spirits you can easily deploy new versions of your applications with the same settings as the previous version. The web interface lets you create, configure and control your spirits, and you can see the past lifetimes of your spirit as a history of containers. 
+Samsara captures the spirit (the soul) of your Docker containers so it can be reincarnated into a new container. With spirits you can easily deploy new versions of your applications with the same settings as the previous version. The web interface lets you create, configure and control your spirits, and you can see the past lifetimes of your spirit as a history of containers.
 
 ## Supported features
 
