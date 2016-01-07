@@ -4,20 +4,21 @@ const samsara = require('samsara-lib');
 
 module.exports = co.wrap(function*(name, secret, image, tag, callback_url){
   const spirit = samsara().spirit(name);
-  const config = yield spirit.config;
+  const config = yield spirit.containerConfig;
+  const settings = yield spirit.settings;
 
   console.log('config', config);
-  if(config.name !== name){
+  if(settings.name !== name){
     throw 'wrong spirit name';
   }
 
-  console.log('enabled', config.webhook.enable);
+  console.log('enabled', settings.webhook.enable);
   if(!config.webhook.enable){
     throw 'webhook disabled';
   }
 
-  console.log('secret', config.webhook.secret, secret);
-  if(config.webhook.secret !== secret){
+  console.log('secret', settings.webhook.secret, secret);
+  if(settings.webhook.secret !== secret){
     throw 'wrong secret';
   }
 
@@ -26,7 +27,7 @@ module.exports = co.wrap(function*(name, secret, image, tag, callback_url){
     throw 'wrong image';
   }
 
-  const matchTag = config.webhook.matchTag || config.tag;
+  const matchTag = settings.webhook.matchTag || config.tag;
   const currentTag = yield getCurrentTag(spirit);
   console.log('tag', matchTag, tag, currentTag);
   if(semverFailsToSatisfy(matchTag, tag, currentTag) && matchTag !== tag){
@@ -63,7 +64,7 @@ const getCurrentTag = co.wrap(function*(spirit){
     return '0';
   }
   try{
-    const config = yield currentLife.config;
+    const config = yield currentLife.containerConfig;
     return config.tag;
   }catch(e){
     return '0';
