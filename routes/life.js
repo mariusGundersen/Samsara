@@ -35,10 +35,11 @@ router.get('/:name/life/:life', co.wrap(function*(req, res, next){
 }));
 
 router.get('/:name/life/:life/logs/download', co.wrap(function*(req, res, next){
-  const container = yield samsara().spirit(req.params.name).life(req.params.life).container;
-  const config = yield container.inspect();
+  const name = req.params.name;
+  const life = req.params.life;
+  const container = yield samsara().spirit(name).life(life).container;
 
-  res.setHeader('Content-disposition', 'attachment;filename='+config.Name.substr(1)+'.log');
+  res.setHeader('Content-disposition', `attachment;filename=${name}_v${life}.log`);
   const logs = yield container.logs({stdout:true, stderr:true});
   logs.pipe(prettifyLogs({html:false})).pipe(res);
 }));
