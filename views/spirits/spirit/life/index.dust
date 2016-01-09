@@ -18,7 +18,7 @@
       </div>
     {/canReincarnate}
 
-    <div class="box box-large">
+    <div class="box box-large box-no-scroll">
       <div class="box-header box-tabs">
         <a data-bind="selectable: tab, name:'logs'" href="#" class="box-tab" selected>Logs</a>
         <a data-bind="selectable: tab, name:'json'" href="#" class="box-tab">Inspect</a>

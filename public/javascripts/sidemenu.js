@@ -68,12 +68,14 @@ window.onload = function(){
           var scrollWidth = target.scrollWidth - target.clientWidth;
           if(target.clientWidth > 0 && scrollWidth > 0){
             if(dir < 0 && scrollWidth - target.scrollLeft > 0){
-              if(window.getComputedStyle(target)['overflow-x'] != 'hidden'){
+              var overflow = window.getComputedStyle(target)['overflow-x']
+              if(overflow == 'scroll' || overflow == 'auto'){
                 pointer = null;
                 return;
               }
             } else if(dir > 0 && target.scrollLeft > 0){
-              if(window.getComputedStyle(target)['overflow-x'] != 'hidden'){
+              var overflow = window.getComputedStyle(target)['overflow-x']
+              if(overflow == 'scroll' || overflow == 'auto'){
                 pointer = null;
                 return;
               }
