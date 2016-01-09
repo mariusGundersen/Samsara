@@ -19,14 +19,14 @@ module.exports = function deploySaga(eventBus){
     };
 
     eventBus.emit('spiritDeployStatus', {
-      group: 'spirit/'+this.id+'/deploy',
+      target: 'spirit/'+this.id+'/deploy',
       data:  this.data
     });
   });
 
   deploySaga.on('deployStatusRequest', function(data){
     eventBus.emit('spiritDeployStatus', {
-      target: data.socket,
+      target: data.target,
       data: this.data
     });
   });
@@ -46,7 +46,7 @@ module.exports = function deploySaga(eventBus){
     }
 
     eventBus.emit('spiritDeployStatus', {
-      group: 'spirit/'+this.id+'/deploy',
+      target: 'spirit/'+this.id+'/deploy',
       data:  this.data
     });
   });
@@ -56,18 +56,18 @@ module.exports = function deploySaga(eventBus){
       if(typeof(data.message) == 'object'){
         if('progressDetail' in data.message){
           eventBus.emit('spiritDeployPullStatus', {
-            group: 'spirit/'+this.id+'/deploy',
+            target: 'spirit/'+this.id+'/deploy',
             data: {id: data.message.id, status: data.message.status, progressDetail: data.message.progressDetail}
           });
         }else if('status' in data.message){
           eventBus.emit('spiritDeployLog', {
-            group: 'spirit/'+this.id+'/deploy',
+            target: 'spirit/'+this.id+'/deploy',
             data: data.message.status
           });
         }
       }else{
         eventBus.emit('spiritDeployLog', {
-            group: 'spirit/'+this.id+'/deploy',
+            target: 'spirit/'+this.id+'/deploy',
             data: data.message
         });
       }
@@ -86,7 +86,7 @@ module.exports = function deploySaga(eventBus){
     }
 
     eventBus.emit('spiritDeployStatus', {
-      group: 'spirit/'+this.id+'/deploy',
+      target: 'spirit/'+this.id+'/deploy',
       data:  this.data
     });
     this.done();

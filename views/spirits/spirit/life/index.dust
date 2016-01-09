@@ -26,19 +26,30 @@
         <a data-bind="selectable: tab, name:'deploy'" href="#" class="box-tab">Deploy log</a>
       </div>
       <div data-bind="ifSelected: tab, name: 'logs'" style="position:relative">
-        <pre class="logs">
-          {log|s}
-          <a href="{life}/logs/download" class="pure-button download-logs-button">
-            <i class="fa fa-fw fa-download"></i>
-          </a>
-        </pre>
+        <div data-viewmodel="spirit/LifeLogVM" data-model="{model|js}">
+          <pre class="logs full-page" data-bind="visible: log().length == 0">
+            {log|s}
+          </pre>
+          <pre class="logs full-page" data-bind="visible: log().length > 0, foreach: log, followProgress: log" style="display:none">
+            <span data-bind="html:$data"></span>
+          </pre>
+          <div class="button-group logs-buttons">
+            <a href="{life}/logs/download" class="pure-button">
+              <i class="fa fa-fw fa-download"></i>
+            </a>
+            <button class="pure-button" data-bind="click: toggleFollowLogs">
+              <i class="fa fa-fw fa-play" data-bind="visible: !isFollowing()"></i>
+              <i class="fa fa-fw fa-pause" data-bind="visible: isFollowing()" style="display:none"></i>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <pre class="logs" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
+      <pre class="logs full-page" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
 
-      <pre class="logs" data-bind="ifSelected: tab, name: 'config'" style="display:none">{config}</pre>
+      <pre class="logs full-page" data-bind="ifSelected: tab, name: 'config'" style="display:none">{config}</pre>
 
-      <pre class="logs" data-bind="ifSelected: tab, name: 'deploy'" style="display:none">{deploy}</pre>
+      <pre class="logs full-page" data-bind="ifSelected: tab, name: 'deploy'" style="display:none">{deploy}</pre>
     </div>
   </div>
 </div>
