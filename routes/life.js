@@ -13,7 +13,8 @@ router.get('/:name/life/latest', co.wrap(function*(req, res, next){
 }));
 
 router.get('/:name/life/:life', co.wrap(function*(req, res, next){
-  const life = samsara().spirit(req.params.name).life(req.params.life);
+  const spirit = samsara().spirit(req.params.name);
+  const life = spirit.life(req.params.life);
 
   const status = yield life.status;
   const container = yield tryGetContainer(life);
@@ -21,14 +22,27 @@ router.get('/:name/life/:life', co.wrap(function*(req, res, next){
   const pageModel = yield makePageModel(req.params.name + ' - ' + req.params.life, {
     name: req.params.name,
     life: req.params.life,
-    json: container.inspect,
-    config: life.containerConfig.catch(e => ''),
-    log: container.logs,
-    deploy: life.deployLog.catch(e => ''),
-    canReincarnate: status == 'stopped' && container.exists,
-    model: {
+    logs: {
+      lifeLog: {
+        name: req.params.name,
+        life: req.params.life,
+      },
       name: req.params.name,
-      life: req.params.life
+      life: req.params.life,
+      json: container.inspect,
+      config: life.containerConfig.catch(e => ''),
+      log: container.logs,
+      deploy: life.deployLog.catch(e => ''),
+    },
+    revive: {
+      name: req.params.name,
+      life: req.params.life,
+      revivable: status == 'stopped' && container.exists
+    },
+    deploy: {
+      name: req.params.name,
+      life: req.params.life,
+      isDeploying: yield spirit.isDeploying
     }
   }, req.params.name, req.params.life);
   res.render('spirits/spirit/life/index', pageModel);

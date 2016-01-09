@@ -2,55 +2,24 @@
 {<spiritLifePage}
 <div class="pane content">
   <h2>{life|nth} life of {name}</h2>
-  <div class="grid-container" data-viewmodel="spirit/LifeVM" data-model="{model|js}">
+  <div class="grid-container"">
 
-    {?canReincarnate}
-      <div class="box">
+    {?revive.revivable}
+      <div class="box" data-viewmodel="spirit/life/ReviveVM" data-model="{revive|js}">
         <h3>Revive</h3>
         <div class="text-center" style="padding: 1em">
           <div class="button-group">
               <button class="pure-button container-state-running" data-bind="click: revive, disable: revive.isBusy">
-                <i class="fa fa-play fa-fw" data-bind="spinIcon: revive.isBusy"></i>&nbsp;Revive life {life}
+                <i class="fa fa-play fa-fw" data-bind="spinIcon: revive.isBusy"></i>&nbsp;Revive {revive.life|nth} life
               </button>
           </div>
           <span class="validation-error-message text-center" data-bind="validationMessageFor: revive"></span>
         </div>
+        {>"spirits/spirit/_deployProgress" model=deploy/}
       </div>
-    {/canReincarnate}
+    {/revive.revivable}
 
-    <div class="box box-large box-no-scroll">
-      <div class="box-header box-tabs">
-        <a data-bind="selectable: tab, name:'logs'" href="#" class="box-tab" selected>Logs</a>
-        <a data-bind="selectable: tab, name:'json'" href="#" class="box-tab">Inspect</a>
-        <a data-bind="selectable: tab, name:'config'" href="#" class="box-tab">Configuration</a>
-        <a data-bind="selectable: tab, name:'deploy'" href="#" class="box-tab">Deploy log</a>
-      </div>
-      <div data-bind="ifSelected: tab, name: 'logs'" style="position:relative">
-        <div data-viewmodel="spirit/LifeLogVM" data-model="{model|js}">
-          <pre class="logs full-page" data-bind="visible: log().length == 0">
-            {log|s}
-          </pre>
-          <pre class="logs full-page" data-bind="visible: log().length > 0, foreach: log, followProgress: log" style="display:none">
-            <span data-bind="html:$data"></span>
-          </pre>
-          <div class="button-group logs-buttons">
-            <a href="{life}/logs/download" class="pure-button">
-              <i class="fa fa-fw fa-download"></i>
-            </a>
-            <button class="pure-button" data-bind="click: toggleFollowLogs">
-              <i class="fa fa-fw fa-play" data-bind="visible: !isFollowing()"></i>
-              <i class="fa fa-fw fa-pause" data-bind="visible: isFollowing()" style="display:none"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <pre class="logs full-page" data-bind="ifSelected: tab, name: 'json'" style="display:none">{json}</pre>
-
-      <pre class="logs full-page" data-bind="ifSelected: tab, name: 'config'" style="display:none">{config}</pre>
-
-      <pre class="logs full-page" data-bind="ifSelected: tab, name: 'deploy'" style="display:none">{deploy}</pre>
-    </div>
+    {>"spirits/spirit/life/_logs" model=logs/}
   </div>
 </div>
 {/spiritLifePage}

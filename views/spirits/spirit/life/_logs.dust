@@ -1,0 +1,33 @@
+<div class="box box-large box-no-scroll" data-viewmodel="spirit/life/LogsVM">
+  <div class="box-header box-tabs">
+    <a data-bind="selectable: tab, name:'logs'" href="#" class="box-tab" selected>Logs</a>
+    <a data-bind="selectable: tab, name:'json'" href="#" class="box-tab">Inspect</a>
+    <a data-bind="selectable: tab, name:'config'" href="#" class="box-tab">Configuration</a>
+    <a data-bind="selectable: tab, name:'deploy'" href="#" class="box-tab">Deploy log</a>
+  </div>
+  <div data-bind="ifSelected: tab, name: 'logs'" style="position:relative">
+    <div data-viewmodel="spirit/life/LifeLogVM" data-model="{model.lifeLog|js}">
+      <pre class="logs full-page" data-bind="visible: log().length == 0">
+        {model.log|s}
+      </pre>
+      <pre class="logs full-page" data-bind="visible: log().length > 0, foreach: log, followProgress: log" style="display:none">
+        <span data-bind="html:$data"></span>
+      </pre>
+      <div class="button-group logs-buttons">
+        <a href="/spirits/{model.name}/life/{model.life}/logs/download" class="pure-button">
+          <i class="fa fa-fw fa-download"></i>
+        </a>
+        <button class="pure-button" data-bind="click: toggleFollowLogs">
+          <i class="fa fa-fw fa-play" data-bind="visible: !isFollowing()"></i>
+          <i class="fa fa-fw fa-pause" data-bind="visible: isFollowing()" style="display:none"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <pre class="logs full-page" data-bind="ifSelected: tab, name: 'json'" style="display:none">{model.json}</pre>
+
+  <pre class="logs full-page" data-bind="ifSelected: tab, name: 'config'" style="display:none">{model.config}</pre>
+
+  <pre class="logs full-page" data-bind="ifSelected: tab, name: 'deploy'" style="display:none">{model.deploy}</pre>
+</div>
