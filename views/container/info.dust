@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <div class="box box-large">
+    <div class="box box-large box-no-scroll">
       <div class="box-header box-tabs">
         <a data-bind="selectable: tab, name:'logs'" selected href="#" class="box-tab">Logs</a>
         <a data-bind="selectable: tab, name:'json'" href="#" class="box-tab">Inspect</a>
@@ -60,9 +60,11 @@
       <div data-bind="ifSelected: tab, name: 'logs'" style="position: relative">
         <pre class="logs">
           {log|s}
-          <a href="{controls.id}/logs/download" class="pure-button download-logs-button">
-            <i class="fa fa-fw fa-download"></i>
-          </a>
+          <div class="button-group logs-buttons">
+            <a href="{controls.id}/logs/download" class="pure-button download-logs-button">
+              <i class="fa fa-fw fa-download"></i>
+            </a>
+          </div>
         </pre>
       </div>
 
