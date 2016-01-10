@@ -8,7 +8,8 @@ router.use('/qvc', qvc(
   require('./handlers/spiritSettings'),
   require('./handlers/settings'),
   {
-    debug: process.env.NODE_ENV === 'development'
+    debug: process.env.NODE_ENV === 'development',
+    cacheConstraints: process.env.NODE_ENV === 'development' ? false : 84600
   }
 ));
 

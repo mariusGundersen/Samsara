@@ -1,31 +1,35 @@
-require.config({
-  baseUrl: '/javascripts',
-  urlArgs: 'cachebust=' + document.querySelector('meta[name=cachebust]').getAttribute('content'),
+(function(){
+  var cacheKey = document.querySelector('meta[name=cachebust]').getAttribute('content');
 
-  paths: {
-    'bower_components': '/bower_components',
-    'io': '/socket.io/socket.io'
-  },
+  require.config({
+    baseUrl: '/javascripts',
+    urlArgs: 'cacheKey=' + cacheKey,
 
-  chain: {
-    'knockout': [
-      'bower_components/knockout/dist/knockout',
-      'customBindings/spinIcon',
-      'customBindings/selectable',
-      'customBindings/followProgress'
+    paths: {
+      'bower_components': '/bower_components',
+      'io': '/socket.io/socket.io'
+    },
+
+    chain: {
+      'knockout': [
+        'bower_components/knockout/dist/knockout',
+        'customBindings/spinIcon',
+        'customBindings/selectable',
+        'customBindings/followProgress'
+      ]
+    },
+
+    packages: [
+      {name: 'deco', location: '/bower_components/deco/Dist', main: 'deco'}
     ]
-  },
+  });
 
-  packages: [
-    {name: 'deco', location: '/bower_components/deco/Dist', main: 'deco'}
-  ]
-});
-
-require(['deco', 'knockout'], function(deco, ko){
-  ko.options.deferUpdates = true;
-  deco.config({
-    qvc:{
-      baseUrl: '/qvc'
-    }
-  }).start();
-});
+  require(['deco', 'knockout'], function(deco, ko){
+    ko.options.deferUpdates = true;
+    deco.config({
+      qvc:{
+        cacheKey: cacheKey
+      }
+    }).start();
+  });
+})();
