@@ -7,22 +7,22 @@
       <h3>Controls</h3>
       <div class="text-center" style="padding: 1em">
         <div class="button-group">
-          <button class="pure-button container-state-running"
+          <button class="pure-button"
                   data-bind="click: start, disable:running()||isBusy()"
-                  {?info.State.Running}disabled{/info.State.Running}>
-            <i class="fa fa-fw fa-play" data-bind="spinIcon: start.isBusy"></i>&nbsp;
+                  {?controls.running}disabled{/controls.running}>
+            <i class="container-state fa fa-fw fa-play" data-bind="spinIcon: start.isBusy"></i>&nbsp;
             Start
           </button>
           <button class="pure-button"
                   data-bind="click: restart, disable: !running()||isBusy()"
-                  {^info.State.Running}disabled{/info.State.Running}>
+                  {^controls.running}disabled{/controls.running}>
             <i class="fa fa-fw fa-refresh" data-bind="spinIcon: restart.isBusy"></i>&nbsp;
             Restart
           </button>
-          <button class="pure-button container-state-stopped"
+          <button class="pure-button"
                   data-bind="click: stop, disable: !running()||isBusy()"
-                  {^info.State.Running}disabled{/info.State.Running}>
-            <i class="fa fa-fw fa-stop" data-bind="spinIcon: stop.isBusy"></i>&nbsp;
+                  {^controls.running}disabled{/controls.running}>
+            <i class="container-state fa fa-fw fa-stop" data-bind="spinIcon: stop.isBusy"></i>&nbsp;
             Stop
           </button>
         </div>
@@ -34,7 +34,7 @@
       <div class="text-center" style="padding: 1em">
         <button class="pure-button button-error"
                 data-bind="click: remove, disable: running()||isBusy()"
-                {?info.State.Running}disabled{/info.State.Running}>
+                {?controls.running}disabled{/controls.running}>
           <i class="fa fa-fw fa-trash-o" data-bind="spinIcon: remove.isBusy"></i>&nbsp;
           Remove
         </button>

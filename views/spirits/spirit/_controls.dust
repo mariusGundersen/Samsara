@@ -7,10 +7,10 @@
   </h3>
   <div class="text-center box-form">
     <div class="button-group">
-      <button class="pure-button container-state-running"
+      <button class="pure-button"
               data-bind="click: start, disable: isBusy()||!canStart()"
               {^controls.canStart}disabled{/controls.canStart}>
-        <i class="fa fa-fw fa-play" data-bind="spinIcon: start.isBusy"></i>&nbsp;
+        <i class="container-state fa fa-fw fa-play" data-bind="spinIcon: start.isBusy"></i>&nbsp;
         Start
       </button>
       <button class="pure-button"
@@ -19,10 +19,10 @@
         <i class="fa fa-fw fa-refresh" data-bind="spinIcon: restart.isBusy"></i>&nbsp;
         Restart
       </button>
-      <button class="pure-button container-state-stopped"
+      <button class="pure-button"
               data-bind="click: stop, disable: isBusy()||!canStop()"
               {^controls.canStop}disabled{/controls.canStop}>
-        <i class="fa fa-fw fa-stop" data-bind="spinIcon: stop.isBusy"></i>&nbsp;
+        <i class="container-state fa fa-fw fa-stop" data-bind="spinIcon: stop.isBusy"></i>&nbsp;
         Stop
       </button>
     </div>

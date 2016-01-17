@@ -3,19 +3,27 @@ h1.hero{
   text-align: center;
 }
 
-.container-state-running i.fa-play{
+i.container-state.fa-play{
   color: #0a0;
 }
-.container-state-stopped i.fa-stop{
-  color: #c00;
+i.container-state.fa-stop{
+  color: #d33;
 }
-.container-state-stopped i.fa-play{
-  display: none;
+i.container-state.fa-pause{
+  color: #d80;
 }
-.container-state-running i.fa-stop{
-  display: none;
+i.container-state.fa-spinner{
+  color: #8bf;
 }
 
+.life-list{
+  .state-active a{
+    color: white;
+  }
+  .state-dead a{
+    color: #707880;
+  }
+}
 
 .container-life{
   color: #567;

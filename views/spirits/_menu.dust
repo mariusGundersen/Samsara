@@ -5,10 +5,9 @@
       <a href="/spirit/new"><i class="fa fa-plus fa-fw"></i>Create new spirit</a>
     </li>
     {#menu.spirits}
-      <li class="container-state-{state} {?selected}selected{/selected}">
+      <li class="{?selected}selected{/selected}">
         <a href="/spirit/{id}">
-          <i class="fa fa-play fa-fw"></i>
-          <i class="fa fa-stop fa-fw"></i>
+          <i class="container-state fa fa-{stateIcon} fa-fw"></i>
           {name} <span class="container-life">({life|nth} life)</span>
         </a>
       </li>
