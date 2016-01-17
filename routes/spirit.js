@@ -1,10 +1,13 @@
 const router = require('express-promise-router')();
 const samsara = require('samsara-lib');
 const co = require('co');
-const makePageModel = require('../pageModels/spirit');
+const rootMenu = require('../private/menu/root');
+const spiritsMenu = require('../private/menu/spirits');
+const spiritMenu = require('../private/menu/spirit');
 
 router.get('/:name', co.wrap(function*(req, res, next) {
   const name = req.params.name;
+  const spirits = yield samsara().spirits();
   const spirit = samsara().spirit(name);
   const state = yield spirit.status;
   const settings = yield spirit.settings;
@@ -14,70 +17,63 @@ router.get('/:name', co.wrap(function*(req, res, next) {
   const latestLife = yield spirit.latestLife;
   const life = (currentLife || latestLife || {life: '?'}).life;
 
-  const pageModel = yield makePageModel(name, {
-    name: name,
-    url: settings.url,
-    description: settings.description,
-    life: life,
-    deploy: {
+  res.render('spirit/index', {
+    title: name + ' - Spirit',
+    menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'status')],
+    content: {
       name: name,
-      image: config.image+':'+config.tag,
-      stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
-      isDeploying: isDeploying
-    },
-    controls: {
-      name: name,
-      canStop: state === 'running',
-      canStart: state == 'stopped' && latestLife && !!(yield latestLife.container),
-      canRestart: state == 'running'
+      url: settings.url,
+      description: settings.description,
+      life: life,
+      deploy: {
+        name: name,
+        image: config.image+':'+config.tag,
+        stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
+        isDeploying: isDeploying
+      },
+      controls: {
+        name: name,
+        canStop: state === 'running',
+        canStart: state == 'stopped' && latestLife && !!(yield latestLife.container),
+        canRestart: state == 'running'
+      }
     }
-  }, name, 'status');
-  res.render('spirits/spirit/status', pageModel);
+  });
 }));
 
 router.get('/:name/settings', co.wrap(function*(req, res, next) {
   const name = req.params.name
+  const spirits = yield samsara().spirits();
   const spirit = samsara().spirit(name);
   const settings = yield spirit.settings;
-  const pageModel = yield makePageModel(name, {
-    name: name,
-    settings: settings
-  }, name, 'settings');
-  res.render('spirits/spirit/settings', pageModel);
+  res.render('spirit/settings', {
+    title: 'Settings - ' + name + ' - Spirit',
+    menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'settings')],
+    content: {
+      name: name,
+      settings: settings
+    }
+  });
 }));
 
 router.get('/:name/configure', co.wrap(function*(req, res, next) {
   const name = req.params.name
+  const spirits = yield samsara().spirits();
   const spirit = samsara().spirit(name);
   const config = yield spirit.containerConfig;
-  const pageModel = yield makePageModel(name, {
-    name: name,
-    repository: repositoryModel(config, name),
-    environment: environmentModel(config, name),
-    volumes: volumesModel(config, name),
-    ports: portsModel(config, name),
-    links: linksModel(config, name),
-    volumesFrom: volumesFromModel(config, name)
-  }, name, 'config');
-  res.render('spirits/spirit/configure', pageModel);
-}));
-
-router.get('/:name/lives', co.wrap(function*(req, res, next) {
-  const spirit = samsara().spirit(req.params.name);
-  const lives = yield spirit.lives;
-  const list = yield lives.reverse().map(co.wrap(function *(life){
-    return {
-      name: life.name,
-      life: life.life,
-      status: yield life.status,
-      uptime: yield life.uptime
-    };
-  }));
-  const pageModel = yield makePageModel(req.params.name, {
-    name: req.params.name,
-    lives: list
-  }, req.params.name, 'lives');
-  res.render('spirits/spirit/lives', pageModel);
+  res.render('spirit/configure', {
+    title: 'Configure - ' + name + ' - Spirit',
+    menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'config')],
+    content: {
+      name: name,
+      repository: repositoryModel(config, name),
+      environment: environmentModel(config, name),
+      volumes: volumesModel(config, name),
+      ports: portsModel(config, name),
+      links: linksModel(config, name),
+      volumesFrom: volumesFromModel(config, name)
+    }
+  });
 }));
 
 module.exports = router;

@@ -1,13 +1,19 @@
-{>"spirits/spirit/layout"/}
-{<spiritPage}
+{>layout/}
+{<content}
+  {>_menuRoot menu=menus[0]/}
+  {>_menuSpirits menu=menus[1]/}
+  {>_menuSpirit menu=menus[2]/}
+
+  {#content}
   <div class="pane content">
     <h2><i class="fa fa-fw fa-info-circle"></i>{name} (<a class="no-link" href="{name}/life/{life}">{life|nth} life</a>)</h2>
         <p class="text-center">
           {description}
         </p>
     <div class="grid-container">
-      {>"spirits/spirit/_controls"/}
-      {>"spirits/spirit/_deploy"/}
+      {>"spirit/_controls"/}
+      {>"spirit/_deploy"/}
     </div>
   </div>
-{/spiritPage}
+  {/content}
+{/content}

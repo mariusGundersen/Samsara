@@ -1,0 +1,32 @@
+{>layout/}
+{<content}
+  {>_menuRoot menu=menus[0]/}
+  {>_menuSpirits menu=menus[1]/}
+  {>_menuSpirit menu=menus[2]/}
+  {>_menuLives menu=menus[3]/}
+
+  {#content}
+  <div class="pane content">
+    <h2>{life|nth} life of {name}</h2>
+    <div class="grid-container">
+
+      {?revive.revivable}
+        <div class="box" data-viewmodel="spirit/life/ReviveVM" data-model="{revive|js}">
+          <h3>Revive</h3>
+          <div class="text-center" style="padding: 1em">
+            <div class="button-group">
+                <button class="pure-button" data-bind="click: revive, disable: revive.isBusy">
+                  <i class="container-state fa fa-play fa-fw" data-bind="spinIcon: revive.isBusy"></i>&nbsp;Revive {revive.life|nth} life
+                </button>
+            </div>
+            <span class="validation-error-message text-center" data-bind="validationMessageFor: revive"></span>
+          </div>
+          {>"spirit/_deployProgress" model=deploy/}
+        </div>
+      {/revive.revivable}
+
+      {>"life/_logs" model=logs/}
+    </div>
+  </div>
+{/content}
+{/content}

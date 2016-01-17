@@ -1,5 +1,7 @@
 {>layout/}
 {<content}
+  {>_menuRoot menu=menus[0]/}
+
   <div class="pane content">
     <h2>Samsara</h2>
   </div>

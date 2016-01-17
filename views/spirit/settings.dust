@@ -1,0 +1,16 @@
+{>layout/}
+{<content}
+  {>_menuRoot menu=menus[0]/}
+  {>_menuSpirits menu=menus[1]/}
+  {>_menuSpirit menu=menus[2]/}
+
+  {#content}
+  <div class="pane content">
+    <h2><i class="fa fa-fw fa-gear"></i>Spirit settings for {name}</h2>
+    <div class="grid-container">
+      {>"spirit/_mainInfo"/}
+      {>"spirit/_webhook"/}
+    </div>
+  </div>
+  {/content}
+{/content}

@@ -1,5 +1,8 @@
 {>layout/}
 {<content}
+  {>_menuRoot menu=menus[0]/}
+
+  {# content}
   <div class="pane content">
     <h2><i class="fa fa-fw fa-cog"></i>Settings</h2>
     <div class="grid-container">
@@ -27,4 +30,5 @@
       </div>
     </div>
   </div>
+  {/content}
 {/content}

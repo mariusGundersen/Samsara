@@ -1,5 +1,9 @@
-{>"spirits/layout"/}
-{<spiritsPage}
+{>layout/}
+{<content}
+  {>_menuRoot menu=menus[0]/}
+  {>_menuSpirits menu=menus[1]/}
+
+  {#content}
   <div class="pane content">
     <h2>Spirits</h2>
     <ul class="pure-menu-list">
@@ -10,4 +14,5 @@
       {/spirits}
     </ul>
   </div>
-{/spiritsPage}
+  {/content}
+{/content}

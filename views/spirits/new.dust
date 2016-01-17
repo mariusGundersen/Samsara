@@ -1,23 +1,28 @@
-{>"spirits/layout"/}
-{<spiritsPage}
-<div class="pane content">
-  <h2>New spirit</h2>
-  <div class="grid-container">
-    <section class="box" data-viewmodel="NewSpiritVM">
-      <form class="pure-form pure-form-stacked box-form" data-bind="submit: create">
-        <label class="small-label">Name&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:name"></span></label>
-        <input data-bind="value: name" placeholder="ex: website" autofocus>
+{>layout/}
+{<content}
+  {>_menuRoot menu=menus[0]/}
+  {>_menuSpirits menu=menus[1]/}
 
-        {>"spirits/spirit/_imageAndTag"/}
+  {#content}
+  <div class="pane content">
+    <h2>New spirit</h2>
+    <div class="grid-container">
+      <section class="box" data-viewmodel="NewSpiritVM">
+        <form class="pure-form pure-form-stacked box-form" data-bind="submit: create">
+          <label class="small-label">Name&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:name"></span></label>
+          <input data-bind="value: name" placeholder="ex: website" autofocus>
 
-        <div class="button-group">
-          <button type="submit" class="pure-button button-success" data-bind="disable: create.isBusy">
-            <i class="fa fa-fw fa-check" data-bind="spinIcon: create.isBusy"></i>&nbsp;
-            Create
-          </button>
-        </div>
-      </form>
-    </section>
+          {>"spirits/spirit/_imageAndTag"/}
+
+          <div class="button-group">
+            <button type="submit" class="pure-button button-success" data-bind="disable: create.isBusy">
+              <i class="fa fa-fw fa-check" data-bind="spinIcon: create.isBusy"></i>&nbsp;
+              Create
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
   </div>
-</div>
-{/spiritsPage}
+  {/content}
+{/content}

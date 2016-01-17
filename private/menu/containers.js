@@ -1,11 +1,5 @@
-const co = require('co');
-const makePageModel = require('./root');
-const samsara = require('samsara-lib');
-
-module.exports = co.wrap(function*(title, content, currentContainerId){
-  const list = yield samsara().containers();
-
-  const containers = list.map(container => ({
+module.exports = function(containers, currentContainerId){
+  return containers.map(container => ({
     name: container.name,
     id: container.id,
     image: container.image,
@@ -14,14 +8,7 @@ module.exports = co.wrap(function*(title, content, currentContainerId){
     status: container.status,
     selected: container.id == currentContainerId
   }));
-
-  return makePageModel(title, {
-    menu: {
-      containers: containers
-    },
-    content: content || {}
-  }, 'containers');
-});
+};
 
 function getIcon(state){
   switch(state){

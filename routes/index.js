@@ -1,10 +1,13 @@
 const router = require('express-promise-router')();
-const makePageModel = require('../pageModels/root');
+const root = require('../private/menu/root');
 const co = require('co');
 
 router.get('/', co.wrap(function*(req, res, next) {
-  const pageModel = makePageModel('Samsara', {}, null);
-  res.render('index', pageModel);
+  res.render('index', {
+    title: null,
+    menus: [root()],
+    content: {}
+  });
 }));
 
 module.exports = router;

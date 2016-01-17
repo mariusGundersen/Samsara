@@ -1,0 +1,21 @@
+{>layout/}
+{<content}
+  {>_menuRoot menu=menus[0]/}
+  {>_menuSpirits menu=menus[1]/}
+  {>_menuSpirit menu=menus[2]/}
+
+  {#content}
+  <div class="pane content">
+    <h2><i class="fa fa-fw fa-wrench"></i>Container configuration for {name}</h2>
+    <p class="text-center">Changes made here will take effect in the next life. Use the Deploy button on the status page to put the new configuration into effect.</p>
+    <div class="grid-container">
+      {>"spirit/_repository" config=repository/}
+      {>"spirit/_envVars" config=environment/}
+      {>"spirit/_volumes" config=volumes/}
+      {>"spirit/_ports" config=ports/}
+      {>"spirit/_links" config=links/}
+      {>"spirit/_volumesFrom" config=volumesFrom/}
+    </div>
+  </div>
+  {/content}
+{/content}

@@ -1,5 +1,6 @@
 {>layout/}
 {<content}
+  {#content}
   <div class="pane content">
     <h1 class="hero"><img src="/images/logo.svg" style="height:.75em">Samsara</h1>
 
@@ -23,4 +24,5 @@
       </section>
     </div>
   </div>
+  {/content}
 {/content}

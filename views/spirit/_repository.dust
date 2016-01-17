@@ -8,7 +8,7 @@
       <button class="pure-button button-xsmall button-minimal button-no-padding" data-bind="click:cancel" title="Cancel changes"><i class="fa fa-fw fa-undo"></i></button>
     </h3>
     <form class="pure-form pure-form-stacked box-form" data-bind="submit: save">
-      {>"spirits/spirit/_imageAndTag"/}
+      {>"spirit/_imageAndTag"/}
 
       <div class="button-group">
         <button class="pure-button button-success" type="submit" data-bind="click: save"><i class="fa fa-fw fa-check"></i>&nbsp;Save</button>
