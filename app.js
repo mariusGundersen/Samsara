@@ -22,6 +22,11 @@ dust.filters.nth = function(value){
     return 'no';
   }
 }
+const startTime = new Date().toISOString().replace(/\D/g, '');
+dust.helpers.cachebust = function(chunk){
+  chunk.write(startTime);
+  return chunk;
+}
 
 app.engine('dust', cons.dust);
 app.set('views', path.join(__dirname, 'views'));
