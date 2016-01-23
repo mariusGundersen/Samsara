@@ -1,20 +1,22 @@
-const router = require('express-promise-router')();
-const samsara = require('samsara-lib');
-const co = require('co');
-const rootMenu = require('../private/menu/root');
-const spiritsMenu = require('../private/menu/spirits');
-const spiritMenu = require('../private/menu/spirit');
+import Router from 'express-promise-router';
+import samsara from 'samsara-lib';
+import rootMenu from '../private/menu/root';
+import spiritsMenu from '../private/menu/spirits';
+import spiritMenu from '../private/menu/spirit';
 
-router.get('/:name', co.wrap(function*(req, res, next) {
+const router = Router();
+export default router;
+
+router.get('/:name', async function(req, res, next) {
   const name = req.params.name;
-  const spirits = yield samsara().spirits();
+  const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
-  const state = yield spirit.status;
-  const settings = yield spirit.settings;
-  const config = yield spirit.containerConfig;
-  const isDeploying = yield spirit.isDeploying;
-  const currentLife = yield spirit.currentLife;
-  const latestLife = yield spirit.latestLife;
+  const state = await spirit.status;
+  const settings = await spirit.settings;
+  const config = await spirit.containerConfig;
+  const isDeploying = await spirit.isDeploying;
+  const currentLife = await spirit.currentLife;
+  const latestLife = await spirit.latestLife;
   const life = (currentLife || latestLife || {life: '?'}).life;
 
   res.render('spirit/index', {
@@ -34,18 +36,18 @@ router.get('/:name', co.wrap(function*(req, res, next) {
       controls: {
         name: name,
         canStop: state === 'running',
-        canStart: state == 'stopped' && latestLife && !!(yield latestLife.container),
+        canStart: state == 'stopped' && latestLife && !!(await latestLife.container),
         canRestart: state == 'running'
       }
     }
   });
-}));
+});
 
-router.get('/:name/settings', co.wrap(function*(req, res, next) {
+router.get('/:name/settings', async function(req, res, next) {
   const name = req.params.name
-  const spirits = yield samsara().spirits();
+  const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
-  const settings = yield spirit.settings;
+  const settings = await spirit.settings;
   res.render('spirit/settings', {
     title: 'Settings - ' + name + ' - Spirit',
     menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'settings')],
@@ -54,13 +56,13 @@ router.get('/:name/settings', co.wrap(function*(req, res, next) {
       settings: settings
     }
   });
-}));
+});
 
-router.get('/:name/configure', co.wrap(function*(req, res, next) {
+router.get('/:name/configure', async function(req, res, next) {
   const name = req.params.name
-  const spirits = yield samsara().spirits();
+  const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
-  const config = yield spirit.containerConfig;
+  const config = await spirit.containerConfig;
   res.render('spirit/configure', {
     title: 'Configure - ' + name + ' - Spirit',
     menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'config')],
@@ -74,9 +76,7 @@ router.get('/:name/configure', co.wrap(function*(req, res, next) {
       volumesFrom: volumesFromModel(config, name)
     }
   });
-}));
-
-module.exports = router;
+});
 
 function repositoryModel(config, name){
   return {

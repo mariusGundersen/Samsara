@@ -1,11 +1,14 @@
-const router = require('express-promise-router')();
-const co = require('co');
-const samsara = require('samsara-lib');
-const root = require('../private/menu/root');
-const containers = require('../private/menu/containers');
+import Router from 'express-promise-router';
+import co from 'co';
+import samsara from 'samsara-lib';
+import root from '../private/menu/root';
+import containers from '../private/menu/containers';
 
-router.get('/', co.wrap(function*(req, res, next) {
-  const list = yield samsara().containers();
+const router = Router();
+export default router;
+
+router.get('/', async function(req, res, next) {
+  const list = await samsara().containers();
   return res.render('container/index', {
     title: 'Containers',
     menus: [root('containers'), containers(list)],
@@ -13,14 +16,14 @@ router.get('/', co.wrap(function*(req, res, next) {
       containers: list
     }
   });
-}));
+});
 
-router.get('/:id', co.wrap(function*(req, res, next) {
-  const list = yield samsara().containers();
+router.get('/:id', async function(req, res, next) {
+  const list = await samsara().containers();
   const container = samsara().container(req.params.id);
-  const config = yield container.inspect();
+  const config = await container.inspect();
   const name = config.Name.substr(1);
-  const logs = yield container.prettyLogs(true, {stdout:true, stderr:true, tail:50});
+  const logs = await container.prettyLogs(true, {stdout:true, stderr:true, tail:50});
 
   return res.render('container/info', {
     title: name + ' - Containers',
@@ -38,15 +41,13 @@ router.get('/:id', co.wrap(function*(req, res, next) {
       }
     }
   });
-}));
+});
 
-router.get('/:id/logs/download', co.wrap(function*(req, res, next){
+router.get('/:id/logs/download', async function(req, res, next){
   const container = samsara().container(req.params.id);
-  const config = yield container.inspect();
+  const config = await container.inspect();
 
   res.setHeader('Content-disposition', 'attachment;filename='+config.Name.substr(1)+'.log');
-  const logs = yield container.prettyLogs(false, {stdout:true, stderr:true});
+  const logs = await container.prettyLogs(false, {stdout:true, stderr:true});
   logs.pipe(res);
-}));
-
-module.exports = router;
+});

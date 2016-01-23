@@ -1,15 +1,17 @@
-const router = require('express-promise-router')();
-const co = require('co');
-const samsara = require('samsara-lib')
-const deploy = require('../private/deploy').deploy;
-const validateDeploy = require('../private/validateDeploy');
-const request = require('request-promise');
+import Router from 'express-promise-router';
+import samsara from 'samsara-lib';
+import {deploy} from '../private/deploy';
+import validateDeploy from '../private/validateDeploy';
+import request from 'request-promise';
 
-router.post('/:name/:secret', co.wrap(function* (req, res, next) {
+const router = Router();
+export default router;
+
+router.post('/:name/:secret', async function (req, res, next) {
 
   try {
     console.log('deploy request', req.params.name, req.body.repository.repo_name, req.body.push_data.tag);
-    yield validateDeploy(
+    await validateDeploy(
       req.params.name,
       req.params.secret,
       req.body.repository && req.body.repository.repo_name,
@@ -17,9 +19,9 @@ router.post('/:name/:secret', co.wrap(function* (req, res, next) {
       req.body.callback_url);
 
     console.log('config is valid');
-    const config = yield samsara().spirit(req.params.name).containerConfig;
+    const config = await samsara().spirit(req.params.name).containerConfig;
     config.tag = req.body.push_data.tag;
-    yield config.save();
+    await config.save();
 
     deploy(req.params.name)
       .on('stop', data => respondTo(data, req.body.callback_url));
@@ -33,15 +35,13 @@ router.post('/:name/:secret', co.wrap(function* (req, res, next) {
   } finally {
     res.end();
   }
-}));
+});
 
 router.use(function (error, req, res, next) {
   res.status('500');
   res.write(JSON.stringify(error.message || error, null, ' '));
   res.end();
 });
-
-module.exports = router;
 
 function respondTo(data, url){
   request.post({

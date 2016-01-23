@@ -1,11 +1,13 @@
-const router = require('express-promise-router')();
-const rootMenu = require('../private/menu/root');
-const spiritsMenu = require('../private/menu/spirits');
-const samsara = require('samsara-lib');
-const co = require('co');
+import Router from 'express-promise-router';
+import rootMenu from '../private/menu/root';
+import spiritsMenu from '../private/menu/spirits';
+import samsara from 'samsara-lib';
 
-router.get('/', co.wrap(function*(req, res, next) {
-  const spirits = yield samsara().spirits();
+const router = Router();
+export default router;
+
+router.get('/', async function(req, res, next) {
+  const spirits = await samsara().spirits();
   res.render('spirits/index', {
     title: 'Spirits',
     menus: [rootMenu('spirits'), spiritsMenu(spirits)],
@@ -13,15 +15,13 @@ router.get('/', co.wrap(function*(req, res, next) {
       spirits: spirits
     }
   });
-}));
+});
 
-router.get('/new', co.wrap(function*(req, res, next) {
-  const spirits = yield samsara().spirits();
+router.get('/new', async function(req, res, next) {
+  const spirits = await samsara().spirits();
   res.render('spirits/new', {
     title: 'New Spirit',
     menus: [rootMenu('spirits'), spiritsMenu(spirits, null, true)],
     content: {}
   });
-}));
-
-module.exports = router;
+});

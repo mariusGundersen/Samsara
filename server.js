@@ -1,7 +1,7 @@
 /**
  * Module dependencies.
  */
-
+require('babel-register');
 const socketIO = require('socket.io');
 const app = require('./app');
 const debug = require('debug')('samsara:server');

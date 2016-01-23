@@ -1,15 +1,18 @@
-const express = require('express');
-const path = require('path');
-const logger = require('morgan');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const flash = require('connect-flash');
-const favicon = require('serve-favicon');
+import express from 'express';
+import path from 'path';
+import logger from 'morgan';
+import bodyParser from 'body-parser';
+import session from 'express-session';
+import flash from 'connect-flash';
+import favicon from 'serve-favicon';
 
-const nth = require('nth');
-const dust = require('dustjs-linkedin');
-const cons = require('consolidate');
-const authentication = require('./private/authentication');
+import nth from 'nth';
+import dust from 'dustjs-linkedin';
+import cons from 'consolidate';
+
+import {initialize as initializeAuthentication, restrict, session as authSession} from './private/authentication';
+import routeAnonymous from './routeAnonymous';
+import routeAuthenticated from './routeAuthenticated';
 
 const app = express();
 app.enable('trust proxy');
@@ -42,11 +45,11 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-app.use(authentication.initialize());
-app.use(authentication.session());
+app.use(initializeAuthentication());
+app.use(authSession());
 
-app.use(require('./routeAnonymous'));
-app.use(authentication.restrict, require('./routeAuthenticated'));
+app.use(routeAnonymous);
+app.use(restrict, routeAuthenticated);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -67,4 +70,4 @@ app.use(function(err, req, res, next) {
     });
 });
 
-module.exports = app;
+export default app;

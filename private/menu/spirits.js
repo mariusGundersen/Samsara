@@ -1,4 +1,4 @@
-module.exports = function(list, currentSpiritName, newSelected){
+export default function(list, currentSpiritName, newSelected){
   return {
     newSelected: newSelected,
     spirits: list.map(spirit => ({

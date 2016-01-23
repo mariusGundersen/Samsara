@@ -1,4 +1,4 @@
-module.exports = function(spirit, lives, selectedLife){
+export default function(spirit, lives, selectedLife){
   return lives.map(life => ({
     spirit: spirit,
     life: life.life,

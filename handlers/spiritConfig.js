@@ -1,50 +1,47 @@
-'use strict'
+import qvc from 'qvc';
+import samsara from 'samsara-lib';
+import NotEmpty from 'qvc/constraints/NotEmpty';
+import Pattern from 'qvc/constraints/Pattern';
 
-const co = require('co');
-const qvc = require('qvc');
-const samsara = require('samsara-lib');
-const NotEmpty = require('qvc/constraints/NotEmpty');
-const Pattern = require('qvc/constraints/Pattern');
-
-module.exports = [
-  qvc.command('setSpiritImageAndTag', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+export default [
+  qvc.command('setSpiritImageAndTag', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     containerConfig.image = command.image;
     containerConfig.tag = command.tag;
-    yield containerConfig.save();
-  }), {
+    await containerConfig.save();
+  }, {
     'image': new NotEmpty('Specify the image to use'),
     'tag': new NotEmpty('Specify the tag')
   }),
-  qvc.command('addEnvVar', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+  qvc.command('addEnvVar', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let environment = containerConfig.environment;
     environment.push({
-      key:command.key,
+      key: command.key,
       value: command.value
     });
     containerConfig.environment = environment;
-    yield containerConfig.save();
-  }), {
+    await containerConfig.save();
+  }, {
     'key': new NotEmpty('Please specify a key for the new environment variable')
   }),
-  qvc.command('setEnvVar', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+  qvc.command('setEnvVar', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let environment = containerConfig.environment;
     environment
       .filter(env => env.key === command.key)
       .forEach(env => env.value = command.value);
     containerConfig.environment = environment;
-    yield containerConfig.save();
-  })),
-  qvc.command('removeEnvVar', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('removeEnvVar', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     containerConfig.environment = containerConfig.environment
       .filter(env => env.key !== command.key);
-    yield containerConfig.save();
-  })),
-  qvc.command('addVolume', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('addVolume', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let volumes = containerConfig.volumes;
     volumes.push({
       containerPath: command.containerPath,
@@ -52,12 +49,12 @@ module.exports = [
       readOnly: command.readOnly
     });
     containerConfig.volumes = volumes;
-    yield containerConfig.save();
-  }), {
+    await containerConfig.save();
+  }, {
     'containerPath': new NotEmpty('Please specify a containerPath for the new volume')
   }),
-  qvc.command('setVolume', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+  qvc.command('setVolume', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let volumes = containerConfig.volumes;
     volumes
       .filter(volume => volume.containerPath === command.containerPath)
@@ -66,16 +63,16 @@ module.exports = [
         volume.readOnly = command.readOnly;
       });
     containerConfig.volumes = volumes;
-    yield containerConfig.save();
-  })),
-  qvc.command('removeVolume', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('removeVolume', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     containerConfig.volumes = containerConfig.volumes
       .filter(volume => volume.containerPath !== command.containerPath);
-    yield containerConfig.save();
-  })),
-  qvc.command('addPort', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('addPort', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let ports = containerConfig.ports;
     ports.push({
       hostPort: command.hostPort,
@@ -83,8 +80,8 @@ module.exports = [
       hostIp: command.hostIp
     });
     containerConfig.ports = ports;
-    yield containerConfig.save();
-  }), {
+    await containerConfig.save();
+  }, {
     'hostPort': [
       new NotEmpty('Please specify a host port for the new port'),
       new Pattern(/^\d+$/, 'The host port must be a number')
@@ -95,8 +92,8 @@ module.exports = [
     ],
     'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
   }),
-  qvc.command('setPort', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+  qvc.command('setPort', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let ports = containerConfig.ports;
     ports
       .filter(port => port.hostPort === command.hostPort)
@@ -105,8 +102,8 @@ module.exports = [
         port.hostIp = command.hostIp;
       });
     containerConfig.ports = ports;
-    yield containerConfig.save();
-  }), {
+    await containerConfig.save();
+  }, {
     'hostPort': [
       new NotEmpty('Please specify a host port for the new port'),
       new Pattern(/^\d+$/, 'The host port must be a number')
@@ -117,14 +114,14 @@ module.exports = [
     ],
     'hostIp': new Pattern(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})?$/, 'The host ip must follow the pattern #.#.#.#')
   }),
-  qvc.command('removePort', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+  qvc.command('removePort', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     containerConfig.ports = containerConfig.ports
       .filter(port => port.hostPort !== command.hostPort);
-    yield containerConfig.save();
-  })),
-  qvc.command('addLink', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('addLink', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let links = containerConfig.links;
     links.push({
       alias: command.alias,
@@ -132,12 +129,12 @@ module.exports = [
       container: command.container
     });
     containerConfig.links = links;
-    yield containerConfig.save();
-  }), {
+    await containerConfig.save();
+  }, {
     'alias': new NotEmpty('Please specify an alias for the new link')
   }),
-  qvc.command('setLink', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+  qvc.command('setLink', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let links = containerConfig.links;
     links
       .filter(link => link.alias === command.alias)
@@ -146,16 +143,16 @@ module.exports = [
         link.container = command.container;
       });
     containerConfig.links = links;
-    yield containerConfig.save();
-  })),
-  qvc.command('removeLink', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('removeLink', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     containerConfig.links = containerConfig.links
       .filter(link => link.alias !== command.alias);
-    yield containerConfig.save();
-  })),
-  qvc.command('addVolumesFrom', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('addVolumesFrom', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let volumesFrom = containerConfig.volumesFrom;
     volumesFrom.push({
       spirit: command.fromSpirit,
@@ -163,13 +160,13 @@ module.exports = [
       readOnly: command.readOnly
     });
     containerConfig.volumesFrom = volumesFrom;
-    yield containerConfig.save();
-  }), {
+    await containerConfig.save();
+  }, {
     'fromSpirit': new NotEmpty('Please specify the spirit to use volumes from')
   }),
-  qvc.command('setVolumesFrom', co.wrap(function *(command) {
+  qvc.command('setVolumesFrom', async function(command) {
     console.log("setVolumesFrom", command.name);
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     let volumesFrom = containerConfig.volumesFrom;
     volumesFrom
       .filter(volumeFrom => volumeFrom.spirit === command.oldFromSpirit && volumeFrom.container === command.oldFromContainer)
@@ -179,12 +176,12 @@ module.exports = [
         volumeFrom.readOnly = command.readOnly;
       });
     containerConfig.volumesFrom = volumesFrom;
-    yield containerConfig.save();
-  })),
-  qvc.command('removeVolumesFrom', co.wrap(function *(command) {
-    let containerConfig = yield samsara().spirit(command.name).containerConfig;
+    await containerConfig.save();
+  }),
+  qvc.command('removeVolumesFrom', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
     containerConfig.volumesFrom = containerConfig.volumesFrom
       .filter(volumeFrom => volumeFrom.spirit !== command.fromSpirit && volumeFrom.container !== command.fromContainer)
-    yield containerConfig.save();
-  }))
+    await containerConfig.save();
+  })
 ];

@@ -1,15 +1,17 @@
-const router = require('express-promise-router')();
-const samsara = require('samsara-lib');
-const co = require('co');
-const nth = require('nth');
-const rootMenu = require('../private/menu/root');
-const spiritsMenu = require('../private/menu/spirits');
-const spiritMenu = require('../private/menu/spirit');
-const livesMenu = require('../private/menu/lives');
+import Router from 'express-promise-router';
+import samsara from 'samsara-lib';
+import nth from 'nth';
+import rootMenu from '../private/menu/root';
+import spiritsMenu from '../private/menu/spirits';
+import spiritMenu from '../private/menu/spirit';
+import livesMenu from '../private/menu/lives';
 
-router.get('/:name/lives', co.wrap(function*(req, res, next) {
+const router = Router();
+export default router;
+
+router.get('/:name/lives', async function(req, res, next) {
   const name = req.params.name;
-  const spirits = yield samsara().spirits();
+  const spirits = await samsara().spirits();
   const spirit = spirits.filter(s => s.name == name)[0];
   const lives = spirit.lives;
   const list = lives.map(x => x).reverse();
@@ -21,26 +23,26 @@ router.get('/:name/lives', co.wrap(function*(req, res, next) {
       lives: list
     }
   });
-}));
+});
 
-router.get('/:name/life/latest', co.wrap(function*(req, res, next){
-  const latestLife = yield samsara().spirit(req.params.name).latestLife;
+router.get('/:name/life/latest', async function(req, res, next){
+  const latestLife = await samsara().spirit(req.params.name).latestLife;
 
   if(!latestLife) throw new Error('404');
 
   res.redirect(latestLife.life);
-}));
+});
 
-router.get('/:name/life/:life', co.wrap(function*(req, res, next){
+router.get('/:name/life/:life', async function(req, res, next){
   const name = req.params.name;
   const life = req.params.life;
-  const spirits = yield samsara().spirits();
+  const spirits = await samsara().spirits();
   const spirit = spirits.filter(s => s.name == name)[0];
   const lives = spirit.lives;
   const currentLife = samsara().spirit(name).life(life);
 
   const state = lives.filter(l => l.life == life)[0].state;
-  const container = yield currentLife.container;
+  const container = await currentLife.container;
 
   res.render('life/index', {
     title: nth.appendSuffix(life)+' life of ' + name,
@@ -72,18 +74,16 @@ router.get('/:name/life/:life', co.wrap(function*(req, res, next){
       }
     }
   });
-}));
+});
 
-router.get('/:name/life/:life/logs/download', co.wrap(function*(req, res, next){
+router.get('/:name/life/:life/logs/download', async function(req, res, next){
   const name = req.params.name;
   const life = req.params.life;
-  const logs = yield samsara()
+  const logs = await samsara()
     .spirit(name)
     .life(life)
     .containerLog(false, {stdout: true, stderr: true});
 
   res.setHeader('Content-disposition', `attachment;filename=${name}_v${life}.log`);
   logs.pipe(res);
-}));
-
-module.exports = router;
+});

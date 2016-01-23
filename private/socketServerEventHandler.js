@@ -1,10 +1,9 @@
-'use strict'
-const EventSaga = require('event-saga');
-const eventBus = require('./eventBus');
-const deploySaga = require('./deploySaga');
-const followSpiritLogSaga = require('./followSpiritLogSaga');
+import EventSaga from 'event-saga';
+import eventBus from './eventBus';
+import deploySaga from './deploySaga';
+import followSpiritLogSaga from './followSpiritLogSaga';
 
-module.exports = function(io){
+export default function socketServerEventHandler(io){
   io.on('connection', function(socket){
     socket.on('subscribeToDeployStatus', function(name){
       socket.join('spirit/'+name+'/deploy');

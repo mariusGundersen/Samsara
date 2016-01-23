@@ -1,4 +1,4 @@
-module.exports = function(containers, currentContainerId){
+export default function(containers, currentContainerId){
   return containers.map(container => ({
     name: container.name,
     id: container.id,

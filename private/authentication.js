@@ -1,20 +1,17 @@
-'use strict';
+import passport from 'passport';
+import {Strategy as LocalStrategy} from 'passport-local';
+import samsara from 'samsara-lib';
 
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const co = require('co');
-const samsara = require('samsara-lib');
-
-passport.use(new LocalStrategy(co.wrap(function*(username, password, done) {
+passport.use(new LocalStrategy(async function(username, password, done) {
   try{
-    const users = yield samsara().users();
+    const users = await samsara().users();
     const found = users.filter(x => x.username === username)[0];
 
     if (!found) {
       return done(null, false, { message: 'Unknown user' });
     }
 
-    if (!(yield found.validate(password))) {
+    if (!(await found.validate(password))) {
       return done(null, false, { message: 'Incorrect password' });
     }
 
@@ -22,7 +19,7 @@ passport.use(new LocalStrategy(co.wrap(function*(username, password, done) {
   }catch(e){
     done(e);
   }
-})));
+}));
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -32,26 +29,24 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-module.exports = {
-  initialize(){
-    return passport.initialize();
-  },
-  session(){
-    return passport.session();
-  },
-  login(){
-    return passport.authenticate('local', {
-      failureRedirect: '/login',
-      failureFlash: true
-    });
-  },
-  redirectAfterLogin(defaultPath){
-    return (req, res) => res.redirect(req.session.returnTo || defaultPath || '/')
-  },
-  restrict(req, res, next){
-    if (req.isAuthenticated())
-      return next();
-    req.session.returnTo = req.path;
-    res.redirect('/login');
-  }
+export function initialize(){
+  return passport.initialize();
+};
+export function session(){
+  return passport.session();
+};
+export function login(){
+  return passport.authenticate('local', {
+    failureRedirect: '/login',
+    failureFlash: true
+  });
+};
+export function redirectAfterLogin(defaultPath){
+  return (req, res) => res.redirect(req.session.returnTo || defaultPath || '/')
+};
+export function restrict(req, res, next){
+  if (req.isAuthenticated())
+    return next();
+  req.session.returnTo = req.path;
+  res.redirect('/login');
 };

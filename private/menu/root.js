@@ -1,4 +1,4 @@
-module.exports = function(selected){
+export default function(selected){
   return {
     constellations: selected == 'constellations',
     spirits: selected == 'spirits',

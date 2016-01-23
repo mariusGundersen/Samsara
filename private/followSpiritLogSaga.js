@@ -1,14 +1,12 @@
-'use strict'
-const co = require('co');
-const samsara = require('samsara-lib');
-const EventSaga = require('event-saga');
-const deploySaga = require('./deploySaga');
+import samsara from 'samsara-lib';
+import EventSaga from 'event-saga';
+import deploySaga from './deploySaga';
 
-module.exports = function(eventBus){
+export default function followSpiritLogSaga(eventBus){
   const saga = new EventSaga(eventBus);
 
-  saga.createOn('followSpiritLifeLog', co.wrap(function*(data){
-    const logs = yield samsara()
+  saga.createOn('followSpiritLifeLog', async function(data){
+    const logs = await samsara()
       .spirit(data.name)
       .life(data.life)
       .containerLog(true, {stdout:true, stderr:true, follow:true, tail:50});
@@ -19,7 +17,7 @@ module.exports = function(eventBus){
       });
     });
     this.data.logs = logs;
-  }));
+  });
 
   saga.on('unfollowSpiritLifeLog', function(){
     this.data.logs.unpipe();

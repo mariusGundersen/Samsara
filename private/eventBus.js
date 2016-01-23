@@ -1,5 +1,3 @@
-var EventEmitter = require('events').EventEmitter;
+import {EventEmitter} from 'events';
 
-var singleton = new EventEmitter();
-
-module.exports = singleton;
+export default new EventEmitter();

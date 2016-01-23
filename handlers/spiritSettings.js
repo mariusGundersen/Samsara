@@ -1,33 +1,33 @@
-const qvc = require('qvc');
-const samsara = require('samsara-lib');
-const NotEmpty = require('qvc/constraints/NotEmpty');
-const Pattern = require('qvc/constraints/Pattern');
+import qvc from 'qvc';
+import samsara from 'samsara-lib';
+import NotEmpty from 'qvc/constraints/NotEmpty';
+import Pattern from 'qvc/constraints/Pattern';
 
-module.exports = [
-  qvc.command('setSpiritDescription', function (command) {
-    return samsara().spirit(command.name).mutateSettings(settings => settings.description = command.value);
+export default [
+  qvc.command('setSpiritDescription', async function (command) {
+    await samsara().spirit(command.name).mutateSettings(settings => settings.description = command.value);
   }),
-  qvc.command('setSpiritUrl', function (command) {
-    return samsara().spirit(command.name).mutateSettings(settings => settings.url = command.value);
+  qvc.command('setSpiritUrl', async function (command) {
+    await samsara().spirit(command.name).mutateSettings(settings => settings.url = command.value);
   }),
-  qvc.command('setSpiritDeploymentMethod', function (command) {
-    return samsara().spirit(command.name).mutateSettings(settings => settings.deploymentMethod = command.value);
+  qvc.command('setSpiritDeploymentMethod', async function (command) {
+    await samsara().spirit(command.name).mutateSettings(settings => settings.deploymentMethod = command.value);
   }),
-  qvc.command('setSpiritCleanupLimit', function (command) {
+  qvc.command('setSpiritCleanupLimit', async function (command) {
     if (command.value >= 0) {
-      return samsara().spirit(command.name).mutateSettings(settings => settings.cleanupLimit = command.value | 0);
+      await samsara().spirit(command.name).mutateSettings(settings => settings.cleanupLimit = command.value | 0);
     } else {
       return { success: false, valid: false, violations: [{ fieldName: 'value', message: 'Value must be positive' }] };
     }
   }),
-  qvc.command('enableWebhook', function (command) {
-    return samsara().spirit(command.name).mutateSettings(settings => settings.webhook.enable = true);
+  qvc.command('enableWebhook', async function (command) {
+    await samsara().spirit(command.name).mutateSettings(settings => settings.webhook.enable = true);
   }),
-  qvc.command('disableWebhook', function (command) {
-    return samsara().spirit(command.name).mutateSettings(settings => settings.webhook.enable = false);
+  qvc.command('disableWebhook', async function (command) {
+    await samsara().spirit(command.name).mutateSettings(settings => settings.webhook.enable = false);
   }),
-  qvc.command('saveWebhook', function (command) {
-    return samsara().spirit(command.name).mutateSettings(settings => {
+  qvc.command('saveWebhook', async function (command) {
+    await samsara().spirit(command.name).mutateSettings(settings => {
       settings.webhook['secret'] = command.secret;
       settings.webhook['matchTag'] = command.matchTag;
     });

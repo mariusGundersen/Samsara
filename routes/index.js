@@ -1,13 +1,13 @@
-const router = require('express-promise-router')();
-const root = require('../private/menu/root');
-const co = require('co');
+import Router from 'express-promise-router';
+import root from '../private/menu/root';
 
-router.get('/', co.wrap(function*(req, res, next) {
+const router = Router();
+export default router;
+
+router.get('/', async function(req, res, next) {
   res.render('index', {
     title: null,
     menus: [root()],
     content: {}
   });
-}));
-
-module.exports = router;
+});

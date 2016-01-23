@@ -1,0 +1,10 @@
+{
+  "presets": ["es2015-node4"],
+  "plugins": [
+    ["transform-async-to-module-method", {
+      "module": "co",
+      "method": "wrap"
+    }],
+    "add-module-exports"
+  ]
+}

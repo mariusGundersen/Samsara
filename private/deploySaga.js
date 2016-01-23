@@ -1,6 +1,6 @@
-var EventSaga = require('event-saga');
+import EventSaga from 'event-saga';
 
-module.exports = function deploySaga(eventBus){
+export default function deploySaga(eventBus){
   var deploySaga = new EventSaga(eventBus);
 
   deploySaga.createOn('spirit.deploy.start', function(data){

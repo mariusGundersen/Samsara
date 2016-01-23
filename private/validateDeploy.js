@@ -1,11 +1,10 @@
-const co = require('co');
-const semver = require('semver');
-const samsara = require('samsara-lib');
+import semver from 'semver';
+import samsara from 'samsara-lib';
 
-module.exports = co.wrap(function*(name, secret, image, tag, callback_url){
+export default async function validateDeploy(name, secret, image, tag, callback_url){
   const spirit = samsara().spirit(name);
-  const config = yield spirit.containerConfig;
-  const settings = yield spirit.settings;
+  const config = await spirit.containerConfig;
+  const settings = await spirit.settings;
 
   console.log('name', settings.name, name);
   if(settings.name !== name){
@@ -28,7 +27,7 @@ module.exports = co.wrap(function*(name, secret, image, tag, callback_url){
   }
 
   const matchTag = settings.webhook.matchTag || config.tag;
-  const currentTag = yield getCurrentTag(spirit);
+  const currentTag = await getCurrentTag(spirit);
   console.log('tag', matchTag, tag, currentTag);
   if(semverFailsToSatisfy(matchTag, tag, currentTag) && matchTag !== tag){
     throw 'wrong tag';
@@ -40,7 +39,7 @@ module.exports = co.wrap(function*(name, secret, image, tag, callback_url){
   }
 
   return true;
-});
+};
 
 function semverFailsToSatisfy(matchTag, tag, currentTag){
   if(!semver.validRange(matchTag)){
@@ -58,15 +57,15 @@ function semverFailsToSatisfy(matchTag, tag, currentTag){
   return false;
 }
 
-const getCurrentTag = co.wrap(function*(spirit){
-  const currentLife = (yield spirit.currentLife) || (yield spirit.latestLife);
+async function getCurrentTag(spirit){
+  const currentLife = (await spirit.currentLife) || (await spirit.latestLife);
   if(currentLife == null){
     return '0';
   }
   try{
-    const config = yield currentLife.containerConfig;
+    const config = await currentLife.containerConfig;
     return config.tag;
   }catch(e){
     return '0';
   }
-});
+};

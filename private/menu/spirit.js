@@ -1,4 +1,4 @@
-module.exports = function(name, selected){
+export default function(name, selected){
   return {
     spirit: name,
     status: selected == 'status',

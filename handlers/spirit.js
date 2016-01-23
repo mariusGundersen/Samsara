@@ -1,15 +1,13 @@
-const qvc = require('qvc');
-const NotEmpty = require('qvc/constraints/NotEmpty');
-const Pattern = require('qvc/constraints/Pattern');
-const co = require('co');
-const samsara = require('samsara-lib');
-const deploy = require('../private/deploy');
-const dockerHub = require('../private/dockerHub');
+import qvc from 'qvc';
+import NotEmpty from 'qvc/constraints/NotEmpty';
+import Pattern from 'qvc/constraints/Pattern';
+import samsara from 'samsara-lib';
+import deploy from '../private/deploy';
+import {searchImages, searchImageTags} from '../private/dockerHub';
 
-module.exports = [
-  qvc.command('newSpirit', function(command){
-    console.log("newSpirit", command.name);
-    return samsara().createSpirit(command.name, command.image, command.tag);
+export default [
+  qvc.command('newSpirit', async function(command){
+    await samsara().createSpirit(command.name, command.image, command.tag);
   }, {
     'name': [
       new NotEmpty('Please specify a name for the new spirit'),
@@ -23,31 +21,31 @@ module.exports = [
       new NotEmpty('Please specify an image tag to use')
     ]
   }),
-  qvc.query('searchImages', co.wrap(function*(query){
-    const result = yield dockerHub.searchImages(query.term)
+  qvc.query('searchImages', async function(query){
+    const result = await searchImages(query.term)
 
     return result.results;
-  }), {
+  }, {
     'term': new NotEmpty('')
   }),
-  qvc.query('searchImageTags', co.wrap(function*(query){
+  qvc.query('searchImageTags', async function(query){
     try{
-      return yield dockerHub.searchImageTags(query.image)
+      return await searchImageTags(query.image)
     }catch(error){
       return [];
     }
-  }), {
+  }, {
     'image': new NotEmpty('')
   }),
-  qvc.command('deploySpirit', co.wrap(function*(command){
+  qvc.command('deploySpirit', async function(command){
     try{
       deploy.deploy(command.name);
     }catch(error){
       console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
     }
-  })),
-  qvc.command('reviveSpiritLife', co.wrap(function*(command){
+  }),
+  qvc.command('reviveSpiritLife', async function(command){
     try{
       console.log('reviving container');
       deploy.revive(command.name, command.life);
@@ -57,46 +55,46 @@ module.exports = [
   },{
     'name': NotEmpty(''),
     'life': NotEmpty('')
-  })),
-  qvc.command('stopSpirit', co.wrap(function*(command){
-    const currentLife = yield samsara().spirit(command.name).currentLife;
+  }),
+  qvc.command('stopSpirit', async function(command){
+    const currentLife = await samsara().spirit(command.name).currentLife;
 
-    if(currentLife && (yield currentLife.status) == 'running'){
-      const container = yield currentLife.container;
-      return yield container.stop();
+    if(currentLife && (await currentLife.status) == 'running'){
+      const container = await currentLife.container;
+      return await container.stop();
     }
-  })),
-  qvc.command('startSpirit', co.wrap(function*(command){
-    const latestLife = yield samsara().spirit(command.name).latestLife;
+  }),
+  qvc.command('startSpirit', async function(command){
+    const latestLife = await samsara().spirit(command.name).latestLife;
 
-    if(latestLife && (yield latestLife.status) == 'stopped'){
-      const container = yield latestLife.container;
-      return yield container.start();
+    if(latestLife && (await latestLife.status) == 'stopped'){
+      const container = await latestLife.container;
+      return await container.start();
     }
-  })),
-  qvc.command('restartSpirit', co.wrap(function*(command){
-    const currentLife = yield samsara().spirit(command.name).currentLife;
+  }),
+  qvc.command('restartSpirit', async function(command){
+    const currentLife = await samsara().spirit(command.name).currentLife;
 
     if(currentLife){
-      const container = yield currentLife.container;
-      return yield container.restart();
+      const container = await currentLife.container;
+      return await container.restart();
     }
-  })),
-  qvc.query('getListOfSpirits', co.wrap(function*(query){
-    const spirits = yield samsara().spirits();
+  }),
+  qvc.query('getListOfSpirits', async function(query){
+    const spirits = await samsara().spirits();
     return spirits.map(spirit => spirit.name);
-  })),
-  qvc.query('getVolumes', co.wrap(function*(query){
+  }),
+  qvc.query('getVolumes', async function(query){
     try{
-      const currentLife = yield samsara().spirit(query.name).currentLife;
+      const currentLife = await samsara().spirit(query.name).currentLife;
       if(currentLife == null) return [];
-      const container = yield currentLife.container;
-      const inspect = yield container.inspect();
+      const container = await currentLife.container;
+      const inspect = await container.inspect();
 
       return Object.keys(inspect.Config.Volumes);
     }catch(e){
       console.log(e.stack);
       return []
     }
-  }))
+  })
 ];

@@ -1,17 +1,15 @@
-const router = require('express-promise-router')();
-const co = require('co');
-const authentication = require('../private/authentication');
+import Router from 'express-promise-router';
+import {login, redirectAfterLogin} from '../private/authentication';
 
-router.get('/', co.wrap(function*(req, res, next) {
+const router = Router();
+export default router;
+
+router.get('/', async function(req, res, next) {
   return res.render('login/index', {
     title:'Login',
     menus: [],
     content:{message:req.flash('error')}
   });
-}));
+});
 
-router.post('/',
-  authentication.login(),
-  authentication.redirectAfterLogin('/'));
-
-module.exports = router;
+router.post('/', login(), redirectAfterLogin('/'));
