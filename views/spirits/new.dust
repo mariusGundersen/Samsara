@@ -12,7 +12,7 @@
           <label class="small-label">Name&nbsp;<span class="validation-error-message" data-bind="validationMessageFor:name"></span></label>
           <input data-bind="value: name" placeholder="ex: website" autofocus>
 
-          {>"spirits/spirit/_imageAndTag"/}
+          {>"spirit/_imageAndTag"/}
 
           <div class="button-group">
             <button type="submit" class="pure-button button-success" data-bind="disable: create.isBusy">
