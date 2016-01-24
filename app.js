@@ -9,7 +9,7 @@ const favicon = require('serve-favicon');
 const nth = require('nth');
 const dust = require('dustjs-linkedin');
 const cons = require('consolidate');
-const authentication = require('./routeAuthentication');
+const authentication = require('./private/authentication');
 
 const app = express();
 app.enable('trust proxy');

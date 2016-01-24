@@ -1,40 +1,57 @@
-'use strict'
-const fs = require('fs-promise');
-const co = require('co');
+'use strict';
 
-const users = co.wrap(function*(){
-  const contents = yield getAuth();
-  return contents.split('\n')
-  .filter(entry => entry.length)
-  .map(line => line.split(':'))
-  .map(parts => ({
-    username: parts[0],
-    secret: parts[1]
-  }));
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const co = require('co');
+const samsara = require('samsara-lib');
+
+passport.use(new LocalStrategy(co.wrap(function*(username, password, done) {
+  try{
+    const users = yield samsara().users();
+    const found = users.filter(x => x.username === username)[0];
+
+    if (!found) {
+      return done(null, false, { message: 'Unknown user' });
+    }
+
+    if (!(yield found.validate(password))) {
+      return done(null, false, { message: 'Incorrect password' });
+    }
+
+    return done(null, found.username);
+  }catch(e){
+    done(e);
+  }
+})));
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
 });
 
-const mutate = co.wrap(function*(mutate){
-  const entries = yield users();
-  const mutatedEntries = yield (mutate(entries) || entries);
-  const contents = mutatedEntries.map(function(entry){
-    return entry.username+':'+entry.secret;
-  }).join('\n')+'\n';
-
-  return fs.writeFile('config/authentication', contents);
+passport.deserializeUser(function(user, done) {
+  done(null, user);
 });
 
 module.exports = {
-  mutate: mutate,
-  users: users
-};
-
-function* getAuth(){
-  const authfile = 'config/authentication';
-  try{
-    return yield fs.readFile(authfile, 'utf8');
-  }catch(e){
-    console.error(e);
+  initialize(){
+    return passport.initialize();
+  },
+  session(){
+    return passport.session();
+  },
+  login(){
+    return passport.authenticate('local', {
+      failureRedirect: '/login',
+      failureFlash: true
+    });
+  },
+  redirectAfterLogin(defaultPath){
+    return (req, res) => res.redirect(req.session.returnTo || defaultPath || '/')
+  },
+  restrict(req, res, next){
+    if (req.isAuthenticated())
+      return next();
+    req.session.returnTo = req.path;
+    res.redirect('/login');
   }
-
-  return 'admin:$apr1$TtDE7V/O$3MhOE98M30cWTDdrb1z7q1';
-}
+};
