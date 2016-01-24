@@ -5,7 +5,7 @@
 Samsara is a Docker orchestration tool I made for my servers. Samsara runs in a docker container, so all you need to start using it is to run the following command:
 
 ```bash
-docker run -d --name samsara -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -v samsara-config:/app/config mariusgundersen/samsara
+docker run -d --name samsara -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock -v samsara-config:/usr/src/app/config mariusgundersen/samsara
 ```
 
 You can now log into Samsara using `admin:admin` on http://localhost:8080. You should change the password in the Settings menu.
