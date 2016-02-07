@@ -5,6 +5,7 @@
       "module": "co",
       "method": "wrap"
     }],
-    "add-module-exports"
+    "add-module-exports",
+    "transform-react-jsx"
   ]
 }

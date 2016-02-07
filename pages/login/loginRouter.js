@@ -1,15 +1,16 @@
 import Router from 'express-promise-router';
 import {login, redirectAfterLogin} from '../../private/authentication';
+import page from './index';
+import layout from '../layout';
 
 const router = Router();
 export default router;
 
 router.get('/', async function(req, res, next) {
-  return res.render('login/index', {
+  return res.send(layout(page({message: req.flash('error')}), {
     title:'Login',
-    menus: [],
-    content:{message:req.flash('error')}
-  });
+    menus: []
+  }));
 });
 
 router.post('/', login(), redirectAfterLogin('/'));

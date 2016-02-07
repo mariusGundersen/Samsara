@@ -27,6 +27,7 @@
     "passport": "^0.3.0",
     "passport-local": "^1.0.0",
     "qvc": "^1.0.2",
+    "react": "^0.14.7",
     "request": "^2.51.0",
     "request-promise": "^1.0.2",
     "samsara-lib": "^6.1.0",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-plugin-transform-async-to-module-method": "^6.3.13",
+    "babel-plugin-transform-react-jsx": "^6.4.0",
     "babel-preset-es2015-node4": "^2.0.2",
     "babel-register": "^6.4.3",
     "gulp": "^3.8.10",
