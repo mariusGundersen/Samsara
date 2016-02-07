@@ -1,5 +1,4 @@
 import Router from 'express-promise-router';
-import root from '../../private/menu/root';
 
 import view from './index';
 import menu from './indexMenu';
