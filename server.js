@@ -1,13 +1,9 @@
-/**
- * Module dependencies.
- */
-require('babel-register');
-const socketIO = require('socket.io');
-const app = require('./app');
-const debug = require('debug')('samsara:server');
-const http = require('http');
-const socketServerEventHandler = require('./private/socketServerEventHandler');
-const samsara = require('samsara-lib');
+import socketIO from 'socket.io';
+import http from 'http';
+
+import samsara from 'samsara-lib';
+import app from './app';
+import socketServerEventHandler from './private/socketServerEventHandler';
 
 console.log('starting upgrade');
 samsara().upgrade().then(() => {
@@ -102,7 +98,7 @@ samsara().upgrade().then(() => {
     const bind = typeof addr === 'string'
       ? 'pipe ' + addr
       : 'port ' + addr.port;
-    debug('Listening on ' + bind);
+    console.log('Listening on ' + bind);
   }
 }).catch(e => {
   console.error(e);
