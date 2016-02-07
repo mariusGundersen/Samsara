@@ -1,8 +1,8 @@
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
-import rootMenu from '../private/menu/root';
-import spiritsMenu from '../private/menu/spirits';
-import spiritMenu from '../private/menu/spirit';
+import rootMenu from '../../private/menu/root';
+import spiritsMenu from '../../private/menu/spirits';
+import spiritMenu from '../../private/menu/spirit';
 
 const router = Router();
 export default router;

@@ -100,20 +100,22 @@ samsara().upgrade().then(() => {
       : 'port ' + addr.port;
     console.log('Listening on ' + bind);
   }
+
+
+  process.on('SIGTERM', function(){
+    console.log("SIGTERM");
+    server.close();
+    process.exit(1);
+  });
+  process.on('SIGINT', function(){
+    console.log("SIGINT");
+    server.close();
+    process.exit(1);
+  });
 }).catch(e => {
   console.error(e);
   console.error(e.stack);
   process.exit();
-});
-process.on('SIGTERM', function(){
-  console.log("SIGTERM");
-  server.close();
-  process.exit(1);
-});
-process.on('SIGINT', function(){
-  console.log("SIGINT");
-  server.close();
-  process.exit(1);
 });
 process.on('unhandledRejection', function(reason, p) {
   console.error(p, reason);

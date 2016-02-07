@@ -1,5 +1,5 @@
 import Router from 'express-promise-router';
-import {login, redirectAfterLogin} from '../private/authentication';
+import {login, redirectAfterLogin} from '../../private/authentication';
 
 const router = Router();
 export default router;

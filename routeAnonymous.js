@@ -1,7 +1,7 @@
 import express, {Router} from 'express';
 import path from 'path';
-import deploy from './routes/deploy';
-import login from './routes/login';
+import deploy from './pages/deploy/deployRouter';
+import login from './pages/login/loginRouter';
 
 const router = Router();
 export default router;

@@ -1,5 +1,5 @@
 import Router from 'express-promise-router';
-import root from '../private/menu/root';
+import root from '../../private/menu/root';
 
 const router = Router();
 export default router;

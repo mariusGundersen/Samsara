@@ -2,8 +2,8 @@ import qvc from 'qvc';
 import NotEmpty from 'qvc/constraints/NotEmpty';
 import Pattern from 'qvc/constraints/Pattern';
 import samsara from 'samsara-lib';
-import deploy from '../private/deploy';
-import {searchImages, searchImageTags} from '../private/dockerHub';
+import deploy from '../../private/deploy';
+import {searchImages, searchImageTags} from '../../private/dockerHub';
 
 export default [
   qvc.command('newSpirit', async function(command){

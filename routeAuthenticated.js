@@ -1,18 +1,18 @@
 import {Router} from 'express';
 import qvc from 'qvc';
 
-import containerHandler from './handlers/container';
-import spiritHandler from './handlers/spirit';
-import spiritConfigHandler from './handlers/spiritConfig';
-import spiritSettingsHandler from './handlers/spiritSettings';
-import settingsHandler from './handlers/settings';
+import containerHandler from './pages/containers/containersHandler';
+import spiritHandler from './pages/spirit/spiritHandler';
+import spiritConfigHandler from './pages/spirit/spiritConfigHandler';
+import spiritSettingsHandler from './pages/spirit/spiritSettingsHandler';
+import settingsHandler from './pages/settings/settingsHandler';
 
-import container from './routes/container';
-import spirits from './routes/spirits';
-import spirit from './routes/spirit';
-import life from './routes/life';
-import settings from './routes/settings';
-import index from './routes/index';
+import container from './pages/containers/containersRouter';
+import spirits from './pages/spirits/spiritsRouter';
+import spirit from './pages/spirit/spiritRouter';
+import life from './pages/life/lifeRouter';
+import settings from './pages/settings/settingsRouter';
+import index from './pages/index/indexRouter';
 
 const router = Router();
 export default router;

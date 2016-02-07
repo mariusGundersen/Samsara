@@ -1,7 +1,7 @@
 {>layout/}
 {<content}
-  {>_menuRoot menu=menus[0]/}
-  {>_menuContainers menu=menus[1]/}
+  {>"index/_indexMenu" menu=menus[0]/}
+  {>"containers/_containersMenu" menu=menus[1]/}
 
   {#content}
   <div class="pane content">

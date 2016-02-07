@@ -1,10 +1,10 @@
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
 import nth from 'nth';
-import rootMenu from '../private/menu/root';
-import spiritsMenu from '../private/menu/spirits';
-import spiritMenu from '../private/menu/spirit';
-import livesMenu from '../private/menu/lives';
+import rootMenu from '../../private/menu/root';
+import spiritsMenu from '../../private/menu/spirits';
+import spiritMenu from '../../private/menu/spirit';
+import livesMenu from '../../private/menu/lives';
 
 const router = Router();
 export default router;

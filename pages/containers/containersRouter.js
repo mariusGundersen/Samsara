@@ -1,15 +1,15 @@
 import Router from 'express-promise-router';
 import co from 'co';
 import samsara from 'samsara-lib';
-import root from '../private/menu/root';
-import containers from '../private/menu/containers';
+import root from '../../private/menu/root';
+import containers from '../../private/menu/containers';
 
 const router = Router();
 export default router;
 
 router.get('/', async function(req, res, next) {
   const list = await samsara().containers();
-  return res.render('container/index', {
+  return res.render('containers/index', {
     title: 'Containers',
     menus: [root('containers'), containers(list)],
     content: {
@@ -25,7 +25,7 @@ router.get('/:id', async function(req, res, next) {
   const name = config.Name.substr(1);
   const logs = await container.prettyLogs(true, {stdout:true, stderr:true, tail:50});
 
-  return res.render('container/info', {
+  return res.render('containers/info', {
     title: name + ' - Containers',
     menus: [root('containers'), containers(list, req.params.id)],
     content: {

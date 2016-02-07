@@ -1,7 +1,7 @@
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
-import {deploy} from '../private/deploy';
-import validateDeploy from '../private/validateDeploy';
+import {deploy} from '../../private/deploy';
+import validateDeploy from '../../private/validateDeploy';
 import request from 'request-promise';
 
 const router = Router();

@@ -1,8 +1,8 @@
 {>layout/}
 {<content}
-  {>_menuRoot menu=menus[0]/}
-  {>_menuSpirits menu=menus[1]/}
-  {>_menuSpirit menu=menus[2]/}
+  {>"index/_indexMenu" menu=menus[0]/}
+  {>"spirits/_spiritsMenu" menu=menus[1]/}
+  {>"spirit/_spiritMenu" menu=menus[2]/}
 
   {#content}
   <div class="pane content">

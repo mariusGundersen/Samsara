@@ -1,6 +1,6 @@
 {>layout/}
 {<content}
-  {>_menuRoot menu=menus[0]/}
+  {>"index/_indexMenu" menu=menus[0]/}
 
   {# content}
   <div class="pane content">

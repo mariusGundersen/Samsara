@@ -32,7 +32,7 @@ dust.helpers.cachebust = function(chunk){
 }
 
 app.engine('dust', cons.dust);
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'pages'));
 app.set('view engine', 'dust');
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
