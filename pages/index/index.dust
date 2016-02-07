@@ -1,8 +1,0 @@
-{>layout/}
-{<content}
-  {>"index/_indexMenu" menu=menus[0]/}
-
-  <div class="pane content">
-    <h2>Samsara</h2>
-  </div>
-{/content}

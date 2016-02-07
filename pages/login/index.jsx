@@ -8,7 +8,7 @@ export default ({message = ''}) => <div className="pane content">
       <form className="pure-form pure-form-stacked box-form" action="/login" method="post">
       <span className="validation-error-message">{message}</span>
         <label className="small-label">Username</label>
-        <input type="text" name="username" id="username" autofocus />
+        <input type="text" name="username" id="username" autoFocus />
 
         <label className="small-label">Password</label>
         <input type="password" name="password" id="password" />

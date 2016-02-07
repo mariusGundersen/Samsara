@@ -16,6 +16,7 @@ export default (html, {title=null, menus=[]}) => `
 </head>
 <body>
 
+  ${menus.map(renderToString)}
   ${renderToString(html)}
 
   <script src="/bower_components/es6-promise/promise.js?cachebust=${cachebust}"></script>
