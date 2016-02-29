@@ -27,4 +27,5 @@ export default ({users}) => (
         </div>
       </div>
     </div>
-  </div>);
+  </div>
+);
