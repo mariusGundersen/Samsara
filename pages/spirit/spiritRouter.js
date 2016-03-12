@@ -1,12 +1,13 @@
+import React from 'react';
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
 
-import indexView from './index';
-import configureView from './configure';
-import settingsView from './settings';
-import rootMenu from '../index/menu';
-import spiritsMenu from '../spirits/menu';
-import menu from './menu';
+import StatusView from './index';
+import ConfigureView from './configure';
+import SettingsView from './settings';
+import IndexMenu from '../index/menu';
+import SpiritsMenu from '../spirits/menu';
+import SpiritMenu from './menu';
 import layout from '../layout';
 
 const router = Router();
@@ -24,27 +25,29 @@ router.get('/:name', async function(req, res, next) {
   const latestLife = await spirit.latestLife;
   const life = (currentLife || latestLife || {life: '?'}).life;
 
-  res.send(layout(indexView({
-    name: name,
-    url: settings.url,
-    description: settings.description,
-    life: life,
-    deploy: {
-      name: name,
-      image: config.image+':'+config.tag,
-      stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
-      isDeploying: isDeploying
-    },
-    controls: {
-      name: name,
-      canStop: state === 'running',
-      canStart: state == 'stopped' && latestLife && !!(await latestLife.container),
-      canRestart: state == 'running'
-    }
-  }), {
-    title: `${name} - Spirit`,
-    menus: [rootMenu({selected: 'spirits'}), spiritsMenu({spirits: spirits, newSelected: false, selectedSpiritName: name}), menu({name:name, selected:'status'})]
-  }));
+  res.send(layout(`${name} - Spirit`,
+    <IndexMenu selected="spirits" />,
+    <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+    <SpiritMenu name={name} selected="status" />,
+    <StatusView
+      name={name}
+      url={settings.url}
+      description={settings.description}
+      life={life}
+      deploy={{
+        name: name,
+        image: config.image+':'+config.tag,
+        stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
+        isDeploying: isDeploying
+      }}
+      controls={{
+        name: name,
+        canStop: state === 'running',
+        canStart: state == 'stopped' && latestLife && !!(await latestLife.container),
+        canRestart: state == 'running'
+      }}
+    />
+  ));
 });
 
 router.get('/:name/settings', async function(req, res, next) {
@@ -52,14 +55,16 @@ router.get('/:name/settings', async function(req, res, next) {
   const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
   const settings = await spirit.settings;
-  res.send(layout(settingsView({
-    name: name,
-    mainInfo: settings,
-    webhook: settings
-  }), {
-    title: `Settings - ${name} - Spirit`,
-    menus: [rootMenu({selected: 'spirits'}), spiritsMenu({spirits: spirits, newSelected: false, selectedSpiritName: name}), menu({name:name, selected:'settings'})]
-  }));
+  res.send(layout(`Settings - ${name} - Spirit`,
+    <IndexMenu selected="spirits" />,
+    <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+    <SpiritMenu name={name} selected="settings" />,
+    <SettingsView
+      name={name}
+      mainInfo={settings}
+      webhook={settings}
+    />
+  ));
 });
 
 router.get('/:name/configure', async function(req, res, next) {
@@ -67,18 +72,20 @@ router.get('/:name/configure', async function(req, res, next) {
   const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
   const config = await spirit.containerConfig;
-  res.send(layout(configureView({
-      name: name,
-      repository: repositoryModel(config, name),
-      environment: environmentModel(config, name),
-      volumes: volumesModel(config, name),
-      ports: portsModel(config, name),
-      links: linksModel(config, name),
-      volumesFrom: volumesFromModel(config, name)
-  }), {
-    title: `Configure - ${name} - Spirit`,
-    menus: [rootMenu({selected: 'spirits'}), spiritsMenu({spirits: spirits, newSelected: false, selectedSpiritName: name}), menu({name:name, selected:'configure'})]
-  }));
+  res.send(layout(`Configure - ${name} - Spirit`,
+    <IndexMenu selected="spirits" />,
+    <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+    <SpiritMenu name={name} selected="configure" />,
+    <ConfigureView
+      name={name}
+      repository={repositoryModel(config, name)}
+      environment={environmentModel(config, name)}
+      volumes={volumesModel(config, name)}
+      ports={portsModel(config, name)}
+      links={linksModel(config, name)}
+      volumesFrom={volumesFromModel(config, name)}
+  />
+  ));
 });
 
 function repositoryModel(config, name){

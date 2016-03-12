@@ -2,7 +2,7 @@ import { renderToString } from 'react-dom/server'
 
 const cachebust = new Date().toISOString().replace(/[^0-9]/g, '');
 
-export default (html, {title=null, menus=[]}) => `
+export default (title=null, ...panes) => `
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,8 +16,7 @@ export default (html, {title=null, menus=[]}) => `
 </head>
 <body>
 
-  ${menus.map(renderToString)}
-  ${renderToString(html)}
+  ${panes.map(renderToString)}
 
   <script src="/bower_components/es6-promise/promise.js?cachebust=${cachebust}"></script>
   <script src="/bower_components/cs-handjs/hand.minified.js?cachebust=${cachebust}"></script>
