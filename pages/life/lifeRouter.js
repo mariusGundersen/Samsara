@@ -9,6 +9,7 @@ import IndexMenu from '../index/menu';
 import SpiritsMenu from '../spirits/menu';
 import SpiritMenu from '../spirit/menu';
 import LivesMenu from './menu';
+import ErrorView from '../errorView';
 import layout from '../layout';
 
 const router = Router();
@@ -18,6 +19,16 @@ router.get('/:name/lives', async function(req, res, next) {
   const name = req.params.name;
   const spirits = await samsara().spirits();
   const spirit = spirits.filter(s => s.name == name)[0];
+
+  if(spirit == undefined){
+    return res.send(layout(`${name} - Spirit`,
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+      <SpiritMenu name={name} selected="not-found" />,
+      <ErrorView message="404 Not Found" />
+    ));
+  }
+
   const lives = spirit.lives;
   const list = lives.map(x => x).reverse();
   res.send(layout(`Lives of ${name} - Spirit`,
@@ -42,12 +53,33 @@ router.get('/:name/life/:life', async function(req, res, next){
   const life = req.params.life;
   const spirits = await samsara().spirits();
   const spirit = spirits.filter(s => s.name == name)[0];
+
+  if(spirit == undefined){
+    return res.send(layout(`${name} - Spirit`,
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+      <SpiritMenu name={name} selected="not-found" />,
+      <ErrorView message="404 Not Found" />
+    ));
+  }
+
   const lives = spirit.lives;
   const list = lives.map(x => x).reverse();
-  const currentLife = samsara().spirit(name).life(life);
+  const foundLife = lives.filter(l => l.life == life)[0]
 
-  const state = lives.filter(l => l.life == life)[0].state;
-  const container = await currentLife.container;
+  if(foundLife == undefined){
+    return res.send(layout(`${name} - Spirit`,
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+      <SpiritMenu name={name} selected="lives" />,
+      <LivesMenu name={name} lives={list} selectedLife={life} />,
+      <ErrorView message="404 Not Found" />
+    ));
+  }
+
+  const state = foundLife.state;
+  const currentLife = samsara().spirit(name).life(life);
+  const container = await currentLife.container.catch(e => null);
 
   res.send(layout(nth.appendSuffix(life)+' life of ' + name,
     <IndexMenu selected="spirits" />,

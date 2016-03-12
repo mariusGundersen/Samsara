@@ -2,6 +2,7 @@ import React from 'react';
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
 
+import ErrorView from '../errorView';
 import IndexView from './index';
 import DetailsView from './details';
 import IndexMenu from '../index/menu';
@@ -24,13 +25,21 @@ router.get('/:id', async function(req, res, next) {
   const selectedId = req.params.id;
   const list = await samsara().containers();
   const container = samsara().container(selectedId);
-  list.filter(x => x.id == selectedId)[0].selected = true;
+  const found = list.filter(x => x.id == selectedId)[0];
+  if(found == undefined){
+    return res.send(layout('Not Found - Containers',
+      <IndexMenu selected="containers" />,
+      <ContainersMenu containers={list} />,
+      <ErrorView message={`404 Not Found`} />
+    ));
+  }
+  found.selected = true;
   const config = await container.inspect();
   const name = config.Name.substr(1);
   const json = JSON.stringify(config, null, '  ');
   const logs = await streamToString(await container.prettyLogs(true, {stdout:true, stderr:true, tail:50}));
 
-  res.send(layout(name + ' - Containers',
+  return res.send(layout(name + ' - Containers',
     <IndexMenu selected="containers" />,
     <ContainersMenu containers={list} />,
     <DetailsView

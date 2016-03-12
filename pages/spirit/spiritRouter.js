@@ -8,6 +8,7 @@ import SettingsView from './settings';
 import IndexMenu from '../index/menu';
 import SpiritsMenu from '../spirits/menu';
 import SpiritMenu from './menu';
+import ErrorView from '../errorView';
 import layout from '../layout';
 
 const router = Router();
@@ -18,14 +19,24 @@ router.get('/:name', async function(req, res, next) {
   const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
   const state = await spirit.status;
-  const settings = await spirit.settings;
+  const settings = await spirit.settings.catch(e => null);
+
+  if(settings == undefined){
+    return res.send(layout(`${name} - Spirit`,
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+      <SpiritMenu name={name} selected="not-found" />,
+      <ErrorView message="404 Not Found" />
+    ));
+  }
+
   const config = await spirit.containerConfig;
   const isDeploying = await spirit.isDeploying;
   const currentLife = await spirit.currentLife;
   const latestLife = await spirit.latestLife;
   const life = (currentLife || latestLife || {life: '?'}).life;
 
-  res.send(layout(`${name} - Spirit`,
+  return res.send(layout(`${name} - Spirit`,
     <IndexMenu selected="spirits" />,
     <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
     <SpiritMenu name={name} selected="status" />,
@@ -54,8 +65,18 @@ router.get('/:name/settings', async function(req, res, next) {
   const name = req.params.name
   const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
-  const settings = await spirit.settings;
-  res.send(layout(`Settings - ${name} - Spirit`,
+  const settings = await spirit.settings.catch(e => null);
+
+  if(settings == undefined){
+    return res.send(layout(`${name} - Spirit`,
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+      <SpiritMenu name={name} selected="not-found" />,
+      <ErrorView message="404 Not Found" />
+    ));
+  }
+
+  return res.send(layout(`Settings - ${name} - Spirit`,
     <IndexMenu selected="spirits" />,
     <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
     <SpiritMenu name={name} selected="settings" />,
@@ -71,8 +92,18 @@ router.get('/:name/configure', async function(req, res, next) {
   const name = req.params.name
   const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
-  const config = await spirit.containerConfig;
-  res.send(layout(`Configure - ${name} - Spirit`,
+  const config = await spirit.containerConfig.catch(e => null);
+
+  if(config == undefined){
+    return res.send(layout(`${name} - Spirit`,
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
+      <SpiritMenu name={name} selected="not-found" />,
+      <ErrorView message="404 Not Found" />
+    ));
+  }
+
+  return res.send(layout(`Configure - ${name} - Spirit`,
     <IndexMenu selected="spirits" />,
     <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
     <SpiritMenu name={name} selected="configure" />,
@@ -84,7 +115,7 @@ router.get('/:name/configure', async function(req, res, next) {
       ports={portsModel(config, name)}
       links={linksModel(config, name)}
       volumesFrom={volumesFromModel(config, name)}
-  />
+    />
   ));
 });
 
