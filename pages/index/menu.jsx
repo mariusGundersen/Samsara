@@ -1,11 +1,9 @@
 import React from 'react';
 import Icon from '../../components/icon';
+import MenuPane from '../../components/menuPane';
 
-export default ({
-  selected = ''
-}={}) => (
-  <div className="menu pane">
-    <h2><a href="#"><Icon of="bars" /></a><a href="/">Menu</a></h2>
+export default ({selected = ''}) => (
+  <MenuPane icon="bars" href="/" title="Menu">
     <ul>
       <li className={selected === 'constellations' ? 'selected' : ''}>
         <a href="#">
@@ -37,4 +35,5 @@ export default ({
         </a>
       </li>
     </ul>
-  </div>);
+  </MenuPane>
+);

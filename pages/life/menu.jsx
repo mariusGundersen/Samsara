@@ -1,10 +1,10 @@
 import React from 'react';
 import Icon from '../../components/icon';
+import MenuPane from '../../components/menuPane';
 import {appendSuffix} from 'nth';
 
 export default ({name, lives, selectedLife}) => (
-  <div className="menu pane">
-    <h2><a href="#"><Icon of="history" /></a><a href={`/spirit/${name}/lives`}>Lives</a></h2>
+  <MenuPane icon="history" href={`/spirit/${name}/lives`} title="Lives">
     <ul className="life-list">
       {lives.map(life => (
         <li className={`state-${getStatus(life.state)} ${life.life == selectedLife ? 'selected' : ''}`} key={life.life}>
@@ -14,7 +14,7 @@ export default ({name, lives, selectedLife}) => (
         </li>
       ))}
     </ul>
-  </div>
+  </MenuPane>
 );
 
 function nth(n){

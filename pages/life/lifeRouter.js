@@ -4,7 +4,7 @@ import nth from 'nth';
 
 import indexView from './index';
 import lifeView from './life';
-import rootMenu from '../index/indexMenu';
+import rootMenu from '../index/menu';
 import spiritsMenu from '../spirits/menu';
 import spiritMenu from '../spirit/menu';
 import menu from './menu';

@@ -2,7 +2,7 @@ import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
 
 import view from './index';
-import menu from '../index/indexMenu';
+import menu from '../index/menu';
 import layout from '../layout';
 
 const router = Router();

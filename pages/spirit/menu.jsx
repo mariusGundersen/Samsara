@@ -1,9 +1,9 @@
 import React from 'react';
 import Icon from '../../components/icon';
+import MenuPane from '../../components/menuPane';
 
 export default ({name, selected}) => (
-  <div className="menu pane">
-    <h2><a href="#"><Icon of="sun-o" /></a><a href="/spirits/{name}">{name}</a></h2>
+  <MenuPane icon="sun-o" href="/spirits/{name}" title={name}>
     <ul>
       <li className={selected == 'status' ? 'selected' : ''}>
         <a href={`/spirit/${name}/`}><Icon of="info" />Status</a>
@@ -18,5 +18,5 @@ export default ({name, selected}) => (
         <a href={`/spirit/${name}/lives`}><Icon of="history" />Lives</a>
       </li>
     </ul>
-  </div>
+  </MenuPane>
 );

@@ -1,9 +1,9 @@
 import React from 'react';
+import MenuPane from '../../components/menuPane';
 import Icon from '../../components/icon';
 
 export default ({containers}) => (
-  <div className="pane menu">
-    <h2><a href="#"><Icon of="th-large" /></a><a href="/containers">Containers</a></h2>
+  <MenuPane icon="th-large" href="/containers" title="Containers">
     <ul>
       {containers.map(container => (
         <li data-viewmodel="MenuListContainerVM"
@@ -24,7 +24,7 @@ export default ({containers}) => (
         </li>
       ))}
     </ul>
-  </div>
+  </MenuPane>
 );
 
 function getIcon(state){

@@ -1,10 +1,10 @@
 import React from 'react';
 import Icon from '../../components/icon';
+import MenuPane from '../../components/menuPane';
 import {appendSuffix} from 'nth';
 
 export default ({spirits, newSelected, selectedSpiritName}) => (
-  <div className="menu pane">
-    <h2><a href="#"><Icon of="sun-o" /></a><a href="/spirits">Spirits</a></h2>
+  <MenuPane icon="sun-o" href="/spirits" title="Spirits">
     <ul>
       <li className={newSelected ? 'selected' : ''}>
         <a href="/spirit/new"><Icon of="plus" />Create new spirit</a>
@@ -18,7 +18,7 @@ export default ({spirits, newSelected, selectedSpiritName}) => (
         </li>
       ))}
     </ul>
-  </div>
+  </MenuPane>
 );
 
 function nth(value){

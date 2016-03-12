@@ -4,7 +4,7 @@ import samsara from 'samsara-lib';
 import indexView from './index';
 import configureView from './configure';
 import settingsView from './settings';
-import rootMenu from '../index/indexMenu';
+import rootMenu from '../index/menu';
 import spiritsMenu from '../spirits/menu';
 import menu from './menu';
 import layout from '../layout';

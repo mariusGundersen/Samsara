@@ -4,7 +4,7 @@ import samsara from 'samsara-lib';
 
 import view from './index';
 import detailView from './details';
-import rootMenu from '../index/indexMenu';
+import rootMenu from '../index/menu';
 import menu from './menu';
 import layout from '../layout';
 
