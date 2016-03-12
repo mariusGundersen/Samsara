@@ -1,8 +1,11 @@
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
-import rootMenu from '../../private/menu/root';
-import spiritsMenu from '../../private/menu/spirits';
-import spiritMenu from '../../private/menu/spirit';
+
+import view from './index';
+import rootMenu from '../index/indexMenu';
+import spiritsMenu from '../spirits/menu';
+import menu from './menu';
+import layout from '../layout';
 
 const router = Router();
 export default router;
@@ -19,28 +22,27 @@ router.get('/:name', async function(req, res, next) {
   const latestLife = await spirit.latestLife;
   const life = (currentLife || latestLife || {life: '?'}).life;
 
-  res.render('spirit/index', {
-    title: name + ' - Spirit',
-    menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'status')],
-    content: {
+  res.send(layout(view({
+    name: name,
+    url: settings.url,
+    description: settings.description,
+    life: life,
+    deploy: {
       name: name,
-      url: settings.url,
-      description: settings.description,
-      life: life,
-      deploy: {
-        name: name,
-        image: config.image+':'+config.tag,
-        stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
-        isDeploying: isDeploying
-      },
-      controls: {
-        name: name,
-        canStop: state === 'running',
-        canStart: state == 'stopped' && latestLife && !!(await latestLife.container),
-        canRestart: state == 'running'
-      }
+      image: config.image+':'+config.tag,
+      stopBeforeStart: settings.deploymentMethod == 'stop-before-start',
+      isDeploying: isDeploying
+    },
+    controls: {
+      name: name,
+      canStop: state === 'running',
+      canStart: state == 'stopped' && latestLife && !!(await latestLife.container),
+      canRestart: state == 'running'
     }
-  });
+  }), {
+    title: `${name} - Spirit`,
+    menus: [rootMenu({selected: 'spirits'}), spiritsMenu({spirits: spirits, newSelected: false, selectedSpiritName: name}), menu({name:name, selected:'status'})]
+  }));
 });
 
 router.get('/:name/settings', async function(req, res, next) {

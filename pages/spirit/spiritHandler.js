@@ -2,7 +2,7 @@ import qvc from 'qvc';
 import NotEmpty from 'qvc/constraints/NotEmpty';
 import Pattern from 'qvc/constraints/Pattern';
 import samsara from 'samsara-lib';
-import deploy from '../../private/deploy';
+import {deploy, revive} from '../../private/deploy';
 import {searchImages, searchImageTags} from '../../private/dockerHub';
 
 export default [
@@ -39,7 +39,7 @@ export default [
   }),
   qvc.command('deploySpirit', async function(command){
     try{
-      deploy.deploy(command.name);
+      deploy(command.name);
     }catch(error){
       console.log(error.stack);
       return {success:false, valid:false, violations: [{fieldName:'', message:error.message}]};
@@ -48,7 +48,7 @@ export default [
   qvc.command('reviveSpiritLife', async function(command){
     try{
       console.log('reviving container');
-      deploy.revive(command.name, command.life);
+      revive(command.name, command.life);
     }catch(e){
       return {success:false, valid:false, violations: [{fieldName:'', message:e.message}]};
     }

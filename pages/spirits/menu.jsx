@@ -12,7 +12,7 @@ export default ({spirits, newSelected, selectedSpiritName}) => (
       {spirits.map(spirit => (
         <li className={spirit.name == selectedSpiritName ? 'selected' : ''} key={spirit.name}>
           <a href={`/spirit/${spirit.name}`}>
-            <Icon of={getIcon(spirit.stateIcon)} className="container-state" />
+            <Icon of={getIcon(spirit.state)} className="container-state" />
             {spirit.name} <span className="container-life">({nth(spirit.life)} life)</span>
           </a>
         </li>
