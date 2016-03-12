@@ -1,8 +1,6 @@
 import Router from 'express-promise-router';
 import co from 'co';
 import samsara from 'samsara-lib';
-import root from '../../private/menu/root';
-import containers from '../../private/menu/containers';
 
 import view from './index';
 import detailView from './details';
