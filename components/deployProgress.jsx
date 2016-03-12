@@ -10,7 +10,7 @@ export default ({deploy}) => (
     <ol class="step-list" data-bind="foreach: steps, css: {'failed': !success()}">
       <li class="step-list-item" data-bind="css:{active:isActive, done:isDone, fail:isFail}">
         <span>
-          Icon of="circle-thin" data-bind="css:{
+          <Icon of="circle-thin" data-bind="css:{
                                               'fa-circle-thin': isPending,
                                               'fa-refresh': isActive,
                                               'fa-spin': isActive,
