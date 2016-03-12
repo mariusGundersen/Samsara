@@ -11,7 +11,7 @@ export default ({name, selected}) => (
       <li className={selected == 'settings' ? 'selected' : ''}>
         <a href={`/spirit/${name}/settings`}><Icon of="gear" />Spirit settings</a>
       </li>
-      <li className={selected == 'config' ? 'selected' : ''}>
+      <li className={selected == 'configure' ? 'selected' : ''}>
         <a href={`/spirit/${name}/configure`}><Icon of="wrench" />Container config</a>
       </li>
       <li className={selected == 'lives' ? 'selected' : ''}>

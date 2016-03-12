@@ -3,7 +3,7 @@ import Icon from './icon';
 
 export default props => (
   <div className="box-form" style={{padding:0}} data-viewmodel="spirit/ImageAndTagVM" data-params="image:image, tag:tag">
-    <label className="small-label">Image&nbsp;<span className="validation-error-message" data-bind="validationMessageFor:image"></span></label>
+    <label className="small-label">Image <span className="validation-error-message" data-bind="validationMessageFor:image"></span></label>
     <input data-bind="textInput: image, hasFocus:imageHasFocus, css:{'autocomplete-input-focus':imageHasFocus}" className="autocomplete-input" placeholder="ex: nginx" />
     <div className="autocomplete-list" data-bind="visible: imageHasFocus" style={{display:'none'}}>
       <ul className="pure-menu-list" data-bind="foreach: images">

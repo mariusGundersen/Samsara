@@ -1,7 +1,8 @@
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
 
-import view from './index';
+import indexView from './index';
+import configureView from './configure';
 import rootMenu from '../index/indexMenu';
 import spiritsMenu from '../spirits/menu';
 import menu from './menu';
@@ -22,7 +23,7 @@ router.get('/:name', async function(req, res, next) {
   const latestLife = await spirit.latestLife;
   const life = (currentLife || latestLife || {life: '?'}).life;
 
-  res.send(layout(view({
+  res.send(layout(indexView({
     name: name,
     url: settings.url,
     description: settings.description,
@@ -65,10 +66,7 @@ router.get('/:name/configure', async function(req, res, next) {
   const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
   const config = await spirit.containerConfig;
-  res.render('spirit/configure', {
-    title: 'Configure - ' + name + ' - Spirit',
-    menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'config')],
-    content: {
+  res.send(layout(configureView({
       name: name,
       repository: repositoryModel(config, name),
       environment: environmentModel(config, name),
@@ -76,8 +74,10 @@ router.get('/:name/configure', async function(req, res, next) {
       ports: portsModel(config, name),
       links: linksModel(config, name),
       volumesFrom: volumesFromModel(config, name)
-    }
-  });
+  }), {
+    title: `Configure - ${name} - Spirit`,
+    menus: [rootMenu({selected: 'spirits'}), spiritsMenu({spirits: spirits, newSelected: false, selectedSpiritName: name}), menu({name:name, selected:'configure'})]
+  }));
 });
 
 function repositoryModel(config, name){
