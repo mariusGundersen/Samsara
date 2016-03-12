@@ -3,6 +3,7 @@ import samsara from 'samsara-lib';
 
 import indexView from './index';
 import configureView from './configure';
+import settingsView from './settings';
 import rootMenu from '../index/indexMenu';
 import spiritsMenu from '../spirits/menu';
 import menu from './menu';
@@ -51,14 +52,14 @@ router.get('/:name/settings', async function(req, res, next) {
   const spirits = await samsara().spirits();
   const spirit = samsara().spirit(name);
   const settings = await spirit.settings;
-  res.render('spirit/settings', {
-    title: 'Settings - ' + name + ' - Spirit',
-    menus: [rootMenu('spirits'), spiritsMenu(spirits, name), spiritMenu(name, 'settings')],
-    content: {
-      name: name,
-      settings: settings
-    }
-  });
+  res.send(layout(settingsView({
+    name: name,
+    mainInfo: settings,
+    webhook: settings
+  }), {
+    title: `Settings - ${name} - Spirit`,
+    menus: [rootMenu({selected: 'spirits'}), spiritsMenu({spirits: spirits, newSelected: false, selectedSpiritName: name}), menu({name:name, selected:'settings'})]
+  }));
 });
 
 router.get('/:name/configure', async function(req, res, next) {
