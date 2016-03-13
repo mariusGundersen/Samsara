@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
+import streamToString from '../../private/streamToString';
 
 import ErrorView from '../errorView';
 import IndexView from './index';
@@ -37,7 +38,7 @@ router.get('/:id', async function(req, res, next) {
   const config = await container.inspect();
   const name = config.Name.substr(1);
   const json = JSON.stringify(config, null, '  ');
-  const logs = await streamToString(await container.prettyLogs(true, {stdout:true, stderr:true, tail:50}));
+  const logs = await streamToString(container.prettyLogs(true, {stdout:true, stderr:true, tail:50}));
 
   return res.send(layout(name + ' - Containers',
     <IndexMenu selected="containers" />,
@@ -65,18 +66,3 @@ router.get('/:id/logs/download', async function(req, res, next){
   const logs = await container.prettyLogs(false, {stdout:true, stderr:true});
   logs.pipe(res);
 });
-
-function streamToString(stream){
-  return new Promise(function(resolve, reject){
-    let result = ''
-    stream.on('data', function(chunk){
-      result += chunk.toString('utf8');
-    });
-
-    stream.on('end', function(){
-      resolve({__html: result, toString: () => result, valueOf: () => result});
-    });
-
-    stream.on('error', reject);
-  });
-}

@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '../../components/icon';
 import ImageAndTag from '../../components/imageAndTag';
-import {appendSuffix} from 'nth';
+import nth from '../../private/nthLife';
 
 export default ({spirits}) => (
   <div className="pane content">
@@ -15,11 +15,3 @@ export default ({spirits}) => (
     </ul>
   </div>
 );
-
-function nth(value){
-  try{
-    return appendSuffix(value);
-  }catch(e){
-    return 'no';
-  }
-}

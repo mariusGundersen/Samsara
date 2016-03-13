@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '../../components/icon';
 import MenuPane from '../../components/menuPane';
-import {appendSuffix} from 'nth';
+import nth from '../../private/nthLife';
 
 export default ({name, lives, selectedLife}) => (
   <MenuPane icon="history" href={`/spirit/${name}/lives`} title="Lives">
@@ -16,14 +16,6 @@ export default ({name, lives, selectedLife}) => (
     </ul>
   </MenuPane>
 );
-
-function nth(n){
-  try{
-    return appendSuffix(n);
-  }catch(e){
-    return 'no';
-  }
-}
 
 function getStatus(state){
   switch(state){

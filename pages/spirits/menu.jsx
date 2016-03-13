@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '../../components/icon';
 import MenuPane from '../../components/menuPane';
-import {appendSuffix} from 'nth';
+import nth from '../../private/nthLife';
 
 export default ({spirits, newSelected, selectedSpiritName}) => (
   <MenuPane icon="sun-o" href="/spirits" title="Spirits">
@@ -20,14 +20,6 @@ export default ({spirits, newSelected, selectedSpiritName}) => (
     </ul>
   </MenuPane>
 );
-
-function nth(value){
-  try{
-    return appendSuffix(value);
-  }catch(e){
-    return 'no';
-  }
-}
 
 function getIcon(state){
   switch(state){

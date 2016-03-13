@@ -1,7 +1,8 @@
 import React from 'react';
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
-import nth from 'nth';
+import nth from '../../private/nthLife';
+import streamToString from '../../private/streamToString';
 
 import LivesView from './index';
 import LifeView from './life';
@@ -81,7 +82,7 @@ router.get('/:name/life/:life', async function(req, res, next){
   const currentLife = samsara().spirit(name).life(life);
   const container = await currentLife.container.catch(e => null);
 
-  res.send(layout(nth.appendSuffix(life)+' life of ' + name,
+  res.send(layout(nth(life)+' life of ' + name,
     <IndexMenu selected="spirits" />,
     <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
     <SpiritMenu name={name} selected="lives" />,
@@ -98,7 +99,7 @@ router.get('/:name/life/:life', async function(req, res, next){
         life: life,
         json: await currentLife.inspect.then(json => json ? JSON.stringify(json, null, '  ') : ''),
         config: await currentLife.containerConfig.catch(e => ''),
-        log: await streamToString(await currentLife.containerLog(true, {stdout:true, stderr:true, tail: 50})),
+        log: await streamToString(currentLife.containerLog(true, {stdout:true, stderr:true, tail: 50})),
         deploy: await currentLife.deployLog.catch(e => ''),
       }}
       revive={{
@@ -126,18 +127,3 @@ router.get('/:name/life/:life/logs/download', async function(req, res, next){
   res.setHeader('Content-disposition', `attachment;filename=${name}_v${life}.log`);
   logs.pipe(res);
 });
-
-function streamToString(stream){
-  return new Promise(function(resolve, reject){
-    var result = ''
-    stream.on('data', function(chunk){
-      result += chunk.toString('utf8');
-    });
-
-    stream.on('end', function(){
-      resolve({__html: result, toString: () => result, valueOf: () => result});
-    });
-
-    stream.on('error', reject);
-  });
-}

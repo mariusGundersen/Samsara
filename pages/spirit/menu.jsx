@@ -3,7 +3,7 @@ import Icon from '../../components/icon';
 import MenuPane from '../../components/menuPane';
 
 export default ({name, selected}) => (
-  <MenuPane icon="sun-o" href="/spirits/{name}" title={name}>
+  <MenuPane icon="sun-o" href={`/spirits/${name}`} title={name}>
     <ul>
       <li className={selected == 'status' ? 'selected' : ''}>
         <a href={`/spirit/${name}/`}><Icon of="info" />Status</a>

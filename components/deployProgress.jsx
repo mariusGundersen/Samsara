@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from './icon';
-import {appendSuffix} from 'nth';
+import nth from '../private/nthLife';
 
 export default ({deploy}) => (
   <div data-viewmodel="spirit/DeployProgressVM"
@@ -44,11 +44,3 @@ export default ({deploy}) => (
     </div>
   </div>
 );
-
-function nth(n){
-  try{
-    return appendSuffix(n);
-  }catch(e){
-    return 'no';
-  }
-}

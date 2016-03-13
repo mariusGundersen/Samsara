@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '../../components/icon';
 import DeployProgress from '../../components/deployProgress';
 import Logs from '../../components/logs';
-import {appendSuffix} from 'nth';
+import nth from '../../private/nthLife';
 
 export default ({name, life, revive, deploy, logs}) => (
   <div className="pane content">
@@ -28,11 +28,3 @@ export default ({name, life, revive, deploy, logs}) => (
     </div>
   </div>
 );
-
-function nth(n){
-  try{
-    return appendSuffix(n);
-  }catch(e){
-    return 'no';
-  }
-}
