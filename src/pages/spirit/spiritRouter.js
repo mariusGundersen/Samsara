@@ -22,10 +22,10 @@ router.get('/:name', async function(req, res, next) {
   const settings = await spirit.settings.catch(e => null);
 
   if(settings == undefined){
+    res.status(404);
     return res.send(layout(`${name} - Spirit`,
       <IndexMenu selected="spirits" />,
       <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
-      <SpiritMenu name={name} selected="not-found" />,
       <ErrorView message="404 Not Found" />
     ));
   }
@@ -68,10 +68,10 @@ router.get('/:name/settings', async function(req, res, next) {
   const settings = await spirit.settings.catch(e => null);
 
   if(settings == undefined){
+    res.status(404);
     return res.send(layout(`${name} - Spirit`,
       <IndexMenu selected="spirits" />,
       <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
-      <SpiritMenu name={name} selected="not-found" />,
       <ErrorView message="404 Not Found" />
     ));
   }
@@ -95,10 +95,10 @@ router.get('/:name/configure', async function(req, res, next) {
   const config = await spirit.containerConfig.catch(e => null);
 
   if(config == undefined){
+    res.status(404);
     return res.send(layout(`${name} - Spirit`,
       <IndexMenu selected="spirits" />,
       <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
-      <SpiritMenu name={name} selected="not-found" />,
       <ErrorView message="404 Not Found" />
     ));
   }

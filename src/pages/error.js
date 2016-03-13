@@ -5,7 +5,7 @@ import ErrorView from './errorView';
 export function notFound(req, res, next){
   res.status(404);
   res.send(layout("Not Found",
-    <ErrorView message="Page not found" error={{}} />
+    <ErrorView message="404 - Page not found" error={{}} />
   ));
 };
 

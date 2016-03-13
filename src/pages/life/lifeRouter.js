@@ -22,10 +22,10 @@ router.get('/:name/lives', async function(req, res, next) {
   const spirit = spirits.filter(s => s.name == name)[0];
 
   if(spirit == undefined){
+    res.status(404);
     return res.send(layout(`${name} - Spirit`,
       <IndexMenu selected="spirits" />,
       <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
-      <SpiritMenu name={name} selected="not-found" />,
       <ErrorView message="404 Not Found" />
     ));
   }
@@ -56,10 +56,10 @@ router.get('/:name/life/:life', async function(req, res, next){
   const spirit = spirits.filter(s => s.name == name)[0];
 
   if(spirit == undefined){
+    res.status(404);
     return res.send(layout(`${name} - Spirit`,
       <IndexMenu selected="spirits" />,
       <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,
-      <SpiritMenu name={name} selected="not-found" />,
       <ErrorView message="404 Not Found" />
     ));
   }
@@ -69,6 +69,7 @@ router.get('/:name/life/:life', async function(req, res, next){
   const foundLife = lives.filter(l => l.life == life)[0]
 
   if(foundLife == undefined){
+    res.status(404);
     return res.send(layout(`${name} - Spirit`,
       <IndexMenu selected="spirits" />,
       <SpiritsMenu spirits={spirits} newSelected={false} selectedSpiritName={name} />,

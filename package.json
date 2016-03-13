@@ -2,11 +2,9 @@
   "name": "samsara",
   "version": "1.7.1",
   "private": true,
-  "main": "server.js",
+  "main": "dist/server.js",
   "scripts": {
-    "compile": "babel -d lib/ src/",
-    "debug": "node debug.js",
-    "start": "node server.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "body-parser": "~1.14.2",
@@ -41,8 +39,11 @@
     "babel-register": "^6.4.3",
     "gulp": "^3.8.10",
     "gulp-autoprefixer": "^3.1.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-cached": "^1.1.0",
     "gulp-concat": "^2.5.2",
     "gulp-less": "~3.0.2",
+    "gulp-nodemon": "^2.0.6",
     "gulp-sourcemaps": "^1.5.1"
   }
 }
