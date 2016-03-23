@@ -141,6 +141,9 @@ h2 i.fa{
 .text-right{
   text-align: right;
 }
+.text-strikeout{
+  text-decoration: line-through;
+}
 
 .button-group{
   margin: 0.5em 0;
@@ -259,6 +262,10 @@ h2 i.fa{
       width:100%;
     }
 
+    .box-form input[type=checkbox]{
+      width: auto;
+    }
+
     .box-list{
       .box-list-item{
         border-bottom: 1px solid #eee;
@@ -271,6 +278,9 @@ h2 i.fa{
             overflow: hidden;
             text-overflow: ellipsis;
             word-break: break-all;
+          }
+          .control-like.flex-shrink{
+            flex: 0 1 auto;
           }
         }
 

@@ -38,7 +38,7 @@ gulp.task('babel', function() {
         "transform-react-jsx"
       ]
     }))
-    .pipe(sourcemaps.write('.'))
+    .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: __dirname + '/src'}))
     .pipe(gulp.dest('dist'));
 });
 

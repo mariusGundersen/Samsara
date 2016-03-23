@@ -16,7 +16,9 @@ define(['spirit/EditPort', 'knockout', 'deco/qvc'], function(EditPort, ko, qvc){
     this.fresh = {
       hostPort: ko.observable(''),
       containerPort: ko.observable(''),
-      hostIp: ko.observable('')
+      hostIp: ko.observable(''),
+      tcp: ko.observable(true),
+      udp: ko.observable(true)
     };
 
     this.remove = function(entry){
@@ -32,16 +34,22 @@ define(['spirit/EditPort', 'knockout', 'deco/qvc'], function(EditPort, ko, qvc){
       name: model.name,
       hostPort: self.fresh.hostPort,
       containerPort: self.fresh.containerPort,
-      hostIp: self.fresh.hostIp
+      hostIp: self.fresh.hostIp,
+      tcp: self.fresh.tcp,
+      udp: self.fresh.udp
     }).success(function(){
       self.ports.push(new EditPort({
         hostPort: self.fresh.hostPort(),
         containerPort: self.fresh.containerPort(),
-        hostIp: self.fresh.hostIp()
+        hostIp: self.fresh.hostIp(),
+        tcp: self.fresh.tcp(),
+        udp: self.fresh.udp(),
       }, model.name));
       self.fresh.containerPort('');
       self.fresh.hostPort('');
       self.fresh.hostIp('');
+      self.fresh.tcp(true);
+      self.fresh.udp(true);
       self.creating(false);
     });
 
@@ -49,6 +57,8 @@ define(['spirit/EditPort', 'knockout', 'deco/qvc'], function(EditPort, ko, qvc){
       self.fresh.containerPort('');
       self.fresh.hostPort('');
       self.fresh.hostIp('');
+      self.fresh.tcp(true);
+      self.fresh.udp(true);
       self.creating(false);
     };
   };

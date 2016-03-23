@@ -77,7 +77,9 @@ export default [
     ports.push({
       hostPort: command.hostPort,
       containerPort: command.containerPort,
-      hostIp: command.hostIp
+      hostIp: command.hostIp,
+      tcp: command.tcp === true,
+      udp: command.udp === true
     });
     containerConfig.ports = ports;
     await containerConfig.save();
@@ -100,6 +102,8 @@ export default [
       .forEach(port => {
         port.containerPort = command.containerPort;
         port.hostIp = command.hostIp;
+        port.tcp = command.tcp === true;
+        port.udp = command.udp === true;
       });
     containerConfig.ports = ports;
     await containerConfig.save();

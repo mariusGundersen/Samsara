@@ -18,11 +18,15 @@ export default ({config}) => (
         <div className="box-list-item-show" data-bind="visible:state()=='show'" style={{display:'none'}}>
           <span className="control-like" data-bind="text:containerPort"></span>
           <span className="control-like" data-bind="visible:hostIp"> (<span data-bind="text:hostIp"></span>)</span>
+          <span className="control-like flex-shrink" data-bind="visible:tcp"> TCP</span>
+          <span className="control-like flex-shrink" data-bind="visible:udp"> UDP</span>
           <button className="pure-button button-minimal button-no-padding" data-bind="click:edit" title="Edit port"><Icon of="pencil" /></button>
         </div>
         <form className="pure-form box-list-item-edit" data-bind="visible:state()=='editing', submit:save" style={{display:'none'}}>
           <input value="" data-bind="value:containerPort, hasFocus:state()=='editing'" placeholder="container port" />
           <input value="" data-bind="value:hostIp" placeholder="host ip (optional)" />
+          <button className="pure-button" type="button" data-bind="click:toggleTcp, css: {'text-strikeout':!tcp()}">TCP</button>
+          <button className="pure-button" type="button" data-bind="click:toggleUdp, css: {'text-strikeout':!udp()}">UDP</button>
           <button className="pure-button button-success" type="submit" data-bind="click:save"><Icon of="check" /></button>
           <button className="pure-button" type="cancel" data-bind="click:cancel"><Icon of="close" /></button>
           <button className="pure-button button-error" type="button" data-bind="click:$parent.remove"><Icon of="trash" /></button>
@@ -43,6 +47,9 @@ export default ({config}) => (
 
       <label className="small-label">Host IP (optional) <span className="validation-error-message" data-bind="validationMessageFor: fresh.hostIp"></span></label>
       <input value="" data-bind="value:fresh.hostIp" placeholder="for example: 127.0.0.1" />
+
+      <label className="small-label"><input type="checkbox" checked data-bind="checked:fresh.tcp" /> TCP</label>
+      <label className="small-label"><input type="checkbox" checked data-bind="checked:fresh.udp" /> UDP</label>
 
       <div className="button-group">
         <button className="pure-button button-success" type="submit" data-bind="click:create"><Icon of="check" /> Create</button>
