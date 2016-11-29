@@ -1,6 +1,6 @@
 {
   "name": "samsara",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "private": true,
   "main": "dist/server.js",
   "scripts": {
