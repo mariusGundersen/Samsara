@@ -32,9 +32,9 @@ export default ({config}) => (
       </h3>
       <form className="box-form pure-form-stacked pure-form">
         <label className="small-label" for="url">Image</label>
-        <a className="control-like" href="https://registry.hub.docker.com/u/{config.image}" data-bind="text:image, attr:{href:'https://registry.hub.docker.com/'+(image().indexOf('/')>0 ? 'u/'+image() : '_/'+image())}" target="_blank">{config.image}</a>
+        <a className="control-like" href="https://hub.docker.com/r/{config.image}" data-bind="text:image, attr:{href:'https://hub.docker.com/'+(image().indexOf('/')>0 ? 'r/'+image() : '_/'+image())}" target="_blank">{config.image}</a>
         <label className="small-label">Tag</label>
-        <span className="control-like" href="https://registry.hub.docker.com/u/{config.tag}" data-bind="text:tag">{config.tag}</span>
+        <span className="control-like" href="https://hub.docker.com/r/{config.tag}" data-bind="text:tag">{config.tag}</span>
       </form>
     </div>
   </section>
