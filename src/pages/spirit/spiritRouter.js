@@ -1,3 +1,4 @@
+import restartPolicy from '../../components/restartPolicy';
 import React from 'react';
 import Router from 'express-promise-router';
 import samsara from 'samsara-lib';
@@ -115,6 +116,7 @@ router.get('/:name/configure', async function(req, res, next) {
       ports={portsModel(config, name)}
       links={linksModel(config, name)}
       volumesFrom={volumesFromModel(config, name)}
+      restartPolicy={restartPolicyModel(config, name)}
     />
   ));
 });
@@ -159,5 +161,12 @@ function volumesFromModel(config, name){
   return {
     name: name,
     volumesFrom: config.volumesFrom
+  };
+}
+
+function restartPolicyModel(config, name){
+  return {
+    name: name,
+    restartPolicy: config.restartPolicy
   };
 }

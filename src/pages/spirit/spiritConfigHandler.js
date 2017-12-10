@@ -187,5 +187,11 @@ export default [
     containerConfig.volumesFrom = containerConfig.volumesFrom
       .filter(volumeFrom => volumeFrom.spirit !== command.fromSpirit && volumeFrom.container !== command.fromContainer)
     await containerConfig.save();
+  }),
+  qvc.command('setRestartPolicy', async function(command) {
+    console.log("setRestartPolicy", command.name);
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
+    containerConfig.restartPolicy = command.value;
+    await containerConfig.save();
   })
 ];

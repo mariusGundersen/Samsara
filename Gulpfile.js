@@ -77,7 +77,7 @@ gulp.task('nodemon', ['build'], function() {
       'dist/'
     ],
     execMap: {
-      "js": "node --debug"
+      "js": "node --inspect"
     },
     delay: 6
   });
