@@ -7,8 +7,8 @@ export default ({deploy}) => (
       data-model={JSON.stringify(deploy)}
       data-bind="visible: showDeployProgress"
       style={{display: 'none'}}>
-    <ol class="step-list" data-bind="foreach: steps, css: {'failed': !success()}">
-      <li class="step-list-item" data-bind="css:{active:isActive, done:isDone, fail:isFail}">
+    <ol className="step-list" data-bind="foreach: steps, css: {'failed': !success()}">
+      <li className="step-list-item" data-bind="css:{active:isActive, done:isDone, fail:isFail}">
         <span>
           <Icon of="circle-thin" data-bind="css:{
                                               'fa-circle-thin': isPending,
@@ -22,12 +22,12 @@ export default ({deploy}) => (
       </li>
     </ol>
     <div data-bind="if: deployLog().length">
-      <pre class="logs" data-bind="foreach: deployLog">
+      <pre className="logs" data-bind="foreach: deployLog">
         <span data-bind="text: $data"></span><br />
       </pre>
     </div>
     <div data-bind="ifSelected: step, name: 'pull'">
-      <pre class="logs" data-bind="foreach: pullStatus">
+      <pre className="logs" data-bind="foreach: pullStatus">
         <span data-bind="text: id"></span>:
         <span data-bind="text: status"></span>
         <span data-bind="if: progress">(<span data-bind="text: progress"></span>)</span>

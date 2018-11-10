@@ -38,14 +38,14 @@ export default ({config}) => (
         <p className="text-center text-muted">Click the pluss icon above to add a new volume</p>
       </div>
     </div>
-    <form class="box-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style={{display: 'none'}}>
-      <label class="small-label">Container path <span class="validation-error-message" data-bind="validationMessageFor:fresh.containerPath"></span></label>
+    <form className="box-form pure-form pure-form-stacked" data-bind="visible:creating, submit:create, disable:create.isBusy" style={{display: 'none'}}>
+      <label className="small-label">Container path <span className="validation-error-message" data-bind="validationMessageFor:fresh.containerPath"></span></label>
       <input value="" data-bind="value:fresh.containerPath, hasFocus: creating()" placeholder="path inside container" />
 
-      <label class="small-label">Host path</label>
+      <label className="small-label">Host path</label>
       <input value="" data-bind="value:fresh.hostPath" placeholder="path on host (optional)" />
-      <label class="pure-checkbox">
-        <span class="button-like">
+      <label className="pure-checkbox">
+        <span className="button-like">
           <Icon of="lock" title="read only" data-bind="visible: fresh.readOnly" />
           <Icon of="pencil-square-o" title="read only" data-bind="visible: !fresh.readOnly()" />
         </span>
@@ -53,9 +53,9 @@ export default ({config}) => (
         Read only
       </label>
 
-      <div class="button-group">
-        <button class="pure-button button-success" type="submit" data-bind="click:create"><Icon of="check" /> Create</button>
-        <button class="pure-button" type="cancel" data-bind="click:cancelCreate"><Icon of="close" /> Cancel</button>
+      <div className="button-group">
+        <button className="pure-button button-success" type="submit" data-bind="click:create"><Icon of="check" /> Create</button>
+        <button className="pure-button" type="cancel" data-bind="click:cancelCreate"><Icon of="close" /> Cancel</button>
       </div>
 
     </form>
