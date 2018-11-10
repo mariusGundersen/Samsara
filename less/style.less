@@ -244,6 +244,10 @@ h2 i.fa{
       line-height: 1.5;
       display: flex;
 
+      &.box-tabs {
+        padding: 0;
+      }
+
       span{
         flex: 1 1 auto;
       }
@@ -374,7 +378,7 @@ pre.logs {
 .box-tabs {
   .box-tab {
     text-decoration: none;
-    padding: 0.5em 1em;
+    padding: 0.5em;
     color: #666;
 
     &[selected] {
@@ -401,10 +405,10 @@ pre.logs {
     overflow-x: hidden;
 
     &:first-child {
-      padding-left: 10px;
+      padding-left: 5px;
     }
     &:last-child {
-      padding-right: 10px;
+      padding-right: 5px;
     }
 
     &:not(:first-child):after, &:not(:first-child)>span:after {

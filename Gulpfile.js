@@ -7,11 +7,9 @@ var cached = require('gulp-cached');
 var concat = require('gulp-concat');
 var nodemon = require('gulp-nodemon');
 
-gulp.task('default', ['build'], function(){
-});
+gulp.task('default', ['build']);
 
-gulp.task('build', ['css', 'babel', 'public', 'bower'], function(){
-});
+gulp.task('build', ['css', 'babel', 'public', 'bower']);
 
 gulp.task('css', function() {
     return gulp.src('less/**/*.less')
@@ -27,17 +25,7 @@ gulp.task('babel', function() {
   return gulp.src(['src/**/*'])
     .pipe(cached('babel'))
     .pipe(sourcemaps.init())
-    .pipe(babel({
-      "presets": ["es2015-node4"],
-      "plugins": [
-        ["transform-async-to-module-method", {
-          "module": "co",
-          "method": "wrap"
-        }],
-        "add-module-exports",
-        "transform-react-jsx"
-      ]
-    }))
+    .pipe(babel())
     .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: __dirname + '/src'}))
     .pipe(gulp.dest('dist'));
 });

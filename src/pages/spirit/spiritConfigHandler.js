@@ -188,6 +188,35 @@ export default [
       .filter(volumeFrom => volumeFrom.spirit !== command.fromSpirit && volumeFrom.container !== command.fromContainer)
     await containerConfig.save();
   }),
+  qvc.command('addLabel', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
+    let labels = containerConfig.labels;
+    labels.push({
+      key: command.key,
+      value: command.value
+    });
+    containerConfig.labels = labels;
+    await containerConfig.save();
+  }, {
+    'key': new NotEmpty('Please specify an key for the new link')
+  }),
+  qvc.command('setLabel', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
+    let labels = containerConfig.labels;
+    labels
+      .filter(label => label.key === command.key)
+      .forEach(label => {
+        label.value = command.value;
+      });
+    containerConfig.labels = labels;
+    await containerConfig.save();
+  }),
+  qvc.command('removeLabel', async function(command) {
+    let containerConfig = await samsara().spirit(command.name).containerConfig;
+    containerConfig.labels = containerConfig.labels
+      .filter(label => label.key !== command.key);
+    await containerConfig.save();
+  }),
   qvc.command('setRestartPolicy', async function(command) {
     console.log("setRestartPolicy", command.name);
     let containerConfig = await samsara().spirit(command.name).containerConfig;

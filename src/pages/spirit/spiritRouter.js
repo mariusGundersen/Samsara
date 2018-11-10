@@ -116,6 +116,7 @@ router.get('/:name/configure', async function(req, res, next) {
       ports={portsModel(config, name)}
       links={linksModel(config, name)}
       volumesFrom={volumesFromModel(config, name)}
+      labels={labelsFromModel(config, name)}
       restartPolicy={restartPolicyModel(config, name)}
     />
   ));
@@ -161,6 +162,13 @@ function volumesFromModel(config, name){
   return {
     name: name,
     volumesFrom: config.volumesFrom
+  };
+}
+
+function labelsFromModel(config, name){
+  return {
+    name: name,
+    labels: config.labels
   };
 }
 
