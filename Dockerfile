@@ -1,17 +1,12 @@
-FROM node:14
-MAINTAINER Marius Gundersen <samsara@mariusgundersen.net>
+FROM node:18
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-# Install Bower & Gulp
-RUN npm install -g bower gulp
-
 COPY . /usr/src/app
 RUN npm ci --silent && npm cache clean --force
-RUN bower install --allow-root
 
-RUN gulp build
+RUN npm run gulp
 
 ENV NODE_ENV production
 ENV PORT 8080
