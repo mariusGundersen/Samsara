@@ -1,6 +1,5 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import ImageAndTag from '../../components/imageAndTag';
+import Icon from "../../components/icon.js";
+import ImageAndTag from "../../components/imageAndTag.js";
 
 export default ({spirits, newSelected}) => (
   <div className="pane content">

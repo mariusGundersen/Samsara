@@ -1,24 +1,21 @@
-import React from 'react';
-import layout from './layout';
-import ErrorView from './errorView';
+import ErrorView from "./errorView.js";
+import layout from "./layout.js";
 
-export function notFound(req, res, next){
+export function notFound(req, res, next) {
   res.status(404);
-  res.send(layout("Not Found",
-    <ErrorView message="404 - Page not found" error={{}} />
-  ));
-};
+  res.send(
+    layout("Not Found", <ErrorView message="404 - Page not found" error={{}} />)
+  );
+}
 
-export function errorProd(err, req, res, next){
+export function errorProd(err, req, res, next) {
   res.status(err.status || 500);
-  res.send(layout("Error",
-    <ErrorView message="An error occured" error={{}} />
-  ));
-};
+  res.send(
+    layout("Error", <ErrorView message="An error occured" error={{}} />)
+  );
+}
 
-export function errorDev(err, req, res, next){
+export function errorDev(err, req, res, next) {
   res.status(err.status || 500);
-  res.send(layout("Error",
-    <ErrorView message={err.message} error={err} />
-  ));
-};
+  res.send(layout("Error", <ErrorView message={err.message} error={err} />));
+}

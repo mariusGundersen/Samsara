@@ -1,6 +1,5 @@
-import React from 'react';
-import Icon from './icon';
-import nth from '../private/nthLife';
+import nth from "../private/nthLife.js";
+import Icon from "./icon.js";
 
 export default ({deploy}) => (
   <div data-viewmodel="spirit/DeployProgressVM"

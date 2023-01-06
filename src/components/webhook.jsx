@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from './icon';
+import Icon from "./icon.js";
 
 export default ({settings }) => (
   <section data-viewmodel="spirit/WebhookVM" data-model={JSON.stringify(settings)} className="box">

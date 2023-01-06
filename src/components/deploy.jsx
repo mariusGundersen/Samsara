@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from './icon';
+import Icon from "./icon.js";
 
 export default ({deploy}) => (
   <section className="box" data-viewmodel="spirit/DeployVM" data-model={JSON.stringify(deploy)}>

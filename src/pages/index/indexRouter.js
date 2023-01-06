@@ -1,16 +1,12 @@
-import React from 'react';
-import Router from 'express-promise-router';
+import Router from "express-promise-router";
 
-import View from './index';
-import Menu from './menu';
-import layout from '../layout';
+import layout from "../layout.js";
+import View from "./index.js";
+import Menu from "./menu.js";
 
 const router = Router();
 export default router;
 
-router.get('/', async function(req, res, next) {
-  res.send(layout(null,
-    <Menu />,
-    <View />
-  ));
+router.get("/", async function (req, res, next) {
+  res.send(layout(null, <Menu />, <View />));
 });

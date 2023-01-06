@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:14
 MAINTAINER Marius Gundersen <samsara@mariusgundersen.net>
 
 RUN mkdir -p /usr/src/app

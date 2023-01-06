@@ -1,6 +1,5 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import nth from '../../private/nthLife';
+import Icon from "../../components/icon.js";
+import nth from "../../private/nthLife.js";
 
 export default ({name, lives}) => (
   <div className="pane content">

@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from '../../components/icon';
+import Icon from "../../components/icon.js";
 
 export default ({users}) => (
   <div className="pane content">

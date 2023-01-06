@@ -1,6 +1,5 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import MenuPane from '../../components/menuPane';
+import Icon from "../../components/icon.js";
+import MenuPane from "../../components/menuPane.js";
 
 export default ({selected = ''}) => (
   <MenuPane icon="bars" href="/" title="Menu">

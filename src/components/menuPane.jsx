@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from './icon';
+import Icon from "./icon.js";
 
 export default ({icon, href, title, children}) => (
   <div className="pane menu">

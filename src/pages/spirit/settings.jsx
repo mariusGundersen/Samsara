@@ -1,7 +1,6 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import MainInfo from '../../components/mainInfo';
-import Webhook from '../../components/webhook';
+import Icon from "../../components/icon.js";
+import MainInfo from "../../components/mainInfo.js";
+import Webhook from "../../components/webhook.js";
 
 export default ({name, mainInfo, webhook}) => (
   <div className="pane content">

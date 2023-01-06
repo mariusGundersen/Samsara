@@ -1,123 +1,120 @@
-import 'babel-polyfill';
-import socketIO from 'socket.io';
-import http from 'http';
+//import 'babel-polyfill';
+import http from "http";
+import socketIO from "socket.io";
 
-import samsara from 'samsara-lib';
-import app from './app';
-import socketServerEventHandler from './private/socketServerEventHandler';
+import samsara from "samsara-lib";
+import app from "./app.js";
+import socketServerEventHandler from "./private/socketServerEventHandler.js";
 
-console.log('starting upgrade');
-samsara().upgrade().then(() => {
-  console.log('upgrade done');
-  /**
-   * Get port from environment and store in Express.
-   */
+console.log("starting upgrade");
+samsara()
+  .upgrade()
+  .then(() => {
+    console.log("upgrade done");
+    /**
+     * Get port from environment and store in Express.
+     */
 
-  const port = normalizePort(process.env.PORT || '8080');
-  app.set('port', port);
+    const port = normalizePort(process.env.PORT || "8080");
+    app.set("port", port);
 
-  /**
-   * Create HTTP server.
-   */
+    /**
+     * Create HTTP server.
+     */
 
-  const server = http.createServer(app);
+    const server = http.createServer(app);
 
-  /**
-   * Create SocketIo app
-   */
+    /**
+     * Create SocketIo app
+     */
 
-  const io = socketIO(server);
+    const io = socketIO(server);
 
-  /**
-   * Listen on provided port, on all network interfaces.
-   */
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
 
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
+    server.listen(port);
+    server.on("error", onError);
+    server.on("listening", onListening);
 
-  /**
-   * Hook socket server to the eventBus
-   */
+    /**
+     * Hook socket server to the eventBus
+     */
 
-  socketServerEventHandler(io);
+    socketServerEventHandler(io);
 
-  /**
-   * Normalize a port into a number, string, or false.
-   */
+    /**
+     * Normalize a port into a number, string, or false.
+     */
 
-  function normalizePort(val) {
-    const port = parseInt(val, 10);
+    function normalizePort(val) {
+      const port = parseInt(val, 10);
 
-    if (isNaN(port)) {
-      // named pipe
-      return val;
+      if (isNaN(port)) {
+        // named pipe
+        return val;
+      }
+
+      if (port >= 0) {
+        // port number
+        return port;
+      }
+
+      return false;
     }
 
-    if (port >= 0) {
-      // port number
-      return port;
-    }
+    /**
+     * Event listener for HTTP server "error" event.
+     */
 
-    return false;
-  }
-
-  /**
-   * Event listener for HTTP server "error" event.
-   */
-
-  function onError(error) {
-    if (error.syscall !== 'listen') {
-      throw error;
-    }
-
-    const bind = typeof port === 'string'
-      ? 'Pipe ' + port
-      : 'Port ' + port
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-      case 'EACCES':
-        console.error(bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
-      case 'EADDRINUSE':
-        console.error(bind + ' is already in use');
-        process.exit(1);
-        break;
-      default:
+    function onError(error) {
+      if (error.syscall !== "listen") {
         throw error;
+      }
+
+      const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+
+      // handle specific listen errors with friendly messages
+      switch (error.code) {
+        case "EACCES":
+          console.error(bind + " requires elevated privileges");
+          process.exit(1);
+        case "EADDRINUSE":
+          console.error(bind + " is already in use");
+          process.exit(1);
+        default:
+          throw error;
+      }
     }
-  }
 
-  /**
-   * Event listener for HTTP server "listening" event.
-   */
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
 
-  function onListening() {
-    const addr = server.address();
-    const bind = typeof addr === 'string'
-      ? 'pipe ' + addr
-      : 'port ' + addr.port;
-    console.log('Listening on ' + bind);
-  }
+    function onListening() {
+      const addr = server.address();
+      const bind =
+        typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+      console.log("Listening on " + bind);
+    }
 
-
-  process.on('SIGTERM', function(){
-    console.log("SIGTERM");
-    server.close();
-    process.exit(1);
+    process.on("SIGTERM", function () {
+      console.log("SIGTERM");
+      server.close();
+      process.exit(1);
+    });
+    process.on("SIGINT", function () {
+      console.log("SIGINT");
+      server.close();
+      process.exit(1);
+    });
+  })
+  .catch((e) => {
+    console.error(e);
+    console.error(e.stack);
+    process.exit();
   });
-  process.on('SIGINT', function(){
-    console.log("SIGINT");
-    server.close();
-    process.exit(1);
-  });
-}).catch(e => {
-  console.error(e);
-  console.error(e.stack);
-  process.exit();
-});
-process.on('unhandledRejection', function(reason, p) {
+process.on("unhandledRejection", function (reason, p) {
   console.error(p, reason);
 });

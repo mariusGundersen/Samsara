@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from './icon';
+import Icon from "./icon.js";
 
 export default props => (
   <div className="box-form" style={{padding:0}} data-viewmodel="spirit/ImageAndTagVM" data-params="image:image, tag:tag">

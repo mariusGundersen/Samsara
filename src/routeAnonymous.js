@@ -1,17 +1,18 @@
-import express, {Router} from 'express';
-import path from 'path';
-import deploy from './pages/deploy/deployRouter';
-import login from './pages/login/loginRouter';
+import express, { Router } from "express";
+import deploy from "./pages/deploy/deployRouter.js";
+import login from "./pages/login/loginRouter.js";
 
 const router = Router();
 export default router;
 
-router.use('/deploy', deploy);
+router.use("/deploy", deploy);
 
-router.use('/login', login);
+router.use("/login", login);
 
-router.use(express.static(path.join(__dirname, 'public'), {
-  etag: false,
-  lastModified: false,
-  maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0
-}));
+router.use(
+  express.static("./dist/public", {
+    etag: false,
+    lastModified: false,
+    maxAge: process.env.NODE_ENV === "production" ? "1d" : 0,
+  })
+);

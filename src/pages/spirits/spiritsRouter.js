@@ -1,30 +1,35 @@
-import React from 'react';
-import Router from 'express-promise-router';
-import samsara from 'samsara-lib';
+import Router from "express-promise-router";
+import samsara from "samsara-lib";
 
-import SpiritsView from './index';
-import NewView from './new';
-import IndexMenu from '../index/menu';
-import SpiritsMenu from './menu';
-import layout from '../layout';
+import IndexMenu from "../index/menu.js";
+import layout from "../layout.js";
+import SpiritsView from "./index.js";
+import SpiritsMenu from "./menu.js";
+import NewView from "./new.js";
 
 const router = Router();
 export default router;
 
-router.get('/', async function(req, res, next) {
+router.get("/", async function (req, res, next) {
   const spirits = await samsara().spirits();
-  res.send(layout('Spirits',
-    <IndexMenu selected="spirits" />,
-    <SpiritsMenu spirits={spirits} newSelected={false} />,
-    <SpiritsView spirits={spirits} />
-  ));
+  res.send(
+    layout(
+      "Spirits",
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={false} />,
+      <SpiritsView spirits={spirits} />
+    )
+  );
 });
 
-router.get('/new', async function(req, res, next) {
+router.get("/new", async function (req, res, next) {
   const spirits = await samsara().spirits();
-  res.send(layout('New Spirit',
-    <IndexMenu selected="spirits" />,
-    <SpiritsMenu spirits={spirits} newSelected={true} />,
-    <NewView />
-  ));
+  res.send(
+    layout(
+      "New Spirit",
+      <IndexMenu selected="spirits" />,
+      <SpiritsMenu spirits={spirits} newSelected={true} />,
+      <NewView />
+    )
+  );
 });

@@ -1,72 +1,74 @@
-var gulp = require('gulp');
-var less = require('gulp-less');
-var sourcemaps = require('gulp-sourcemaps');
-var autoprefixer = require('gulp-autoprefixer');
-var babel = require('gulp-babel');
-var cached = require('gulp-cached');
-var concat = require('gulp-concat');
-var nodemon = require('gulp-nodemon');
+import gulp from "gulp";
+import autoprefixer from "gulp-autoprefixer";
+import babel from "gulp-babel";
+import cached from "gulp-cached";
+import concat from "gulp-concat";
+import less from "gulp-less";
+import nodemon from "gulp-nodemon";
+import gulpSrcMaps from "gulp-sourcemaps";
 
-gulp.task('default', ['build']);
+const { init, write } = gulpSrcMaps;
 
-gulp.task('build', ['css', 'babel', 'public', 'bower']);
+export const css = function () {
+  return gulp
+    .src("less/**/*.less")
+    .pipe(init())
+    .pipe(less())
+    .pipe(autoprefixer())
+    .pipe(concat("style.css"))
+    .pipe(write("."))
+    .pipe(gulp.dest("dist/public/stylesheets/"));
+};
 
-gulp.task('css', function() {
-    return gulp.src('less/**/*.less')
-      .pipe(sourcemaps.init())
-      .pipe(less())
-      .pipe(autoprefixer())
-      .pipe(concat('style.css'))
-      .pipe(sourcemaps.write('.'))
-      .pipe(gulp.dest('dist/public/stylesheets/'));
-});
-
-gulp.task('babel', function() {
-  return gulp.src(['src/**/*'])
-    .pipe(cached('babel'))
-    .pipe(sourcemaps.init())
+export const js = function () {
+  return gulp
+    .src(["src/**/*"])
+    .pipe(cached("babel"))
+    .pipe(init())
     .pipe(babel())
-    .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: __dirname + '/src'}))
-    .pipe(gulp.dest('dist'));
-});
+    .pipe(write(".", { includeContent: false, sourceRoot: "/src" }))
+    .pipe(gulp.dest("dist"));
+};
 
-gulp.task('public', function() {
-  return gulp.src('public/**/*')
-    .pipe(gulp.dest('dist/public'));
-});
+export const copyToPublic = function () {
+  return gulp.src("public/**/*").pipe(gulp.dest("dist/public"));
+};
 
-gulp.task('bower', function() {
-  return gulp.src([
-    'bower_components/cs-handjs/hand.minified.js',
-    'bower_components/requirejs/require.js',
-    'bower_components/pure/pure-min.css',
-    'bower_components/font-awesome/css/font-awesome.min.css',
-    'bower_components/font-awesome/fonts/*',
-    'bower_components/es6-promise/promise.js',
-    'bower_components/dependency-chain/require.plugin.chain.js',
-    'bower_components/knockout/dist/knockout.js',
-    'bower_components/deco/Dist/*'
-  ], {base: 'bower_components'})
-  .pipe(gulp.dest('dist/public/bower_components'));
-})
+export const bower = function () {
+  return gulp
+    .src(
+      [
+        "node_modules/requirejs/bin/r.js",
+        "node_modules/purecss/build/pure-min.css",
+        "node_modules/font-awesome/css/font-awesome.min.css",
+        "node_modules/font-awesome/fonts/*",
+        "node_modules/knockout/build/output/knockout-latest.js",
+        "node_modules/decojs/Dist/*",
+      ],
+      { base: "node_modules" }
+    )
+    .pipe(gulp.dest("dist/public/bower_components"));
+};
 
-gulp.task('watch', ['build', 'nodemon'], function(){
-  gulp.watch('less/**/*.less', ['css']);
-  gulp.watch('public/**/*', ['public']);
-  gulp.watch('src/**/*', ['babel']);
-});
+export const build = gulp.series(css, js, copyToPublic, bower);
 
-gulp.task('nodemon', ['build'], function() {
+export const devServer = gulp.series(build, function () {
   nodemon({
-    script: 'dist/server.js',
-    ext: 'js jsx',
-    env: { 'NODE_ENV': 'development' },
-    watch: [
-      'dist/'
-    ],
+    script: "dist/server.js",
+    ext: "js jsx",
+    env: { NODE_ENV: "development" },
+    watch: ["dist/"],
     execMap: {
-      "js": "node --inspect"
+      js: "node --inspect",
     },
-    delay: 6
+    delay: 6,
   });
 });
+
+export const watch = gulp.series(build, devServer, function () {
+  gulp.watch("less/**/*.less", css);
+  gulp.watch("public/**/*", copyToPublic);
+  gulp.watch("src/**/*", js);
+});
+
+export default build;

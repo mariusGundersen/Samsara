@@ -1,8 +1,7 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import DeployProgress from '../../components/deployProgress';
-import Logs from '../../components/logs';
-import nth from '../../private/nthLife';
+import DeployProgress from "../../components/deployProgress.js";
+import Icon from "../../components/icon.js";
+import Logs from "../../components/logs.js";
+import nth from "../../private/nthLife.js";
 
 export default ({name, life, revive, deploy, logs}) => (
   <div className="pane content">

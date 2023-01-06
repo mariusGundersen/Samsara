@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from './icon';
+import Icon from "./icon.js";
 
 export default ({model}) => (
   <div className="box box-large box-no-scroll" data-viewmodel="spirit/life/LogsVM">

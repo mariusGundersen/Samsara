@@ -1,7 +1,4 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import ImageAndTag from '../../components/imageAndTag';
-import nth from '../../private/nthLife';
+import nth from "../../private/nthLife.js";
 
 export default ({spirits}) => (
   <div className="pane content">

@@ -1,6 +1,5 @@
-import React from 'react';
-import MenuPane from '../../components/menuPane';
-import Icon from '../../components/icon';
+import Icon from "../../components/icon.js";
+import MenuPane from "../../components/menuPane.js";
 
 export default ({containers}) => (
   <MenuPane icon="th-large" href="/containers" title="Containers">

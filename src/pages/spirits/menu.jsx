@@ -1,7 +1,6 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import MenuPane from '../../components/menuPane';
-import nth from '../../private/nthLife';
+import Icon from "../../components/icon.js";
+import MenuPane from "../../components/menuPane.js";
+import nth from "../../private/nthLife.js";
 
 export default ({spirits, newSelected, selectedSpiritName}) => (
   <MenuPane icon="sun-o" href="/spirits" title="Spirits">

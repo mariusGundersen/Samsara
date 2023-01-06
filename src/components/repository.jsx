@@ -1,6 +1,5 @@
-import React from 'react';
-import Icon from './icon';
-import ImageAndTag from './imageAndTag';
+import Icon from "./icon.js";
+import ImageAndTag from "./imageAndTag.js";
 
 export default ({config}) => (
   <section data-viewmodel="spirit/RepositoryVM" data-model={JSON.stringify(config)} className="box">

@@ -1,13 +1,12 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import Repository from '../../components/repository';
-import EnvVars from '../../components/envVars';
-import Volumes from '../../components/volumes';
-import Ports from '../../components/ports';
-import Links from '../../components/links';
-import VolumesFrom from '../../components/volumesFrom';
-import Labels from '../../components/labels';
-import RestartPolicy from '../../components/restartPolicy';
+import EnvVars from "../../components/envVars.js";
+import Icon from "../../components/icon.js";
+import Labels from "../../components/labels.js";
+import Links from "../../components/links.js";
+import Ports from "../../components/ports.js";
+import Repository from "../../components/repository.js";
+import RestartPolicy from "../../components/restartPolicy.js";
+import Volumes from "../../components/volumes.js";
+import VolumesFrom from "../../components/volumesFrom.js";
 
 export default ({name, repository, environment, volumes, ports, links, volumesFrom, labels, restartPolicy}) => (
   <div className="pane content">

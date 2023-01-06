@@ -1,8 +1,7 @@
-import React from 'react';
-import Icon from '../../components/icon';
-import Controls from '../../components/controls';
-import Deploy from '../../components/deploy';
-import nth from '../../private/nthLife';
+import Controls from "../../components/controls.js";
+import Deploy from "../../components/deploy.js";
+import Icon from "../../components/icon.js";
+import nth from "../../private/nthLife.js";
 
 export default ({name, life, description, controls, deploy}) => (
   <div className="pane content">

@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from './icon';
+import Icon from "./icon.js";
 
 export default ({controls, url}) => (
   <section data-viewmodel="spirit/ControlsVM" data-model={JSON.stringify(controls)} className="box" style={{marginBottom: '20px'}}>

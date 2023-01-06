@@ -1,5 +1,4 @@
-import React from 'react';
-import Icon from '../../components/icon';
+import Icon from "../../components/icon.js";
 
 export default (content) => (
   <div data-viewmodel="ContainerViewModel" data-model={JSON.stringify(content.controls)} className="pane content">
